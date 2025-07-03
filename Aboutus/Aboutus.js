@@ -13,8 +13,15 @@ const integrantes = [
         biografia:"Ingeniero en Computación, apasionado por la tecnología y el aprendizaje continuo, con experiencia en desarrollo web, gestión de bases de datos y despliegue de sistemas en servidores.",
         rol:"Desarrollador FullStack"
     },
-
     {
+        foto:"./fotosEquipo/Foto_Beca.jpeg",
+        NombreCompleto:"Rebeca Martínez Sánchez",
+        información:"Analista de datos Jr.",
+        biografia:"Ingeniera Industrial egresada del Instituto Tecnológico de Querétaro, con experiencia en análisis de datos con herramientas como la Power Plataform de Microsoft, Excel (tablas dinámicas, formulas, macros y scripts), Python y MySQL Workbench. Apasionada por la tecnología y el aprendizaje continuo.",
+        rol:"Desarrollador FullStack"
+
+    }
+    ,{
        foto:"https://media.licdn.com/dms/image/v2/D4D03AQEF3e6wwwG23g/profile-displayphoto-crop_800_800/B4DZeBbB8vH4AM-/0/1750223040886?e=1756944000&v=beta&t=a21-8qcmbjAJGqRHIaMQ9N-fncLp4tsxYxfGCylTAJI",
        NombreCompleto:"Jesús Benedicto Jiménez",
        información: "Desarrollador de Software Jr.",
