@@ -1,6 +1,6 @@
 const integrantes = [
     {
-        foto:"https://avatars.githubusercontent.com/u/212970403?v=4",
+        foto:"./fotosEquipo/Foto_JFCR.jpg",
         NombreCompleto:"Jesus Cruz",
         información:"Egresado de la Escuela Superior de Ingeniería en Computación (ESIME) del Instituto Politécnico Nacional (IPN).",
         biografia:"Soy un ingeniero en Computación con experiencia en desarrollo web, bases de datos y despliegue de aplicaciones. Apasionado por la tecnología y el aprendizaje continuo, además un entusiasta en el campo del audio.",
@@ -29,19 +29,19 @@ const integrantes = [
        rol: "Desarrollador FullStack"
     },
         {
-        foto:"/fotosEquipo/Foto_Daniel.jpg",
+        foto:"./fotosEquipo/Foto_Daniel.jpg",
         NombreCompleto:"Daniel Arian Arias Rosales",
         informacion:"Desarrollador de Software Jr.",
         biografia:"Ingenierio en computación y desarrollador apasionado por la tecnologia en constante evolucion, buscando aprender cosas nuevas para innovar en el area-",
         rol:"Desarrollador FullStack"
     },
-    {foto:"/fotosEquipo/Brandon.jpg",
+    {foto:"./fotosEquipo/Brandon.jpg",
         NombreCompleto:"Brandon Isaí Hernández Jiménez",
         información:"Desarrollador Java, Analista de datos",
         biografia:"Desarrollador Java Fullstack con experiencia en analisis de datos.",
         rol:"Desarrollador FullStack"
     },
-    {foto:"/fotosEquipo/Foto_Alfredo.jepg",
+    {foto:"./fotosEquipo/Foto_Alfredo.jepg",
         NombreCompleto:"José Alfredo Pozos Briones",
         información:"Desarrollador Java",
         biografia:"desarrollador Fullstack Jr. con enfoque en Java, apasionado por el trabajo en equipo y con una fuerte orientación a la persistencia.",
