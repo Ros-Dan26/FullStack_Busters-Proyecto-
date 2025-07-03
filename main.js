@@ -1,4 +1,9 @@
 
+document.addEventListener("DOMContentLoaded", () => {
+    createFooter()
+    createNavbar()
+})
+
 const createFooter = () => {
     let footerElement = document.querySelector("footer");
     const footerContent = `
@@ -67,4 +72,169 @@ const createFooter = () => {
      `
 
     footerElement.innerHTML = footerContent;
+}
+const verDetalles = (e) => {
+    console.log(e.dataset);
+    const producto = {
+        producto: e.dataset.producto,
+        descripcion: e.dataset.descripcion,
+        categoria: e.dataset.categoria,
+        tallas: JSON.parse(e.dataset.tallas),
+        imagen: e.dataset.imagen,
+        precio: Number(e.dataset.precio),
+        precioOferta: Number(e.dataset.preciooferta),
+        descuento: Number(e.dataset.descuento),
+    };
+    localStorage.setItem("productoSeleccionado", JSON.stringify(producto));
+    window.location.href = "detalles-del-producto.html";
+}
+
+const addCart = (e) => {
+    const producto = {
+        producto: e.dataset.producto,
+        categoria: e.dataset.categoria,
+        descripcion: e.dataset.descripcion,
+        tallas: JSON.parse(e.dataset.tallas),
+        imagen: e.dataset.imagen,
+        precio: Number(e.dataset.precio),
+        precioOferta: Number(e.dataset.preciooferta),
+        descuento: Number(e.dataset.descuento),
+    };
+    let cart = JSON.parse(localStorage.getItem("carrito")) || [];
+    const existingProductIndex = cart.findIndex(item => item.producto === producto.producto);
+    if (existingProductIndex !== -1) {
+        cart[existingProductIndex].cantidad += 1;
+    } else {
+        producto.cantidad = 1;
+        cart.push(producto);
+    }
+    localStorage.setItem("carrito", JSON.stringify(cart));
+
+    Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Añadido al carrito!",
+        text: `"${producto.producto}" se ha añadido al carrito.`,
+        showConfirmButton: false,
+        timer: 1500
+    });
+}
+
+function seleccionarTalla(element) {
+    const todas = document.querySelectorAll('.talla-option');
+    todas.forEach(t => t.classList.remove('bg-primary', 'text-white'));
+
+    element.classList.add('bg-dark', 'text-white');
+}
+
+function createNavbar() {
+    const vistaGuardada = localStorage.getItem('vistaActual');
+    const links = document.querySelectorAll('#navLinks .nav-link');
+
+    const navbar = `
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-2 mb-3">
+            <div class="container-fluid">
+                <a onclick="guardarVistaActual('')" class="navbar-brand" href="index.html">
+                <img src="./assets/icono-minimalista.png" alt="logo" width="50">
+                <strong class="ms-2">Net/Shopping</strong>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarMenu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse  justify-content-between" id="navbarMenu">
+                    <div class="d-flex justify-content-lg-center justify-content-start w-100">
+                        <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a 
+                                class="nav-link ${localStorage.getItem('vistaActual') === 'lo-nuevo.html' ? 'active' : ''}" 
+                                href="lo-nuevo.html" 
+                                onclick="guardarVistaActual('lo-nuevo.html')"
+                                >Lo Nuevo</a>
+                            </li>
+                            <li class="nav-item">
+                                <a 
+                                class="nav-link ${localStorage.getItem('vistaActual') === 'hombres.html' ? 'active' : ''}" 
+                                href="hombres.html" 
+                                onclick="guardarVistaActual('hombres.html')"
+                                >Hombre</a>
+                            </li>
+                            <li class="nav-item">
+                                <a 
+                                class="nav-link ${localStorage.getItem('vistaActual') === 'mujer.html' ? 'active' : ''}" 
+                                href="mujer.html" 
+                                onclick="guardarVistaActual('mujer.html')"
+                                >Mujer</a>
+                            </li>
+                            <li class="nav-item">
+                                <a 
+                                class="nav-link ${localStorage.getItem('vistaActual') === 'niños.html' ? 'active' : ''}" 
+                                href="niños.html" 
+                                onclick="guardarVistaActual('niños.html')"
+                                >Niño/a</a>
+                            </li>
+                            <li class="nav-item">
+                                <a 
+                                class="nav-link text-danger ${localStorage.getItem('vistaActual') === 'ofertas.html' ? 'active' : ''}" 
+                                href="ofertas.html" 
+                                onclick="guardarVistaActual('ofertas.html')"
+                                >Ofertas</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <form class="d-flex align-items-center">
+                        <input class="form-control form-control-sm me-2 d-none d-lg-block" type="search"
+                            placeholder="Buscar">
+                        <button  onclick="guardarVistaActual('')" class="btn btn-light btn-sm me-3 d-none d-lg-block" type="submit">
+                            <i class="bi bi-search"></i>
+                        </button>
+                        <a  onclick="guardarVistaActual('')" href="login.html" class="text-white me-3"><i class="bi bi-person"
+                                style="font-size: 1.2rem;"></i></a>
+                        <a type="button" onclick="mostrarProximaFuncion(); return false;" class="text-danger me-3"><i class="bi bi-heart"
+                                style="font-size: 1.2rem;"></i></a>
+                        <a  onclick="guardarVistaActual('')" href="carrito.html" class="text-white"><i class="bi bi-bag"
+                                style="font-size: 1.2rem;"></i></a>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    `;
+    document.getElementById('navbar').innerHTML = navbar;
+}
+
+const mensajes = [
+    { texto: "🚚 Envío gratis en compras mayores a $999", enlace: "index.html" },
+    { texto: "🔥 Unete para recibir informacion sobre productos exclusivos disponibles solo esta semana", enlace: "login.html" },
+    { texto: "🎁 Ofertas exclusivas de todos los productos", enlace: "ofertas.html" },
+];
+
+let indice = 0;
+const ticker = document.getElementById("mensaje-ticker");
+
+function mostrarMensaje() {
+    ticker.textContent = mensajes[indice].texto;
+    ticker.href = mensajes[indice].enlace;
+    indice = (indice + 1) % mensajes.length;
+}
+
+// Inicializa
+mostrarMensaje();
+// Cambia cada 5 segundos
+setInterval(mostrarMensaje, 5000);
+
+function guardarVistaActual(vista) {
+    if (vista.length > 0) {
+        localStorage.setItem('vistaActual', vista);
+    } else {
+        localStorage.removeItem('vistaActual'); // Elimina si no se pasa nada
+    }
+}
+
+function mostrarProximaFuncion() {
+    Swal.fire({
+        icon: 'info',
+        title: '¡Muy pronto!',
+        text: 'La función de favoritos estará disponible próximamente.',
+        confirmButtonText: 'OK',
+    });
 }
