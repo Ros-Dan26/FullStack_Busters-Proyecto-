@@ -31,7 +31,7 @@ const integrantes = [
         {
         foto:"./fotosEquipo/Foto_Daniel.jpg",
         NombreCompleto:"Daniel Arian Arias Rosales",
-        informacion:"Desarrollador de Software Jr.",
+        información:"Desarrollador de Software Jr.",
         biografia:"Ingenierio en computación y desarrollador apasionado por la tecnologia en constante evolucion, buscando aprender cosas nuevas para innovar en el area-",
         rol:"Desarrollador FullStack"
     },
