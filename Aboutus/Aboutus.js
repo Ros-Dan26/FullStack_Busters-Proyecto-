@@ -73,3 +73,5 @@ function renderizarIntegrantes() {
 }
 
 document.addEventListener('DOMContentLoaded', renderizarIntegrantes);
+
+
