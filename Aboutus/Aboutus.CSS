@@ -54,18 +54,27 @@
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
 }
 
-/* Estilos para la imagen */
-.team-card-img {
+/* Estilos para la imagen - AJUSTE AUTOMÁTICO */
+.team-card-img-container {
+    position: relative;
     width: 100%;
-    height: 350px;
+    padding-top: 100%; /* Relación 1:1 (cuadrada) */
+    overflow: hidden;
+}
+
+.team-card-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    object-position: top;
-    border-bottom: 4px solid #3498db;
-    transition: all 0.5s ease;
+    object-position: top center;
+    transition: transform 0.5s ease;
 }
 
 .team-card:hover .team-card-img {
-    transform: scale(1.03);
+    transform: scale(1.05);
 }
 
 /* Estilos para el cuerpo de la tarjeta */
@@ -128,16 +137,12 @@
         max-width: 100%;
     }
     
-    .team-card-img {
-        height: 400px;
+    .team-card-img-container {
+        padding-top: 75%; /* Cambiar relación de aspecto para móviles */
     }
 }
 
 @media (max-width: 480px) {
-    .team-card-img {
-        height: 300px;
-    }
-    
     .team-card-body {
         padding: 1.5rem;
     }
