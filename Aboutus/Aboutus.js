@@ -1,9 +1,9 @@
 const integrantes = [
     {
-        foto:"/fotosEquipo/foto.jpg",
+        foto:"https://avatars.githubusercontent.com/u/212970403?v=4",
         NombreCompleto:"Jesus Cruz",
-        información:"Egresado de escuela",
-        biografia:"Pequeña descripción de nostros",
+        información:"Egresado de la Escuela Superior de Ingeniería en Computación (ESIME) del Instituto Politécnico Nacional (IPN).",
+        biografia:"Soy un ingeniero en Computación con experiencia en desarrollo web, bases de datos y despliegue de aplicaciones. Apasionado por la tecnología y el aprendizaje continuo, además un entusiasta en el campo del audio.",
         rol:"Desarrollador FullStack"
     },
     {
