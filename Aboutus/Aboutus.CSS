@@ -1,0 +1,148 @@
+/* Estilos generales para la sección del equipo */
+.team-section {
+    background-color: #f8f9fa;
+    padding: 4rem 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.team-title {
+    text-align: center;
+    margin-bottom: 3rem;
+    position: relative;
+    padding-bottom: 1rem;
+    color: #2c3e50;
+    font-weight: 700;
+}
+
+.team-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, #3498db, #9b59b6);
+}
+
+/* Contenedor de las tarjetas */
+.team-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* Estilos para cada tarjeta de integrante */
+.team-card {
+    width: 100%;
+    max-width: 350px;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.team-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Estilos para la imagen */
+.team-card-img {
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+    object-position: top;
+    border-bottom: 4px solid #3498db;
+    transition: all 0.5s ease;
+}
+
+.team-card:hover .team-card-img {
+    transform: scale(1.03);
+}
+
+/* Estilos para el cuerpo de la tarjeta */
+.team-card-body {
+    padding: 2rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.team-card-name {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+    font-weight: 700;
+}
+
+.team-card-info {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    font-style: italic;
+}
+
+.team-card-bio {
+    color: #34495e;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    flex-grow: 1;
+}
+
+/* Estilos para el rol */
+.team-card-role {
+    align-self: flex-start;
+    background: linear-gradient(135deg, #3498db, #9b59b6);
+    color: white;
+    padding: 0.5rem 1.2rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: auto;
+}
+
+/* Efecto de hover para el rol */
+.team-card:hover .team-card-role {
+    background: linear-gradient(135deg, #2980b9, #8e44ad);
+    box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .team-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .team-card {
+        max-width: 100%;
+    }
+    
+    .team-card-img {
+        height: 400px;
+    }
+}
+
+@media (max-width: 480px) {
+    .team-card-img {
+        height: 300px;
+    }
+    
+    .team-card-body {
+        padding: 1.5rem;
+    }
+    
+    .team-card-name {
+        font-size: 1.3rem;
+    }
+}
