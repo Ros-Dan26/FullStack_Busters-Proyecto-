@@ -40,5 +40,11 @@ const integrantes = [
         información:"Desarrollador Java, Analista de datos",
         biografia:"Desarrollador Java Fullstack con experiencia en analisis de datos.",
         rol:"Desarrollador FullStack"
+    },
+    {foto:"/fotosEquipo/Foto_Alfredo.jepg",
+        NombreCompleto:"José Alfredo Pozos Briones",
+        información:"Desarrollador Java",
+        biografia:"desarrollador Fullstack Jr. con enfoque en Java, apasionado por el trabajo en equipo y con una fuerte orientación a la persistencia.",
+        rol:"Desarrollador FullStack"
     }   
         ];
