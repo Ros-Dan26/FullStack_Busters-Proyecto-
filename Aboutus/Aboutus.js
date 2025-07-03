@@ -1,8 +1,10 @@
-const integrantes = [{foto:"/fotosEquipo/Foto_Daniel.jpg",
+const integrantes = [
+    {foto:"/fotosEquipo/Foto_Daniel.jpg",
     NombreCompleto:"Daniel Arian Arias Rosales",
-    informacion:"Egresado de ingenieria en computación ",
-    biografia:"Pequeña descripción de nostros",
-    rol:"Desarrollador FullStack"}];
+    informacion:"Ingenierio en computación",
+    biografia:"Desarrollador apasionado por la tecnologia en constante evolucion, buscando aprender cosas nuevas para innovar en el area-",
+    rol:"Desarrollador FullStack"}
+];
 
     console.log(integrantes);
     
