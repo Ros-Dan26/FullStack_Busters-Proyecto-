@@ -12,5 +12,12 @@ const integrantes = [
         información:"Desarrollador de Software Jr.",
         biografia:"Ingeniero en Computación, apasionado por la tecnología y el aprendizaje continuo, con experiencia en desarrollo web, gestión de bases de datos y despliegue de sistemas en servidores.",
         rol:"Desarrollador FullStack"
+    },
+    {
+        foto:"./fotosEquipo/Foto_Beca.jpeg",
+        NombreCompleto:"Rebeca Martínez Sánchez",
+        información:"Analista de datos Jr.",
+        biografia:"Ingeniera Industrial egresada del Instituto Tecnológico de Querétaro, con experiencia en análisis de datos con herramientas como la Power Plataform de Microsoft, Excel (tablas dinámicas, formulas, macros y scripts), Python y MySQL Workbench. Apasionada por la tecnología y el aprendizaje continuo.",
+        rol:"Desarrollador FullStack"
     }
         ];
