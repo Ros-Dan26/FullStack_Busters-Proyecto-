@@ -1,9 +1,9 @@
 const integrantes = [
     {
-        foto:"/fotosEquipo/foto.jpg",
+        foto:"https://avatars.githubusercontent.com/u/212970403?v=4",
         NombreCompleto:"Jesus Cruz",
-        información:"Egresado de escuela",
-        biografia:"Pequeña descripción de nostros",
+        información:"Egresado de la Escuela Superior de Ingeniería en Computación (ESIME) del Instituto Politécnico Nacional (IPN).",
+        biografia:"Soy un ingeniero en Computación con experiencia en desarrollo web, bases de datos y despliegue de aplicaciones. Apasionado por la tecnología y el aprendizaje continuo, además un entusiasta en el campo del audio.",
         rol:"Desarrollador FullStack"
     },
     {
@@ -19,5 +19,15 @@ const integrantes = [
         información:"Analista de datos Jr.",
         biografia:"Ingeniera Industrial egresada del Instituto Tecnológico de Querétaro, con experiencia en análisis de datos con herramientas como la Power Plataform de Microsoft, Excel (tablas dinámicas, formulas, macros y scripts), Python y MySQL Workbench. Apasionada por la tecnología y el aprendizaje continuo.",
         rol:"Desarrollador FullStack"
+
     }
+        {
+       foto:"https://media.licdn.com/dms/image/v2/D4D03AQEF3e6wwwG23g/profile-displayphoto-crop_800_800/B4DZeBbB8vH4AM-/0/1750223040886?e=1756944000&v=beta&t=a21-8qcmbjAJGqRHIaMQ9N-fncLp4tsxYxfGCylTAJI",
+       NombreCompleto:"Jesús Benedicto Jiménez",
+       información: "Desarrollador de Software Jr.",
+       biografia: "Ingeniero en Sistemas Computacionales, motivado por la creación de soluciones digitales que generen impacto positivo",
+       rol: "Desarrollador FullStack"
+    }
+
+    
         ];
