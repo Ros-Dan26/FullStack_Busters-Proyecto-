@@ -12,5 +12,13 @@ const integrantes = [
         información:"Desarrollador de Software Jr.",
         biografia:"Ingeniero en Computación, apasionado por la tecnología y el aprendizaje continuo, con experiencia en desarrollo web, gestión de bases de datos y despliegue de sistemas en servidores.",
         rol:"Desarrollador FullStack"
-    }
-        ];
+    },
+    {
+        foto:"/fotosEquipo/Brandon.jpg",
+        NombreCompleto:"Brandon Isaí Hernández Jiménez",
+        información:"Desarrollador Java, Analista de datos",
+        biografia:"Desarrollador Java Fullstack con experiencia en analisis de datos.",
+        rol:"Desarrollador FullStack"
+    },
+
+];
