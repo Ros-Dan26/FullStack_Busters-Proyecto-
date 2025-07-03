@@ -1,1 +1,5 @@
-const integrantes = [{foto:"/fotosEquipo/foto.jpg",NombreCompleto:"Jesus Cruz",información:"Egresado de escuela",biografia:"Pequeña descripción de nostros",rol:"Desarrollador FullStack"},{foto:"/fotosEquipo/foto.jpg",NombreCompleto:"Jesus Cruz",información:"Egresado de escuela",biografia:"Pequeña descripción de nostros",rol:"Desarrollador FullStack"}];
+const integrantes = [{foto:"/fotosEquipo/foto.jpg",
+    NombreCompleto:"Jesus Cruz",
+    información:"Egresado de escuela",
+    biografia:"Pequeña descripción de nostros",
+    rol:"Desarrollador FullStack"}];
