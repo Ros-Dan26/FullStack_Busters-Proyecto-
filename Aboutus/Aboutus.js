@@ -21,4 +21,6 @@ const integrantes = [
        biografia: "Ingeniero en Sistemas Computacionales, motivado por la creación de soluciones digitales que generen impacto positivo",
        rol: "Desarrollador FullStack"
     }
+
+    
         ];
