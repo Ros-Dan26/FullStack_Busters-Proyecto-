@@ -22,7 +22,11 @@
     transform: translateX(-50%);
     width: 80px;
     height: 3px;
+<<<<<<< HEAD
     background: linear-gradient(90deg, #3498db, #9b59b6);
+=======
+    background: linear-gradient(90deg, #FFFFFF, #00C0FF,#FFFFFF);
+>>>>>>> main
 }
 
 /* Contenedor de las tarjetas */
@@ -54,6 +58,7 @@
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
 }
 
+<<<<<<< HEAD
 /* Estilos para la imagen */
 .team-card-img {
     width: 100%;
@@ -66,6 +71,29 @@
 
 .team-card:hover .team-card-img {
     transform: scale(1.03);
+=======
+/* Estilos para la imagen - AJUSTE AUTOMÁTICO */
+.team-card-img-container {
+    position: relative;
+    width: 100%;
+    padding-top: 100%; /* Relación 1:1 (cuadrada) */
+    overflow: hidden;
+}
+
+.team-card-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    transition: transform 0.5s ease;
+}
+
+.team-card:hover .team-card-img {
+    transform: scale(1.05);
+>>>>>>> main
 }
 
 /* Estilos para el cuerpo de la tarjeta */
@@ -100,7 +128,11 @@
 /* Estilos para el rol */
 .team-card-role {
     align-self: flex-start;
+<<<<<<< HEAD
     background: linear-gradient(135deg, #3498db, #9b59b6);
+=======
+    background: linear-gradient(135deg, #00C0FF, #D1F6B4);
+>>>>>>> main
     color: white;
     padding: 0.5rem 1.2rem;
     border-radius: 50px;
@@ -113,7 +145,11 @@
 
 /* Efecto de hover para el rol */
 .team-card:hover .team-card-role {
+<<<<<<< HEAD
     background: linear-gradient(135deg, #2980b9, #8e44ad);
+=======
+    background: linear-gradient(135deg, #00C0FF, #D1F6B4);
+>>>>>>> main
     box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
 }
 
@@ -128,16 +164,24 @@
         max-width: 100%;
     }
     
+<<<<<<< HEAD
     .team-card-img {
         height: 400px;
+=======
+    .team-card-img-container {
+        padding-top: 75%; /* Cambiar relación de aspecto para móviles */
+>>>>>>> main
     }
 }
 
 @media (max-width: 480px) {
+<<<<<<< HEAD
     .team-card-img {
         height: 300px;
     }
     
+=======
+>>>>>>> main
     .team-card-body {
         padding: 1.5rem;
     }
