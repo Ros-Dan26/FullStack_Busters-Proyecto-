@@ -46,7 +46,7 @@ const createFooter = () => {
             </ul>
         </div>
     </div>
-    <p class="copyright">&copy; 2025 Sport Shop. Todos los derechos reservados.</p>
+    <p class="copyright">&copy; 2025 Net/Shopping. Todos los derechos reservados.</p>
     `;
     footerElement.innerHTML = footerContent;
 };
