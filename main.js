@@ -9,7 +9,7 @@ const createFooter = () => {
     <div class="footer-content">
         <div class="footer-section logo-container">
             <div class="logo-image-footer">
-                <img src="./assets/icono-minimalista.png" alt="Logo Sport Shop" width="150">
+                <img src="./assets/icono-minimalista.png" alt="Logo Net-Shopping Online" width="150">
             </div>
         </div>
         <div class="footer-section">
@@ -33,7 +33,7 @@ const createFooter = () => {
             <p>Contacto</p>
             <ul>
                 <li>Teléfono: 55 1234 5678</li>
-                <li>Correo: contacto@sportshop.com</li>
+                <li>Correo: contacto@netshopping.com</li>
                 <li>CDMX, México</li>
             </ul>
         </div>
@@ -46,7 +46,7 @@ const createFooter = () => {
             </ul>
         </div>
     </div>
-    <p class="copyright">&copy; 2025 Sport Shop. Todos los derechos reservados.</p>
+    <p class="copyright">&copy; 2025 Net-Shopping Online. Todos los derechos reservados.</p>
     `;
     footerElement.innerHTML = footerContent;
 };
@@ -57,7 +57,7 @@ function createNavbar() {
             <div class="container-fluid">
                 <a class="navbar-brand" href="index.html">
                     <img src="./assets/icono-minimalista.png" alt="logo" width="50">
-                    <strong class="ms-2">Sport Shop</strong>
+                    <strong class="ms-2">Net-Shopping Online</strong>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarMenu">
