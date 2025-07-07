@@ -1,81 +1,54 @@
-function validate(val) {
-    v1 = document.getElementById("fname");
-    v2 = document.getElementById("lname");
-    v3 = document.getElementById("email");
-    v4 = document.getElementById("mob");
-    v5 = document.getElementById("job");
-    v6 = document.getElementById("ans");
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('demoForm');
 
-    flag1 = true;
-    flag2 = true;
-    flag3 = true;
-    flag4 = true;
-    flag5 = true;
-    flag6 = true;
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
 
-    if(val>=1 || val==0) {
-        if(v1.value == "") {
-            v1.style.borderColor = "red";
-            flag1 = false;
+        if (validateForm()) {
+            alert('Formulario enviado correctamente. Nos pondremos en contacto contigo pronto.');
+            form.reset();
+            clearValidation();
         }
-        else {
-            v1.style.borderColor = "green";
-            flag1 = true;
-        }
-    }
+    });
 
-    if(val>=2 || val==0) {
-        if(v2.value == "") {
-            v2.style.borderColor = "red";
-            flag2 = false;
-        }
-        else {
-            v2.style.borderColor = "green";
-            flag2 = true;
-        }
-    }
-    if(val>=3 || val==0) {
-        if(v3.value == "") {
-            v3.style.borderColor = "red";
-            flag3 = false;
-        }
-        else {
-            v3.style.borderColor = "green";
-            flag3 = true;
-        }
-    }
-    if(val>=4 || val==0) {
-        if(v4.value == "") {
-            v4.style.borderColor = "red";
-            flag4 = false;
-        }
-        else {
-            v4.style.borderColor = "green";
-            flag4 = true;
-        }
-    }
-    if(val>=5 || val==0) {
-        if(v5.value == "") {
-            v5.style.borderColor = "red";
-            flag5 = false;
-        }
-        else {
-            v5.style.borderColor = "green";
-            flag5 = true;
-        }
-    }
-    if(val>=6 || val==0) {
-        if(v6.value == "") {
-            v6.style.borderColor = "red";
-            flag6 = false;
-        }
-        else {
-            v6.style.borderColor = "green";
-            flag6 = true;
-        }
+    function validateForm() {
+        let isValid = true;
+        const fields = form.querySelectorAll('input[required], textarea[required]');
+
+        fields.forEach(field => {
+            const value = field.value.trim();
+            const feedback = field.nextElementSibling;
+
+            // Reset estado
+            field.classList.remove('is-invalid');
+
+            // Validación general
+            if (!value) {
+                field.classList.add('is-invalid');
+                isValid = false;
+                return;
+            }
+
+            // Validación de email
+            if (field.type === 'email' && !/^\S+@\S+\.\S+$/.test(value)) {
+                field.classList.add('is-invalid');
+                isValid = false;
+                return;
+            }
+
+            // Validación de teléfono básico (para México)
+            if (field.type === 'tel' && !/^(\+?52)?\s?\d{2,3}\s?\d{4}\s?\d{4}$/.test(value)) {
+                field.classList.add('is-invalid');
+                isValid = false;
+                return;
+            }
+        });
+
+        return isValid;
     }
 
-    flag = flag1 && flag2 && flag3 && flag4 && flag5 && flag6;
-
-    return flag;
-}
+    function clearValidation() {
+        const fields = form.querySelectorAll('input, textarea');
+        fields.forEach(field => field.classList.remove('is-invalid'));
+    }
+});
