@@ -5,11 +5,29 @@ document.addEventListener('DOMContentLoaded', function () {
         event.preventDefault();
 
         if (validateForm()) {
-            alert('Formulario enviado correctamente. Nos pondremos en contacto contigo pronto.');
-            form.reset();
-            clearValidation();
-        }
-    });
+                // Captura datos del formulario
+        const formData = {
+            fname: form.fname.value,
+            lname: form.lname.value,
+            email: form.email.value,
+            phone: form.phone.value,
+            job: form.job.value,
+            purpose: form.mensaje.value
+        };
+
+        // ENVÍO A EMAILJS
+        emailjs.send("service_7yw8m9n", "template_uyxs1m9", formData)
+            .then(function(response) {
+                console.log("Correo enviado", response.status, response.text);
+                alert('Formulario enviado correctamente. Nos pondremos en contacto contigo pronto.');
+                form.reset();
+                clearValidation();
+            }, function(error) {
+                console.error("Fallo en el envío", error);
+                alert("Hubo un error al enviar el formulario. Intenta más tarde.");
+            });
+    }
+        });
 
     function validateForm() {
         let isValid = true;
