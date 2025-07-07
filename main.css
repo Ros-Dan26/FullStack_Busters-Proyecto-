@@ -98,7 +98,6 @@ footer {
     margin-top: 2rem;
     color: #777;
 }
-
 /* Responsive */
 @media (max-width: 768px) {
     .footer-content {
