@@ -14,54 +14,38 @@
         <div id="navbar"></div>
     </nav>
 
-    <div class="container-fluid px-1 py-5 mx-auto contact-section">
-        <div class="row d-flex justify-content-center">
-            <div class="col-xl-7 col-lg-8 col-md-9 col-11 text-center">
-                <h3 class="mb-3">Solicita una Demostración</h3>
-                <p class="highlight-text">Responde unas preguntas<br>para ofrecerte la mejor experiencia personalizada.</p>
-                <div class="card contact-card">
-                    <h5 class="text-center mb-4">Impulsando empresas de clase mundial</h5>
-                    <form class="form-card" id="demoForm">
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label for="fname" class="form-label">Nombre<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="fname" name="fname" placeholder="Tu nombre" required>
-                                <div class="invalid-feedback">Por favor ingresa tu nombre</div>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="lname" class="form-label">Apellido<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="lname" name="lname" placeholder="Tu apellido" required>
-                                <div class="invalid-feedback">Por favor ingresa tu apellido</div>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="email" class="form-label">Correo electrónico<span class="text-danger">*</span></label>
-                                <input type="email" class="form-control" id="email" name="email" placeholder="tucorreo@empresa.com" required>
-                                <div class="invalid-feedback">Por favor ingresa un correo válido</div>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="phone" class="form-label">Teléfono<span class="text-danger">*</span></label>
-                                <input type="tel" class="form-control" id="phone" name="phone" placeholder="+52 55 1234 5678" required>
-                                <div class="invalid-feedback">Por favor ingresa un teléfono válido</div>
-                            </div>
-                            <div class="col-12">
-                                <label for="job" class="form-label">Puesto<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="job" name="job" placeholder="Tu puesto en la empresa" required>
-                                <div class="invalid-feedback">Por favor ingresa tu puesto</div>
-                            </div>
-                            <div class="col-12">
-                                <label for="purpose" class="form-label">¿Cómo te gustaría usar nuestros servicios?<span class="text-danger">*</span></label>
-                                <textarea class="form-control" id="purpose" name="purpose" rows="3" required></textarea>
-                                <div class="invalid-feedback">Por favor describe tu necesidad</div>
-                            </div>
-                            <div class="col-12 mt-4">
-                                <button type="submit" class="btn btn-primary btn-lg w-100">Solicitar demostración</button>
-                            </div>
+  <div class="container">
+            
+                <div id="content" >
+                    <h1> Contáctanos </h1>
+
+                    <form role="form">
+                        <div class="form-group">
+                            <label for="username"> Nombre <span class="required">*</span></label>
+                            <input type="text" class="form-control" name="username" id="username"  required="required" >
                         </div>
+                        <div class="form-group">
+                            <label for="usermail"> Correo electrónico <span class="required">*</span></label> 
+                            <input type="email" class="form-control" name="usermail" id="usermail"  required="required">
+                        </div>
+                         <div class="form-group">
+                            <label for="userphone">Celular <span class="required">*</span></label> 
+                            <input type="tel" class="form-control" name="userphone" id="userphone" required="required">
+                        </div>
+                        <div class="form-group">
+                            <label for="subject"> Asunto </label>
+                            <input type="text" class="form-control" name="subject" id="subject"  required="required">
+                        </div>
+                        <div class="form-group">
+                            <label for="message"> Mensaje </label>
+                            <textarea name="message" id="message"  class="form-control" rows="3"></textarea>
+                        </div>
+                        <input type="button" value="Enviar el correo !" class="btn2" />    	
                     </form>
                 </div>
-            </div>
+           
+            
         </div>
-    </div>
 
     <footer>
         <div id="footer"></div>
@@ -69,5 +53,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
     <script src="main.js"></script>
+    <script src="./Contactus/Contactus.js"></script>
 </body>
 </html>
