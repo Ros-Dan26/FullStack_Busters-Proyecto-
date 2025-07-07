@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('demoForm');
 
-    form.addEventListener('submit', function (event) {
+    form.addEventListener('click', function (event) {
         event.preventDefault();
 
         if (validateForm()) {
