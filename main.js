@@ -24,8 +24,8 @@ const createFooter = () => {
         <div class="footer-section">
             <p>General</p>
             <ul>
-                <li><a href="aboutus.html">Sobre nosotros</a></li>
-                <li><a href="contactanos.html">Contáctanos</a></li>
+                <li><a href="Aboutus.html">Sobre nosotros</a></li>
+                <li><a href="Contactus.html">Contáctanos</a></li>
                 <li><a href="terminos.html">Términos y condiciones</a></li>
             </ul>
         </div>
