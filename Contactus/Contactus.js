@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('demoForm');
+    const button = document.getElementById('btnEnviar');
 
     form.addEventListener('click', function (event) {
         event.preventDefault();
@@ -7,16 +8,15 @@ document.addEventListener('DOMContentLoaded', function () {
         if (validateForm()) {
                 // Captura datos del formulario
         const formData = {
-            fname: form.fname.value,
-            lname: form.lname.value,
-            email: form.email.value,
-            phone: form.phone.value,
-            job: form.job.value,
-            purpose: form.mensaje.value
+            nombre: form.username.value,
+            correo: form.usermail.value,
+            celular: form.userphone.value,
+            asunto: form.subject.value,
+            mensaje: form.message.value,
         };
 
         // ENVÍO A EMAILJS
-        emailjs.send("service_7yw8m9n", "template_uyxs1m9", formData)
+        emailjs.send("service_7yw8m9n","template_g2k5dly", formData)
             .then(function(response) {
                 console.log("Correo enviado", response.status, response.text);
                 alert('Formulario enviado correctamente. Nos pondremos en contacto contigo pronto.');
@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.error("Fallo en el envío", error);
                 alert("Hubo un error al enviar el formulario. Intenta más tarde.");
             });
+            console.log("Form data enviado:", formData);
     }
         });
 

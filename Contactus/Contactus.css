@@ -305,3 +305,9 @@ input[type=submit]:active, input[type=submit]:focus {
         animation-name: animPhone;
     }
 }
+
+.custom-placeholder::placeholder {
+  font-size: 0.75rem;         /* Tamaño más pequeño */
+  color: rgba(0, 0, 0, 0.4);  /* Más transparente (gris) */
+  font-style: italic;         /* Opcional: lo hace más sutil */
+}
