@@ -1,0 +1,32 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.bg-gradient {
+  background: linear-gradient(180deg, #1e3c72 0%, #2a5298 100%);
+}
+
+.login-box {
+  max-width: 400px;
+}
+
+.forgot-password {
+  position: absolute;
+  right: 10px;
+  top: 36px;
+  font-size: 0.9rem;
+  color: #ccc;
+  text-decoration: none;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  cursor: pointer;
+}
