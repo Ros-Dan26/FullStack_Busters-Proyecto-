@@ -15,7 +15,7 @@ const createFooter = () => {
         <div class="footer-section">
             <p class="p-0">Categorías</p>
             <ul>
-                <li><a href="Index.html">Principal</a></li>
+                <li><a href="index.html">Principal</a></li>
                 <li><a href="productos.html">Productos</a></li>
                 <li><a href="carrito.html">Carrito</a></li>
             </ul>
@@ -23,9 +23,9 @@ const createFooter = () => {
         <div class="footer-section">
             <p>General</p>
             <ul>
-                <li><a href="Aboutus.html">Sobre nosotros</a></li>
-                <li><a href="Contactus.html">Contáctanos</a></li>
-                <li><a href="Registro.html">Registrate</a></li>
+                <li><a href="aboutus.html">Sobre nosotros</a></li>
+                <li><a href="aboutus.html">Contáctanos</a></li>
+                <li><a href="registro.html">Registrate</a></li>
             </ul>
         </div>
         <div class="footer-section contacto-section">
@@ -66,13 +66,13 @@ function createNavbar() {
                     <div class="d-flex justify-content-lg-center justify-content-start w-100">
                         <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                             <li class="nav-item">
-                                <a class="nav-link" href="Index.html">Principal</a>
+                                <a class="nav-link" href="index.html">Principal</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="Contactus.html">Contáctanos</a>
+                                <a class="nav-link" href="aboutus.html">Contáctanos</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="Aboutus.html">Sobre nosotros</a>
+                                <a class="nav-link" href="aboutus.html">Sobre nosotros</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="productos.html">Productos</a>
