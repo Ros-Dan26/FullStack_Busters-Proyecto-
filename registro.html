@@ -1,27 +1,56 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Contacto - Net-Shopping Online</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="main.css">
-    <link rel="stylesheet" href="Contactus/Contactus.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Crear cuenta</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" 
+  crossorigin="anonymous">
+  <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="./registro/styles.css" />
 </head>
 <body>
-    <nav>
+<nav>
         <div id="navbar"></div>
     </nav>
 
-  <!--- pagina de registro --->
-    <footer>
+  <div class="container-fluid bg-page d-flex justify-content-center align-items-center min-vh-100">
+    <div class="form-box p-5 rounded-4 shadow">
+      <h1 class="text-center mb-4 titulo">Crear cuenta</h1>
+      <form id="registerForm">
+        <div class="mb-3">
+          <input type="text" class="form-control input-blue" placeholder="Nombres:" required />
+        </div>
+        <div class="mb-3">
+          <input type="text" class="form-control input-white" placeholder="Apellidos:" required />
+        </div>
+        <div class="mb-3">
+          <input type="email" class="form-control input-blue" placeholder="Correo:" required />
+        </div>
+        <div class="mb-3">
+          <input type="tel" class="form-control input-white" placeholder="Teléfono:" required />
+        </div>
+        <div class="mb-3">
+          <input type="password" class="form-control input-blue" placeholder="Contraseña:" required />
+        </div>
+        <div class="mb-4">
+          <input type="password" class="form-control input-white" placeholder="Confirme Contraseña:" required />
+        </div>
+        <div class="d-grid">
+          <button type="submit" class="btn btn-primary boton">REGISTRAR</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+ <footer>
         <div id="footer"></div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="main.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script src="main.js"></script>
-    <script src="./Contactus/Contactus.js"></script>
+    
 </body>
 </html>

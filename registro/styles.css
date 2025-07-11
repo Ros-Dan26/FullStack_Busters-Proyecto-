@@ -1,0 +1,43 @@
+body {
+  background-color: #F5EFE7;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.bg-page {
+  background-color: #F5EFE7;
+}
+
+.titulo {
+  font-size: 48px;
+  font-weight: bold;
+}
+
+.form-box {
+  background-color: #E5D5C3;
+  width: 400px;
+}
+
+.input-blue {
+  background-color: #274A7D;
+  color: white;
+  border: none;
+}
+
+.input-blue::placeholder {
+  color: white;
+}
+
+.input-white {
+  background-color: #F6F6F6;
+  color: black;
+  border: none;
+}
+
+.input-white::placeholder {
+  color: black;
+}
+
+.boton {
+  background-color: #274A7D;
+  border: none;
+}
