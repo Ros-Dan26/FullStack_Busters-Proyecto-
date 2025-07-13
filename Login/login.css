@@ -1,32 +1,116 @@
 body {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
+    background: #f5f2ef;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    min-height: 100vh;
+}
+nav, #navbar, .navbar {
+    border-bottom: none !important;
+    box-shadow: none !important;
 }
 
-.bg-gradient {
-  background: linear-gradient(180deg, #1e3c72 0%, #2a5298 100%);
+.login-container {
+    display: flex;
+    min-height: 100vh;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    border-top: none !important;
 }
 
-.login-box {
-  max-width: 400px;
+.login-left {
+    flex: 1;
+    background: #ececec;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: none !important;
 }
 
-.forgot-password {
-  position: absolute;
-  right: 10px;
-  top: 36px;
-  font-size: 0.9rem;
-  color: #ccc;
-  text-decoration: none;
+.login-image {
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
 }
 
-.forgot-password:hover {
-  text-decoration: underline;
+.login-right {
+    flex: 1;
+    background: linear-gradient(180deg, #3c5a99 0%, #6e8ecb 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-top: none !important;
 }
 
-.toggle-password {
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
-  cursor: pointer;
+.login-title {
+    color: #fff;
+    font-size: 2.6rem;
+    font-weight: bold;
+    margin-bottom: 2.5rem;
+    letter-spacing: 2px;
+}
+
+form {
+    width: 100%;
+    max-width: 440px;
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.login-label {
+    color: #fff;
+    font-weight: 500;
+    font-size: 1.08rem;
+    margin-bottom: 0.4rem;
+}
+
+.login-input {
+    width: 100%;
+    min-height: 48px;
+    padding: 0.8rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    margin-bottom: 0.2rem;
+    box-sizing: border-box;
+    background: #fff;
+    color: #333;
+}
+
+.login-input:focus {
+    outline: 2px solid #377dff;
+    box-shadow: none;
+}
+
+.forgot-link {
+    color: #c0c8d7;
+    text-decoration: none;
+    font-size: 0.97rem;
+    transition: color 0.2s;
+}
+
+.forgot-link:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.login-btn {
+    background: #377dff;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 1rem 0;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-top: 1.5rem;
+    width: 100%;
+    transition: background 0.2s;
+}
+
+.login-btn:hover {
+    background: #285bb5;
 }
