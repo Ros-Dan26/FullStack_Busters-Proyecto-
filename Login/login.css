@@ -1,49 +1,59 @@
-body {
+/* Estructura global */
+
+html, body {
+    height: 100%;
     margin: 0;
     padding: 0;
-    background: #f5f2ef;
+    /* Corregido: ahora el degradado tiene transición visible entre los colores */
+    background: linear-gradient(100deg, #3c5a99 0%, #6e8ecb 100%);
     font-family: 'Segoe UI', Arial, sans-serif;
-    min-height: 100vh;
-}
-nav, #navbar, .navbar {
-    border-bottom: none !important;
-    box-shadow: none !important;
+    display: flex;
+    flex-direction: column;
 }
 
-.login-container {
-    display: flex;
-    min-height: 100vh;
-    width: 100vw;
-    margin: 0;
-    padding: 0;
+
+nav, #navbar, .navbar, footer {
+    flex-shrink: 0;
+    border-bottom: none !important;
+    box-shadow: none !important;
     border-top: none !important;
 }
 
+/* Contenedor de login */
+.login-container {
+    flex: 1;
+    display: flex;
+    width: 100vw;
+    padding: 2rem;
+    margin: 0;
+}
+
+/* Lado izquierdo con imagen */
 .login-left {
     flex: 1;
     background: #ececec;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-top: none !important;
 }
 
 .login-image {
     width: 100%;
-    height: 100vh;
+    height: 100%;
     object-fit: cover;
 }
 
+/* Lado derecho con formulario */
 .login-right {
     flex: 1;
-    background: linear-gradient(180deg, #3c5a99 0%, #6e8ecb 100%);
+
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border-top: none !important;
 }
 
+/* Título */
 .login-title {
     color: #fff;
     font-size: 2.6rem;
@@ -52,6 +62,7 @@ nav, #navbar, .navbar {
     letter-spacing: 2px;
 }
 
+/* Formulario */
 form {
     width: 100%;
     max-width: 440px;
@@ -61,6 +72,7 @@ form {
     box-shadow: none;
 }
 
+/* Etiquetas y campos */
 .login-label {
     color: #fff;
     font-weight: 500;
@@ -86,6 +98,7 @@ form {
     box-shadow: none;
 }
 
+/* Enlace de recuperación */
 .forgot-link {
     color: #c0c8d7;
     text-decoration: none;
@@ -98,6 +111,7 @@ form {
     text-decoration: underline;
 }
 
+/* Botones */
 .login-btn {
     background: #377dff;
     color: #fff;
