@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="es">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,21 +8,199 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="main.css">
-    <link rel="stylesheet" href="contactus/contactus.css">
+    <link rel="stylesheet" href="index/stylesIndex.css">
 </head>
+
 <body>
+    <!--navegador-->
     <nav>
         <div id="navbar"></div>
     </nav>
 
-  <!--- pagina de inicio --->
+    <!--Hero section semantico-->
+    <section class="hero">
+        <div class="hero__container">
+            <!--Contenido textual-->
+            <div class="hero__content">
+                <!--Titulo principal con propuesta de valor clara-->
+                <h1 class="hero__title">
+                    Transforma tu estilo con zapatillas unicas
+                </h1>
+                <p class="hero__subtitle">
+                    Encuentra los modelos mas exclusivos y vive la cultura urbana.
+                </p>
+                <!-- Boton de llamada de accion-->
+                <button class="hero__cta" arial-label="Comprar">
+                    Comprar
+                </button>
+            </div>
+            <!-- Imagen destacada del producto-->
+            <div class="hero__image">
+                <img src="index/imgIndex/shoesNikeRojo.webp" alt="sneakers edicion limitada" class="hero__img" />
+            </div>
+        </div>
+    </section>
+
+    <!--Carrusel-->
+    <h2 class="carousel__title">
+        Los productos destacados de esta temporada
+    </h2>
+    <section class="carousel" aria-label="Productos destacados">
+        <!-- boton anterior-->
+        <button class="carousel__button carousel__button--prev" aria-label="Anterior">
+            &#10094;
+        </button>
+        <!--Contenedor de las tarjetas-->
+        <div class="carousel__track-container">
+            <ul class="carousel__track">
+                <!--tarjeta de producto 1-->
+                <li class="carousel__slide">
+                    <div class="product-card">
+                        <img src="index/imgIndex/shoesNikeRojo.webp" alt="Modelo x en x y x"
+                            class="product-card__img" />
+                        <h2 class="product-card__name"> Runner 1</h2>
+                        <p class="product-card__price">$120</p>
+                        <button class="product-card__btn" aria-label="Ver mas Runner X">Ver más</button>
+                    </div>
+                </li>
+                <!--Repite <li> para cada producto-->
+                <!--tarjeta 2-->
+                <li class="carousel__slide">
+                    <div class="product-card">
+                        <img src="index/imgIndex/shoesNikeRojo.webp" alt="Modelo x en x y x"
+                            class="product-card__img" />
+                        <h2 class="product-card__name"> Runner 2</h2>
+                        <p class="product-card__price">$120</p>
+                        <button class="product-card__btn" aria-label="Ver mas Runner X">Ver más</button>
+                    </div>
+                </li>
+                <!--tarjeta 3-->
+                <li class="carousel__slide">
+                    <div class="product-card">
+                        <img src="index/imgIndex/shoesNikeRojo.webp" alt="Modelo x en x y x"
+                            class="product-card__img" />
+                        <h2 class="product-card__name"> Runner 3</h2>
+                        <p class="product-card__price">$120</p>
+                        <button class="product-card__btn" aria-label="Ver mas Runner X">Ver más</button>
+                    </div>
+                </li>
+                <!--tarjeta 4-->
+                <li class="carousel__slide">
+                    <div class="product-card">
+                        <img src="index/imgIndex/shoesNikeRojo.webp" alt="Modelo x en x y x"
+                            class="product-card__img" />
+                        <h2 class="product-card__name"> Runner 4</h2>
+                        <p class="product-card__price">$120</p>
+                        <button class="product-card__btn" aria-label="Ver mas Runner X">Ver más</button>
+                    </div>
+                </li>
+                <!--tarjeta 5-->
+                <li class="carousel__slide">
+                    <div class="product-card">
+                        <img src="index/imgIndex/shoesNikeRojo.webp" alt="Modelo x en x y x"
+                            class="product-card__img" />
+                        <h2 class="product-card__name"> Runner 5</h2>
+                        <p class="product-card__price">$120</p>
+                        <button class="product-card__btn" aria-label="Ver mas Runner X">Ver más</button>
+                    </div>
+                </li>
+                <!--tarjeta 6-->
+                <li class="carousel__slide">
+                    <div class="product-card">
+                        <img src="index/imgIndex/shoesNikeRojo.webp" alt="Modelo x en x y x"
+                            class="product-card__img" />
+                        <h2 class="product-card__name"> Runner 6</h2>
+                        <p class="product-card__price">$120</p>
+                        <button class="product-card__btn" aria-label="Ver mas Runner X">Ver más</button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!--boton siguiente-->
+        <button class="carousel__button carousel__button--next" aria-label="Siguiente">
+            &#10095;
+        </button>
+    </section>
+
+    <!-- testimonios-->
+    <section class="testimonials" aria-labelledby="testimonials-title">
+        <!--titulo de la seccion-->
+        <h2 id="testimonials-title" class="testimonials__title">
+            Lo que dicen nuestros clientes
+        </h2>
+        <!-- contenedor de tarjetas-->
+        <div class="testimonials__grid">
+            <!--testimonio 1-->
+            <article class="testimonial">
+                <!--foto de cliente-->
+                <img src="index/imgIndex/shoesNikeRojo.webp" alt="Foto de Maria Gonzales" class="testimonial__photo" />
+
+                <!--cita con el texto de la resenia-->
+                <blockquote class="testimonial__quote">
+                    <p>
+                        Me encantaron mis nuevos sneakers, ¡son súper cómodas y con mucho estilo!
+                    </p>
+                </blockquote>
+                <!-- Calificación de estrellas -->
+                <div class="testimonial__rating" aria-label="5 de 5 estrellas">
+                    <span class="star" aria-hidden="true">★</span>
+                    <span class="star" aria-hidden="true">★</span>
+                    <span class="star" aria-hidden="true">★</span>
+                    <span class="star" aria-hidden="true">★</span>
+                    <span class="star" aria-hidden="true">★</span>
+                </div>
+
+                <!--autor de la resenia-->
+                <cite class="testimonial__author">Maria Gonzales</cite>
+            </article>
+            <!-- Testimonio #2 -->
+            <article class="testimonial">
+                <img src="index/imgIndex/shoesNikeRojo.webp" alt="Foto de Carlos Ramírez" class="testimonial__photo" />
+                <blockquote class="testimonial__quote">
+                    <p>
+                        Excelente atención y envío rapidísimo. Mis zapatillas llegaron en perfectas condiciones.
+                    </p>
+                </blockquote>
+                <div class="testimonial__rating" aria-label="4 de 5 estrellas">
+                    <span class="star" aria-hidden="true">★</span>
+                    <span class="star" aria-hidden="true">★</span>
+                    <span class="star" aria-hidden="true">★</span>
+                    <span class="star" aria-hidden="true">★</span>
+                    <span class="star" aria-hidden="true">☆</span>
+                </div>
+                <cite class="testimonial__author">Carlos Ramírez</cite>
+            </article>
+
+            <!-- Testimonio #3 -->
+            <article class="testimonial">
+                <img src="index/imgIndex/shoesNikeRojo.webp" alt="Foto de Ana López" class="testimonial__photo" />
+                <blockquote class="testimonial__quote">
+                    <p>
+                        Diseño único y calidad premium. Definitivamente mi tienda de confianza.
+                    </p>
+                </blockquote>
+                <div class="testimonial__rating" aria-label="5 de 5 estrellas">
+                    <span class="star" aria-hidden="true">★</span>
+                    <span class="star" aria-hidden="true">★</span>
+                    <span class="star" aria-hidden="true">★</span>
+                    <span class="star" aria-hidden="true">★</span>
+                    <span class="star" aria-hidden="true">★</span>
+                </div>
+                <cite class="testimonial__author">Ana López</cite>
+            </article>
+        </div>
+    </section>
+
+    <!-- pie de pagina -->
     <footer>
         <div id="footer"></div>
     </footer>
-
+    <!-- scripts-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script src="main.js"></script>
     <script src="./contactus/contactus.js"></script>
+    <script src="index/scriptIndex.js"></script>
 </body>
+
 </html>
