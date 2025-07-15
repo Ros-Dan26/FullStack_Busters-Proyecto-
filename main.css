@@ -98,8 +98,10 @@ footer {
     margin-top: 2rem;
     color: #D5B99C;
 }
+
 /* Responsive */
 @media (max-width: 768px) {
+    
     .footer-content {
         flex-direction: column;
         align-items: center;
