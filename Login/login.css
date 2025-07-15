@@ -12,13 +12,6 @@ html, body {
 }
 
 
-nav, #navbar, .navbar, footer {
-    flex-shrink: 0;
-    border-bottom: none !important;
-    box-shadow: none !important;
-    border-top: none !important;
-}
-
 /* Contenedor de login */
 .login-container {
     flex: 1;
@@ -46,12 +39,14 @@ nav, #navbar, .navbar, footer {
 /* Lado derecho con formulario */
 .login-right {
     flex: 1;
-
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background: linear-gradient(135deg, #3c5a99 0%, #6e8ecb 100%);
+    color: #fff;
 }
+
 
 /* Título */
 .login-title {
