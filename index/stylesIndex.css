@@ -1,22 +1,44 @@
-/* ---------- Variables CSS globales ---------- */
+/* ===================================================================
+   styles.css — Landing Page de Sneakers
+   Paleta: #f5efe7 & #213555 | Tipografía Montserrat
+   Responsividad completa con media queries
+   =================================================================== */
+
+/* 1. VARIABLES GLOBALES */
 :root {
-    --color-bg: #ffffff;
+    /* Colores */
+    --color-bg: #f5efe7;
     --color-primary: #213555;
-    --color-secondary: #213555;
-    --font-sans: 'Helvetica Neue', Arial, sans-serif;
-    --transition-speed: 0.3s;
+    --color-accent: #213555;
+    --color-text: var(--color-primary);
+    --color-muted: rgba(33, 53, 85, 0.7);
+
+    /* Tipografía */
+    --font-sans: 'Montserrat', sans-serif;
+    --title-lg: 2.5rem;
+    --title-sm: 1.75rem;
+
+    /* Espaciados */
+    --spacing-xxs: 0.25rem;
+    --spacing-xs: 0.5rem;
     --spacing: 1rem;
-    --transition: 0.4s ease;
+    --spacing-lg: 2rem;
+    --spacing-xl: 4rem;
+
+    /* Bordes y radios */
+    --radius: 0.5rem;
+    /* 8px */
+
+    /* Transiciones */
+    --transition: 0.3s ease;
+
+    /* Componentes */
     --card-width: 280px;
-    --color-accent: #ff6f61;
-    --title-size-desktop: 2.5rem;
-    --title-size-mobile: 1.75rem;
-    --color-text: #1a1a1a;
-    --color-muted: #555555;
-    --radius: 8px;
+    --banner-padding: 0.75rem 1rem;
+    --banner-font-sm: 0.9rem;
 }
 
-/* ---------- Reset / Base global ---------- */
+/* 2. RESET Y BASE GLOBAL */
 *,
 *::before,
 *::after {
@@ -25,116 +47,128 @@
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: var(--font-sans);
     background-color: var(--color-bg);
-    color: var(--color-primary);
+    color: var(--color-text);
     line-height: 1.6;
-    padding: var(--spacing);
+    margin: 0;
+    padding: 0;
 }
 
-/* ---------- Hero Section Styles ---------- */
+/* Elimina márgenes laterales globales */
+body>* {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+/* 3. ESPACIADO GENERAL ENTRE SECCIONES */
+section {
+    padding: var(--spacing-xl) var(--spacing-lg);
+}
+
+section>h1,
+section>h2 {
+    font-size: var(--title-lg);
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-lg);
+}
+
+/* 4. HERO SECTION */
 .hero {
-    padding: 2rem;
-    background: linear-gradient(135deg,
-            rgba(245, 239, 231, 1) 0%,
-            rgba(182, 127, 89, 1) 100%);
+    background: linear-gradient(135deg, #f5efe7 0%, #e0d3cb 100%);
 }
 
 .hero__container {
+    max-width: 1200px;
+    margin: 0 auto;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     align-items: center;
-    gap: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-/* Contenido de texto */
-.hero__content {
-    text-align: center;
+    gap: var(--spacing-lg);
+    padding: 0 var(--spacing-lg);
 }
 
 .hero__title {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
+    font-size: var(--title-lg);
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing);
+    text-align: center;
 }
 
 .hero__subtitle {
     font-size: 1.125rem;
-    margin-bottom: 1.5rem;
-    color: #213555;
+    color: var(--color-muted);
+    margin-bottom: var(--spacing-lg);
+    text-align: center;
 }
 
-/* Botón CTA */
 .hero__cta {
-    background-color: var(--color-secondary);
-    color: #f5efe7;
+    background-color: var(--color-primary);
+    color: var(--color-bg);
     border: none;
-    padding: 0.75rem 1.5rem;
+    padding: var(--spacing-xs) var(--spacing-lg);
     font-size: 1rem;
+    border-radius: var(--radius);
     cursor: pointer;
-    transition: background-color var(--transition-speed),
-        transform var(--transition-speed);
+    transition: background var(--transition), transform var(--transition);
 }
 
 .hero__cta:hover,
 .hero__cta:focus {
-    background-color: #2e5b9b;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    transform: translateY(-3px);
+    background-color: #1b2f4a;
+    transform: translateY(-2px);
 }
 
-/* Imagen del producto */
 .hero__image {
     text-align: center;
 }
 
 .hero__img {
-    max-width: 100%;
-    height: auto;
-    transition: transform var(--transition-speed);
+    width: 100%;
+    border-radius: var(--radius);
+    transition: transform var(--transition);
 }
 
 .hero__img:hover {
     transform: scale(1.05);
 }
 
-/* ---------- Media Queries para Responsividad ---------- */
-@media (min-width: 768px) {
-    .hero__content {
-        text-align: left;
-    }
-}
-
-@media (max-width: 480px) {
-    .hero__title {
-        font-size: 2rem;
-    }
-
-    .hero__subtitle {
-        font-size: 1rem;
-    }
-}
-
-/*contenedor principal carrusel*/
+/* 5. CARRUSEL DE PRODUCTOS */
 .carousel {
     position: relative;
-    max-width: 100%;
-    margin: 0 auto;
+    overflow: hidden;
+    padding-inline: var(--spacing-lg);
+}
+
+.carousel__title {
+    text-align: center;
+    font-weight: 700;
+    margin-block: var(--spacing-lg) var(--spacing);
+}
+
+.carousel__track-container {
     overflow: hidden;
 }
 
-/*titulo del carrusel*/
-.carousel__title {
-    font-size: var(--title-size-desktop);
-    font-weight: 700;
-    color: var(--color-primary);
-    text-align: center;
-    margin-bottom: calc(var(--spacing) * 2);
+.carousel__track {
+    display: flex;
+    transition: transform var(--transition);
 }
 
-/*botonoes prev/next*/
+.carousel__slide {
+    min-width: var(--card-width);
+    margin-right: var(--spacing);
+    display: flex;
+    justify-content: center;
+}
+
 .carousel__button {
     position: absolute;
     top: 50%;
@@ -143,7 +177,8 @@ body {
     border: none;
     font-size: 2rem;
     color: var(--color-primary);
-    padding: var(--spacing);
+    padding: var(--spacing-xs);
+    border-radius: var(--radius);
     cursor: pointer;
     transition: background var(--transition);
     z-index: 1;
@@ -154,37 +189,18 @@ body {
 }
 
 .carousel__button--prev {
-    left: 0;
+    left: var(--spacing);
 }
 
 .carousel__button--next {
-    right: 0;
+    right: var(--spacing);
 }
 
-/*Pista del carrusel*/
-.carousel__track--container {
-    overflow: hidden;
-}
-
-.carousel__track {
-    display: flex;
-    transition: transform var(--transition);
-    list-style: none;
-}
-
-/*cada slide / tarjeta*/
-.carousel__slide {
-    min-width: var(--card-width);
-    margin-right: var(--spacing);
-    display: flex;
-    justify-content: center;
-}
-
-/*tarjeta de producto*/
+/* Tarjetas */
 .product-card {
-    background: #fafafa;
-    border: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 1);
+    background-color: var(--color-bg);
+    border-radius: var(--radius);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     padding: var(--spacing);
     text-align: center;
     transition: transform var(--transition), box-shadow var(--transition);
@@ -197,7 +213,7 @@ body {
 
 .product-card__img {
     width: 100%;
-    border-radius: 4px;
+    border-radius: var(--radius);
     margin-bottom: var(--spacing);
 }
 
@@ -205,69 +221,41 @@ body {
     font-size: 1.125rem;
     font-weight: 700;
     color: var(--color-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.product-card__price {
+    color: var(--color-accent);
+    margin-bottom: var(--spacing);
+}
+
+.product-card__btn {
+    background-color: var(--color-primary);
+    color: var(--color-bg);
     border: none;
-    padding: 0.5rem 1rem;
+    padding: var(--spacing-xs) var(--spacing-lg);
+    border-radius: var(--radius);
     cursor: pointer;
-    transition: background var(--transition);
+    transition: background var(--transition), transform var(--transition);
 }
 
-.product-card__btn:hover {
-    background: darken(var(--color-accent), 10%);
+.product-card__btn:hover,
+.product-card__btn:focus {
+    background-color: #1b2f4a;
+    transform: translateY(-2px);
 }
 
-/*responsividad*/
-@media(max-width: 1024px) {
-    .carousel__slide {
-        min-width: 240px;
-    }
-}
-
-@media (max-width: 768px) {
-    .carousel__slide {
-        min-width: 200px;
-    }
-}
-
-@media (max-width: 480px) {
-    .carousel__slide {
-        min-width: 160px;
-        margin-right: 0.5rem;
-    }
-}
-
-@media (max-width: 768px) {
-    .carousel__title {
-        font-size: var(--title-size-mobile);
-        margin-bottom: var(--spacing);
-    }
-}
-
-/*seccion de testimonios*/
-.testimonials {
-    max-width: 1200px;
-    margin: 0 auto var(--spacing);
-    padding: var(--spacing);
-}
-
-.testimonials__title {
-    font-size: 2rem;
-    font-weight: 700;
-    text-align: center;
-    margin-bottom: calc(var(--spacing) * 2);
-}
-
-/*grid responsivo de tarjetas*/
+/* 6. TESTIMONIOS */
 .testimonials__grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: var(--spacing);
+    gap: var(--spacing-lg);
 }
 
-/*cada tarjeta de testimonio*/
 .testimonial {
-    background-color: #f9f9f9;
+    background-color: var(--color-bg);
     border-radius: var(--radius);
-    padding: var(--spacing);
+    padding: var(--spacing-lg);
     text-align: center;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     opacity: 0;
@@ -275,7 +263,6 @@ body {
     animation: fadeInUp 0.6s var(--transition) forwards;
 }
 
-/*retrasar animacion por tarjeta*/
 .testimonial:nth-child(1) {
     animation-delay: 0.2s;
 }
@@ -288,7 +275,6 @@ body {
     animation-delay: 0.6s;
 }
 
-/*foto del cliente*/
 .testimonial__photo {
     width: 80px;
     height: 80px;
@@ -297,36 +283,26 @@ body {
     margin-bottom: var(--spacing);
 }
 
-.testimonial__quote p {
-    font-size: 1rem;
-}
-
-/*calificacion con estrellas*/
-.testimonial__rating {
+.testimonial__quote {
+    font-style: italic;
+    color: var(--color-muted);
     margin-bottom: var(--spacing);
 }
 
-.star {
-    color: var(--color-accent);
+.testimonial__rating .star {
     font-size: 1.2rem;
+    color: var(--color-accent);
     margin: 0 2px;
 }
 
-/*nombre del autor*/
 .testimonial__author {
     display: block;
     font-weight: 700;
-    font-size: 0.975rem;
-    color: var(--color-text);
+    color: var(--color-primary);
+    margin-top: var(--spacing-xs);
+    font-size: 0.95rem;
 }
 
-/* Hover: ligera elevación */
-.testimonial:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-}
-
-/* Animación fade-in hacia arriba */
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -339,14 +315,154 @@ body {
     }
 }
 
-/* Ajustes responsivos */
+/* 7. BANNER PROMOCIONAL */
+.promo-banner {
+    position: relative;
+    background-color: var(--color-primary);
+    color: var(--color-bg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--banner-padding);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: var(--banner-font-sm);
+    border-radius: var(--radius) var(--radius) 0 0;
+    margin-bottom: var(--spacing-lg);
+}
+
+.promo-banner__text {
+    font-weight: 600;
+}
+
+.promo-banner__btn {
+    background-color: var(--color-bg);
+    color: var(--color-primary);
+    border: none;
+    padding: var(--spacing-xs) var(--spacing-lg);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background var(--transition), transform var(--transition);
+}
+
+.promo-banner__btn:hover,
+.promo-banner__btn:focus {
+    background-color: rgba(229, 211, 195, 0.8);
+    transform: translateY(-2px);
+}
+
+/* 8. MEDIA QUERIES – RESPONSIVIDAD */
+
+/* Large desktops (≤1200px) */
+@media (max-width: 1200px) {
+    .hero__container {
+        gap: var(--spacing);
+    }
+
+    .testimonials__grid {
+        gap: var(--spacing);
+    }
+}
+
+/* Tablets (≤1024px) */
+@media (max-width: 1024px) {
+    .carousel__slide {
+        min-width: 240px;
+    }
+
+    section {
+        padding: var(--spacing-lg) var(--spacing);
+    }
+}
+
+/* Small tablets/large phones (≤768px) */
+@media (max-width: 768px) {
+
+    /* Hero: centrado */
+    .hero__title,
+    .hero__subtitle {
+        text-align: center;
+    }
+
+    /* Carousel slides */
+    .carousel__slide {
+        min-width: 200px;
+    }
+
+    /* Banner: vertical */
+    .promo-banner {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .promo-banner__btn {
+        margin-top: var(--spacing-xs);
+        width: 100%;
+    }
+
+    /* Secciones: reducir padding lateral */
+    section {
+        padding: var(--spacing-lg) var(--spacing);
+    }
+}
+
+/* Mobile (≤480px) */
 @media (max-width: 480px) {
-    .testimonials__title {
-        font-size: 1.5rem;
-        margin-bottom: var(--spacing);
+    :root {
+        --title-lg: 1.75rem;
+        --banner-font-sm: 0.8rem;
+    }
+
+    .hero__title {
+        font-size: var(--title-lg);
+    }
+
+    .hero__subtitle {
+        font-size: 1rem;
+    }
+
+    .carousel__slide {
+        min-width: 160px;
+        margin-right: var(--spacing-xs);
+    }
+
+    .product-card__name {
+        font-size: 1rem;
+    }
+
+    .product-card__price {
+        font-size: 0.9rem;
+    }
+
+    .product-card__btn {
+        padding: var(--spacing-xxs) var(--spacing);
     }
 
     .testimonial__quote p {
-        font-size: 0.95rem;
+        font-size: 0.9rem;
+    }
+
+    .testimonial__author {
+        font-size: 0.85rem;
+    }
+
+    section {
+        padding: var(--spacing-lg) var(--spacing-xs);
+    }
+}
+
+/* Extra small phones (≤360px) */
+@media (max-width: 360px) {
+    .hero__container {
+        grid-template-columns: 1fr;
+        gap: var(--spacing);
+    }
+
+    .carousel__slide {
+        min-width: 140px;
+    }
+
+    .testimonial__photo {
+        width: 60px;
+        height: 60px;
     }
 }
