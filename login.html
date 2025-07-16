@@ -7,14 +7,36 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="main.css">
-    <link rel="stylesheet" href="contactus/contactus.css">
+    <link rel="stylesheet" href="Contactus/Contactus.css">
+    <link rel="stylesheet" href="Login/login.css">
 </head>
 <body>
     <nav>
         <div id="navbar"></div>
     </nav>
-
-  <!--- pagina de login --->
+<div class="login-container">
+        <div class="login-left">
+            <img src="Login/Images/cara-delevingne-women-model-actress-wallpaper-preview.jpg" alt="Imagen login" class="login-image">
+        </div>
+        <div class="login-right">
+            <h2 class="login-title">BIENVENIDO</h2>
+            <form id="loginForm" autocomplete="off">
+                <div class="mb-3">
+                    <label for="email" class="form-label login-label">Usuario</label>
+                    <input type="email" id="email" class="form-control login-input" placeholder="Ingresa tu email" required>
+                </div>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <label for="password" class="form-label login-label mb-0">Contraseña</label>
+                        <a href="#" class="forgot-link">¿Has Olvidado tu contraseña ?</a>
+                    </div>
+                    <input type="password" id="password" class="form-control login-input" placeholder="Ingresa tu contraseña" required>
+                </div>
+                <button type="submit" class="btn login-btn w-100">Iniciar Sesión</button>
+                <button type="button" class="btn login-btn w-100" onclick="window.location.href='registro2.html'">Crear Cuenta</button>
+            </form>
+        </div>
+    </div>
     <footer>
         <div id="footer"></div>
     </footer>
@@ -22,6 +44,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script src="main.js"></script>
-    <script src="./contactus/contactus.js"></script>
+    <script src="./Contactus/Contactus.js"></script>
+    <script src="Login/login.js"></script>
 </body>
 </html>
+
