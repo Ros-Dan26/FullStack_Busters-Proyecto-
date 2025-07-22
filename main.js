@@ -17,6 +17,7 @@ const createFooter = () => {
             <ul>
                 <li><a href="index.html">Principal</a></li>
                 <li><a href="productos.html">Productos</a></li>
+                <li><a href="registroproductos.html">Agregar Productos</a></li>
                 <li><a href="carrito.html">Carrito</a></li>
             </ul>
         </div>
@@ -76,6 +77,9 @@ function createNavbar() {
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="productos.html">Productos</a>
+                            </li>
+                              <li class="nav-item">
+                                <a class="nav-link" href="registroproductos.html">Agregar Productos</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="registro2.html">Registro</a>
