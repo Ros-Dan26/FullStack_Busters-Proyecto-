@@ -53,7 +53,7 @@ const createFooter = () => {
 
 function createNavbar() {
     const navbar = `
-        <nav class="navbar navbar-expand-lg navbar-dark py-2 mb-3" style="background-color: #242424;">
+        <nav class="navbar navbar-expand-lg navbar-dark py-2 mb-3>
             <div class="container-fluid">
                 <a class="navbar-brand" href="index.html">
                     <img src="./assets/tenisbuena.png" alt="logo" width="100">
@@ -91,7 +91,7 @@ function createNavbar() {
                         <a href="carrito.html" class="text-white"><i class="bi bi-bag" style="font-size: 1.2rem;"></i></a>
                     </div>
                 </div>
-            </div>
+            </+div>
         </nav>
     `;
     document.getElementById('navbar').innerHTML = navbar;
