@@ -53,3 +53,27 @@ productos.map((producto) => {
     </div>
     `;
 });
+
+const addCart = (e) => {
+    const producto = {
+        producto: e.dataset.producto,
+        categoria: e.dataset.categoria,
+        descripcion: e.dataset.descripcion,
+        tallas: JSON.parse(e.dataset.tallas),
+        imagen: e.dataset.imagen,
+        precio: Number(e.dataset.precio),
+        precioOferta: Number(e.dataset.preciooferta),
+        descuento: Number(e.dataset.descuento),
+    };
+    let cart = JSON.parse(localStorage.getItem("carrito")) || [];
+    const existingProductIndex = cart.findIndex(item => item.producto === producto.producto);
+    if (existingProductIndex !== -1) {
+        cart[existingProductIndex].cantidad += 1;
+    } else {
+        producto.cantidad = 1;
+        cart.push(producto);
+    }
+    localStorage.setItem("carrito", JSON.stringify(cart));
+    alert("Producto agregadd al carrito que esta en la cookie");
+
+}
