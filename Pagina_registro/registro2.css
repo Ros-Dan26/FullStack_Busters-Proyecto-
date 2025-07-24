@@ -104,13 +104,17 @@ html {
 }
 
 .popup-content-registro {
-  background-color: white;
+  background: linear-gradient(180deg, #274A7D, #9AB8DF);
+  color:  #F5EFE7;
+  border-radius: 20px;
   padding: 30px;
   text-align: center;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
 }
 
 .popup-content-registro button {
+  border-radius: 30px;
+  background-color: #9AB8DF;
   padding: 10px 20px;
   margin-top: 15px;
 }
@@ -119,7 +123,7 @@ html {
 /*         RESPONSIVE         */
 /* -------------------------- */
 
-@media (max-width: 768px) {
+@media (max-width: 1040px) {
   /* Imagen desaparece */
   .Imagen-registro {
     display: none;

@@ -36,21 +36,22 @@
     <div class="contenedor-principal-registro container-fluid d-flex"><!--Inicio contenedor-principal-registro-->
 
         <div class="contenido-registro">
-            <form onsubmit="mostrarPopupRegistro(event)">
-                <h1 style="color: white; text-align:center"> Registro</h1>
-                <input type="text" id="nombre-registro" class="entradas-registro" placeholder="Nombres: "><br>
-                <input type="text" id="apellidos-registro" class="entradas-registro" placeholder="Apellidos: "><br>
-                <input type="email" id="correo-registro" class="entradas-registro" placeholder="Correo: "><br>
-                <input type="text" id="estado-registro" class="entradas-registro" placeholder="Estado: "><br>
-                <input type="password" id="contrasena-registro" class="entradas-registro"
-                    placeholder="Contraseña: "><br>
-                <input type="password" id="contrasenaConf-registro" class="entradas-registro"
-                    placeholder="Confirme contraseña: "><br><br>
 
-                <p style="text-align:center"><a href="#"> ¿Ya tienes una cuenta? </a></p>
+            <form id="enviar-registro">
+                <h1 style="color: white; text-align:center"> Registro</h1>
+                <input type="text" id="nombre-registro" class="entradas-registro" placeholder="Nombres: " required><br>
+                <input type="text" id="apellidos-registro" class="entradas-registro" placeholder="Apellidos: " required><br>
+                <input type="email" id="correo-registro" class="entradas-registro" placeholder="Correo: " required><br>
+                <input type="text" id="estado-registro" class="entradas-registro" placeholder="Estado: " required><br>
+                <input type="password" id="contrasena-registro" class="entradas-registro"
+                    placeholder="Contraseña: " required><br>
+                <input type="password" id="contrasenaConf-registro" class="entradas-registro"
+                    placeholder="Confirme contraseña: " required><br><br>
+
+                <p style="text-align:center"><a href="login.html"> ¿Ya tienes una cuenta? </a></p>
 
                 <div class="contenedor-boton-registro">
-                    <button class="btn-registro" id="enviar-registro">Registrar</button>
+                    <button class="btn-registro" >Registrar</button>
                 </div>
 
             </form>
