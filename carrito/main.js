@@ -25,7 +25,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 <p class="card-text"><strong>Precio:</strong> $${producto.precio.toFixed(2)}</p>
                 <p class="card-text"><strong>Cantidad:</strong> ${producto.cantidad}</p>
                 <p class="card-text"><strong>Subtotal:</strong> $${subtotal.toFixed(2)}</p>
-                <button class="btn btn-danger eliminar-item" data-index="${index}">Eliminar</button>
+                <form>
+                    <button class="btn btn-danger eliminar-item" data-index="${index}">Eliminar</button>
+                </form>
             </div>
         </div>
     </div>
@@ -56,15 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
             carritoPlano = carritoPlano.filter(p => p.producto !== productoAEliminar.producto);
 
             localStorage.setItem('carrito', JSON.stringify(carritoPlano));
-            Swal.fire({
-                position: "top-end",
-                icon: "success",
-                title: "Eliminado del carrito!",
-                showConfirmButton: false,
-                timer: 1000
-            }).then(() => {
-                location.reload();
-            });
+
         }
     });
 
