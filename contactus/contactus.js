@@ -23,9 +23,11 @@ document.addEventListener('DOMContentLoaded', () => {
             emailjs.send("service_7yw8m9n", "template_g2k5dly", formData)
                 .then(function (response) {
                     // Si el envío fue exitoso
-                    alert('Formulario enviado correctamente.');
+                    //alert("Tu mensaje ha sido enviado correctamente");
+                        window.location.href = "gracias.html"; // aquí puedes poner cualquier ruta
                     form.reset(); // Limpiamos los campos del formulario
                     clearValidation(); // Quitamos estilos de error si los había
+                
                 }, function (error) {
                     // Si hubo un error durante el envío
                     alert("Hubo un error al enviar el formulario.");
