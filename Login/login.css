@@ -4,13 +4,11 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    /* Corregido: ahora el degradado tiene transición visible entre los colores */
     background: linear-gradient(100deg, #3c5a99 0%, #6e8ecb 100%);
     font-family: 'Segoe UI', Arial, sans-serif;
     display: flex;
     flex-direction: column;
 }
-
 
 /* Contenedor de login */
 .login-container {
@@ -46,7 +44,6 @@ html, body {
     background: linear-gradient(135deg, #3c5a99 0%, #6e8ecb 100%);
     color: #fff;
 }
-
 
 /* Título */
 .login-title {
@@ -122,4 +119,20 @@ form {
 
 .login-btn:hover {
     background: #285bb5;
+}
+
+/* Ojo para mostrar/ocultar contraseña */
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+    font-size: 1.2rem;
 }
