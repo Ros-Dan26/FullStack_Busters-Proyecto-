@@ -1,55 +1,66 @@
-/* Reset general */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 body,
 html {
   height: 100%;
-  font-family: Arial, Helvetica, sans-serif;
-  background-color: #F5EFE7;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(100deg, #3c5a99 0%, #6e8ecb 100%);
+  font-family: 'Segoe UI', Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Contenedor principal de la página */
 .contenedor-principal-registro {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #F5EFE7;
-  flex-wrap: wrap;
+  flex: 1;
+  width: 100vw;
+  padding: 2rem;
+  margin: 0;
 }
 
 /* Imagen decorativa */
 .Imagen-registro {
+  flex: 1;
+  background: #ececec;
   display: flex;
-  width: 500px;
-  height: 620px;
+  align-items: center;
+  justify-content: center;
+}
+
+.registro-imagen {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
 }
 
 /* Contenedor del formulario */
 .contenido-registro {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 40px;
-  width: 500px;
-  height: 620px;
-  border-color: #000;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-  align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, #274A7D, #9AB8DF);
+  align-items: center;
+  background: linear-gradient(135deg, #3c5a99 0%, #6e8ecb 100%);
+  color: #fff;
+  padding: 40px;
+
+}
+
+/* Título */
+.login-title {
+  color: #fff;
+  font-size: 2.6rem;
+  font-weight: bold;
+  margin-bottom: 2.5rem;
+  letter-spacing: 2px;
+  text-align: center;
 }
 
 /* Campos de entrada */
 .entradas-registro {
   font-family: "Montserrat", sans-serif;
   font-weight: bold;
-  width: 350px;
-  height: 40px;
+  width: 400px;
+  height: 50px;
   padding-left: 15px;
   margin-top: 30px;
   font-size: 15px;
@@ -63,6 +74,22 @@ html {
   border-color: #3498bd;
 }
 
+
+/* Genero */
+.form-registro-select {
+  border-radius: 0px;
+  font-weight: bold;
+  width: 400px;
+  height: 50px;
+  padding-left: 15px;
+  margin-top: 30px;
+  font-size: 15px;
+  border: 2px solid #ccc;
+  outline: none;
+  transition: border 0.3s ease;
+  background: linear-gradient(90deg, #EDE2D5, #fff);
+}
+
 /* Botón de registro */
 .btn-registro {
   font-family: "Montserrat", sans-serif;
@@ -71,8 +98,8 @@ html {
   width: 150px;
   height: 40px;
   font-size: 15px;
-  color: #000000;
-  background-color: #F5EFE7;
+  background: #377dff;
+  color: #fff;
   cursor: pointer;
   transition: all 0.3s ease;
   transform: scale(1.05);
@@ -80,6 +107,7 @@ html {
 }
 
 .btn-registro:hover {
+  background: #285bb5;
   transform: scale(1.1);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
@@ -95,8 +123,10 @@ html {
 .popup-registro {
   display: none;
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   justify-content: center;
   align-items: center;
@@ -105,7 +135,7 @@ html {
 
 .popup-content-registro {
   background: linear-gradient(180deg, #274A7D, #9AB8DF);
-  color:  #F5EFE7;
+  color: #F5EFE7;
   border-radius: 20px;
   padding: 30px;
   text-align: center;
@@ -119,38 +149,54 @@ html {
   margin-top: 15px;
 }
 
+
+/* POPUP CONTRASEÑA NO COINCIDE */
+.popup-registro-Con-Inc {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-content-registro-Con-in {
+  background: linear-gradient(180deg, #274A7D, #9AB8DF);
+  color: #F5EFE7;
+  border-radius: 20px;
+  padding: 30px;
+  text-align: center;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+.popup-content-registro-Con-in button {
+  border-radius: 30px;
+  background-color: #9AB8DF;
+  padding: 10px 20px;
+  margin-top: 15px;
+}
+
 /* -------------------------- */
 /*         RESPONSIVE         */
 /* -------------------------- */
 
-@media (max-width: 1040px) {
+
+@media (max-width: 840px) {
+
   /* Imagen desaparece */
   .Imagen-registro {
     display: none;
-  }
 
-  /* Formulario se adapta */
-  .contenedor-principal-registro {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    height: auto;
-  }
+    .entradas-registro {
+      width: 100%;
+    }
 
-  .contenido-registro {
-    width: 90%;
-    max-width: 400px;
-    height: auto;
-    padding: 20px;
-  }
-
-  .entradas-registro {
-    width: 100%;
-  }
-
-  .btn-registro {
-    width: 100%;
+    .btn-registro {
+      width: 100%;
+    }
   }
 }
-
