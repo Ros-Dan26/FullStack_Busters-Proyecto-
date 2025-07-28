@@ -3,6 +3,9 @@ function cargarHeader() {
     .then(response => response.text())
     .then(data => {
       document.getElementById('header-container').innerHTML = data;
+
+      // Ejecutar lógica de sesión una vez insertado el header
+      manejarSesion(); // Esta función debe estar en session.js
     });
 }
 
