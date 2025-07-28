@@ -5,76 +5,59 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Login - Net-Shopping Online</title>
 
-    <!-- Bootstrap y Bootstrap Icons (versión corregida) -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <!-- Bootstrap y Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
-    <!-- Estilos personalizados -->
-    <link rel="stylesheet" href="Contactus/Contactus.css">
-    <link rel="stylesheet" href="Login/login.css">
-    <link rel="stylesheet" href="/header-footer/header-footer.css">
+  <!-- Estilos personalizados -->
+  <link rel="stylesheet" href="Contactus/Contactus.css">
+  <link rel="stylesheet" href="Login/login.css">
+  <link rel="stylesheet" href="/header-footer/header-footer.css">
 
-    <!-- Header y Footer -->
-    <script defer src="/header-footer/header-footer.js"></script>
+  <!-- Header y Footer JS -->
+  <script defer src="/header-footer/header-footer.js"></script>
 </head>
-
 <body onload="cargarHeader(); cargarFooter();" style="font-family: 'Montserrat', sans-serif;">
+
   <!-- Header -->
   <div id="header-container"></div>
 
-    <!-- Contenedor de Login -->
-    <div class="login-container">
-        <div class="login-left">
-            <img src="Login/Images/cara-delevingne-women-model-actress-wallpaper-preview.jpg" alt="Imagen login" class="login-image">
-        </div>
-        <div class="login-right">
-            <h2 class="login-title">BIENVENIDO</h2>
-            <form id="loginForm" autocomplete="off">
-                <div class="mb-3">
-                    <label for="email" class="form-label login-label">Usuario</label>
-                    <input type="email" id="email" class="form-control login-input" placeholder="Ingresa tu email" required>
-                </div>
-                <div class="mb-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <label for="password" class="form-label login-label mb-0">Contraseña</label>
-                        <a href="#" class="forgot-link">¿Has olvidado tu contraseña?</a>
-                    </div>
-                    <div class="password-wrapper position-relative">
-                        <input type="password" id="password" class="form-control login-input pe-5" placeholder="Ingresa tu contraseña" required>
-                        <i class="bi bi-eye-fill toggle-password position-absolute top-50 end-0 translate-middle-y me-3" id="togglePassword" style="cursor:pointer;"></i>
-                    </div>
-                </div>
-                <button type="submit" class="btn login-btn w-100">Iniciar Sesión</button>
-                <button type="button" class="btn login-btn w-100" onclick="window.location.href='registro2.html'">Crear Cuenta</button>
-            </form>
-        </div>
+  <!-- Contenedor de Login -->
+  <div class="login-container">
+    <div class="login-left">
+      <img src="Login/Images/cara-delevingne-women-model-actress-wallpaper-preview.jpg" alt="Imagen login" class="login-image">
     </div>
+    <div class="login-right">
+      <h2 class="login-title">BIENVENIDO</h2>
+      <form id="loginForm" autocomplete="off">
+        <div class="mb-3">
+          <label for="email" class="form-label login-label">Usuario</label>
+          <input type="email" id="email" class="form-control login-input" placeholder="Ingresa tu email" required>
+        </div>
+        <div class="mb-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <label for="password" class="form-label login-label mb-0">Contraseña</label>
+            <a href="#" class="forgot-link">¿Has olvidado tu contraseña?</a>
+          </div>
+          <div class="password-wrapper position-relative">
+            <input type="password" id="password" class="form-control login-input pe-5" placeholder="Ingresa tu contraseña" required>
+            <i class="bi bi-eye-fill toggle-password position-absolute top-50 end-0 translate-middle-y me-3" id="togglePassword" style="cursor:pointer;"></i>
+          </div>
+        </div>
+        <button type="submit" class="btn login-btn w-100">Iniciar Sesión</button>
+        <button type="button" class="btn login-btn w-100" onclick="window.location.href='registro2.html'">Crear Cuenta</button>
+      </form>
+    </div>
+  </div>
 
   <!-- Footer -->
   <div id="footer-container"></div>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script src="./Contactus/Contactus.js"></script>
-    <script src="Login/login.js"></script>
-    <script src="/header-footer/header-footer.js"></script>
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script defer src="./Contactus/Contactus.js"></script>
+  <script defer src="Login/login.js"></script>
 
-    <!-- Mostrar/ocultar contraseña -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const togglePassword = document.getElementById('togglePassword');
-            const passwordInput = document.getElementById('password');
-
-            if (togglePassword && passwordInput) {
-                togglePassword.addEventListener('click', function () {
-                    const isPassword = passwordInput.getAttribute('type') === 'password';
-                    passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
-                    this.classList.toggle('bi-eye-fill');
-                    this.classList.toggle('bi-eye-slash-fill');
-                });
-            }
-        });
-    </script>
 </body>
 </html>
