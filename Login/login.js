@@ -22,6 +22,11 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
     alert("Por favor, completa todos los campos.");
     return;
   }
+  // Validar campos vacíos
+  if (email === "" || password === "") {
+    alert("Por favor, completa todos los campos.");
+    return;
+  }
 
   const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
   const usuarioValido = usuarios.find(user => user.email === email && user.password === password);
