@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <img src="${producto.imagen}" class="card-img-top img-fluid" alt="${producto.producto}">
             <div class="card-body">
                 <h5 class="card-title">${producto.producto}</h5>
-                <p class="card-text">${producto.descripcion}</p>
+                
                 <p class="card-text"><strong>Precio:</strong> $${producto.precio.toFixed(2)}</p>
                 <p class="card-text"><strong>Cantidad:</strong> ${producto.cantidad}</p>
                 <p class="card-text"><strong>Subtotal:</strong> $${subtotal.toFixed(2)}</p>
