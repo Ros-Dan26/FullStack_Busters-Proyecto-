@@ -5,12 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Login - Net-Shopping Online</title>
 
+  <link href="https://cdn.jsdelivr.net/npm/alertifyjs@1.11.0/build/css/alertify.min.css" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.11.0/build/alertify.min.js"></script>
+
   <!-- Bootstrap y Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
   <!-- Estilos personalizados -->
-  <link rel="stylesheet" href="Contactus/Contactus.css">
   <link rel="stylesheet" href="Login/login.css">
   <link rel="stylesheet" href="/header-footer/header-footer.css">
 
@@ -32,7 +34,7 @@
       <form id="loginForm" autocomplete="off">
         <div class="mb-3">
           <label for="email" class="form-label login-label">Usuario</label>
-          <input type="email" id="email" class="form-control login-input" placeholder="Ingresa tu email" required>
+          <input type="text" id="email" class="form-control login-input" placeholder="Ingresa tu email">
         </div>
         <div class="mb-3">
           <div class="d-flex justify-content-between align-items-center">
@@ -40,7 +42,7 @@
             <a href="#" class="forgot-link">¿Has olvidado tu contraseña?</a>
           </div>
           <div class="password-wrapper position-relative">
-            <input type="password" id="password" class="form-control login-input pe-5" placeholder="Ingresa tu contraseña" required>
+            <input type="password" id="password" class="form-control login-input pe-5" placeholder="Ingresa tu contraseña">
             <i class="bi bi-eye-fill toggle-password position-absolute top-50 end-0 translate-middle-y me-3" id="togglePassword" style="cursor:pointer;"></i>
           </div>
         </div>
@@ -53,10 +55,28 @@
   <!-- Footer -->
   <div id="footer-container"></div>
 
+  <!-- Modales -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Understood</button>
+      </div>
+    </div>
+  </div>
+</div>
+
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-  <script defer src="./Contactus/Contactus.js"></script>
   <script defer src="Login/login.js"></script>
 
 </body>

@@ -1,72 +1,68 @@
 document.addEventListener("DOMContentLoaded", () => {
     const container = document.getElementById('carrito-productos');
-    const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-    console.log(carrito);
+    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
     if (carrito.length === 0) {
         container.innerHTML = '<p class="text-center">No hay productos en el carrito.</p>';
         return;
     }
 
-    let total = 0;
-    let contenidoHTML = '';
+    renderizarCarrito();
 
-    carrito.forEach((producto, index) => {
-        const subtotal = producto.precio * producto.cantidad;
-        total += subtotal;
+    function renderizarCarrito() {
+        container.innerHTML = "";
+        let total = 0;
 
-        contenidoHTML += `
-    <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center mb-3">
-        <div class="card h-100" style="width: 100%;">
-            <img src="${producto.imagen}" class="card-img-top img-fluid" alt="${producto.producto}">
-            <div class="card-body">
-                <h5 class="card-title">${producto.producto}</h5>
-                
-                <p class="card-text"><strong>Precio:</strong> $${producto.precio.toFixed(2)}</p>
-                <p class="card-text"><strong>Cantidad:</strong> ${producto.cantidad}</p>
-                <p class="card-text"><strong>Subtotal:</strong> $${subtotal.toFixed(2)}</p>
-                <form>
-                    <button class="btn btn-danger eliminar-item" data-index="${index}">Eliminar</button>
-                </form>
-            </div>
-        </div>
-    </div>
-`;
+        carrito.forEach((producto, index) => {
+            const subtotal = producto.precio * producto.cantidad;
+            total += subtotal;
 
-    });
+            const col = document.createElement('div');
+            col.className = "col d-flex justify-content-center";
 
-    container.innerHTML = contenidoHTML;
+            col.innerHTML = `
+                <div class="card h-100">
+                    <img src="${producto.imagen}" class="card-img-top" alt="${producto.producto}">
+                    <div class="card-body d-flex flex-column justify-content-between">
+                        <div>
+                            <h5 class="card-title">${producto.producto}</h5>
+                            <p class="card-text"><strong>Talla:</strong> ${producto.talla || "No especificada"}</p>
+                            <p class="card-text"><strong>Precio:</strong> $${producto.precio.toFixed(2)}</p>
+                            <p class="card-text"><strong>Cantidad:</strong> ${producto.cantidad}</p>
+                            <p class="card-text"><strong>Subtotal:</strong> $${subtotal.toFixed(2)}</p>
+                        </div>
+                        <button class="btn btn-outline-danger w-100 mt-3 eliminar-item" data-index="${index}">
+                            <i class="bi bi-trash-fill"></i> Eliminar
+                        </button>
+                    </div>
+                </div>
+            `;
+            container.appendChild(col);
+        });
 
-    // Mostrar total y botón de finalizar compra
-    const resumen = document.createElement('div');
-    resumen.innerHTML = `
-        <div class="text-center mt-5">
-            <h4>Total a pagar: $${total.toFixed(2)}</h4>
-            <button class="btn btn-success btn-lg mt-3" id="finalizar-compra">Finalizar compra</button>
-        </div>
-    `;
-    container.parentElement.appendChild(resumen);
+        const resumen = document.createElement('div');
+        resumen.className = 'text-center w-100 mt-5';
+        resumen.innerHTML = `
+            <h4 class="mb-3">Total a pagar: <span class="text-success">$${total.toFixed(2)}</span></h4>
+            <button class="btn btn-success btn-lg" id="finalizar-compra">
+                <i class="bi bi-cart-check-fill"></i> Finalizar compra
+            </button>
+        `;
+        container.appendChild(resumen);
+    }
 
-    // Evento para eliminar productos
     container.addEventListener('click', e => {
-        if (e.target.classList.contains('eliminar-item')) {
-            const index = parseInt(e.target.getAttribute('data-index'));
-
-            let carritoPlano = JSON.parse(localStorage.getItem('carrito')) || [];
-            const productoAEliminar = carrito[index];
-
-            carritoPlano = carritoPlano.filter(p => p.producto !== productoAEliminar.producto);
-
-            localStorage.setItem('carrito', JSON.stringify(carritoPlano));
-
+        if (e.target.closest('.eliminar-item')) {
+            const index = parseInt(e.target.closest('.eliminar-item').dataset.index);
+            carrito.splice(index, 1);
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+            renderizarCarrito();
         }
     });
 
-    // Finalizar compra
     document.addEventListener('click', e => {
         if (e.target.id === 'finalizar-compra') {
             window.location.href = "finalizar-compra.html";
         }
     });
-
 });
