@@ -16,7 +16,7 @@
   height: 200px;                /* Altura fija para el contenedor de imagen */
   object-fit: contain;          /* Ajusta sin recortar ni deformar */
   background-color: #f8f9fa;    /* Fondo claro para imágenes más pequeñas */
-  padding: 10px;                /* Espacio interno para mejor presentación */
+  padding: 15px;                /* Espacio interno para mejor presentación */
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
 }
