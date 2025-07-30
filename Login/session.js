@@ -1,21 +1,35 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const userDropdown = document.getElementById("userDropdown");
-  const loginButton = document.getElementById("loginButton");
-  const usernameDisplay = document.getElementById("usernameDisplay");
+function manejarSesion() {
+  const userData = localStorage.getItem('usuario');
 
-  const user = JSON.parse(localStorage.getItem("loggedInUser"));
+  const loginItem = document.getElementById('user-name');
+  const userDropdown = document.getElementById('userDropdown');
+  const usernameDisplay = document.getElementById('usernameDisplay');
 
-  if (user && user.username) {
-    loginButton.style.display = "none";
-    usernameDisplay.textContent = user.username;
-    userDropdown.style.display = "block";
+  if (userData) {
+    const usuario = JSON.parse(userData);
+    const nombreUsuario = usuario.email.split('@')[0];
+
+    // Ocultar "Iniciar sesión" y mostrar el dropdown
+    if (loginItem) loginItem.style.display = 'none';
+    if (userDropdown) {
+      userDropdown.style.display = 'block';
+      if (usernameDisplay) {
+        usernameDisplay.textContent = `¡Hola, ${nombreUsuario}!`;
+      }
+    }
   } else {
-    loginButton.style.display = "block";
-    userDropdown.style.display = "none";
+    // Si no hay usuario, asegurarse de mostrar "Iniciar sesión"
+    if (loginItem) loginItem.style.display = 'block';
+    if (userDropdown) userDropdown.style.display = 'none';
   }
-});
-
-function logout() {
-  localStorage.removeItem("loggedInUser");
-  window.location.href = "logout.html";
 }
+
+// Ejecutar al cargar
+document.addEventListener('DOMContentLoaded', manejarSesion);
+
+// Función de logout
+function logout() {
+  localStorage.removeItem('usuario');
+  window.location.href = "login.html";
+}
+

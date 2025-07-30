@@ -57,12 +57,20 @@
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script src="./Contactus/Contactus.js"></script>
     <script src="Login/login.js"></script>
+  <!-- Scripts -->
     <script src="/header-footer/header-footer.js"></script>
-    <script src="/Login/session.js"></script>
     <script>
-        cargarHeader();
-        cargarFooter();
-    </script>
+      cargarHeader().then(() => {
+        const script = document.createElement('script');
+        script.src = "/Login/session.js";
+        script.onload = () => {
+        manejarSesion(); // llama solo después de estar cargado
+    };
+    document.body.appendChild(script);
+  });
+
+  cargarFooter();
+</script>
 
     <!-- Script para mostrar/ocultar contraseña -->
     <script>

@@ -77,12 +77,21 @@
   <div id="footer-container"></div>
 
  
+  <!-- Scripts header-footer-->
+  <!-- Scripts -->
     <script src="/header-footer/header-footer.js"></script>
-    <script src="/Login/session.js"></script>
     <script>
-        cargarHeader();
-        cargarFooter();
-    </script>
+      cargarHeader().then(() => {
+        const script = document.createElement('script');
+        script.src = "/Login/session.js";
+        script.onload = () => {
+        manejarSesion(); // llama solo después de estar cargado
+    };
+    document.body.appendChild(script);
+  });
+
+  cargarFooter();
+</script>
 
     <script src="/Pagina_registro/registro2.js"></script>
     

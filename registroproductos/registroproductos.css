@@ -1,7 +1,7 @@
 body {
   font-family: 'Montserrat', sans-serif;
-  font-weight: bold;
-  background-image: url('sneakers3.webp');
+  
+  background-image: url('/assets/fondor-registro.png'); /* Reemplaza con tu imagen */
   /* Reemplaza con tu imagen */
   background-size: cover;
   background-position: center;
@@ -13,12 +13,7 @@ body {
   flex-direction: column;
 }
 
-header,
-footer {
-  background-color: #213555;
-  color: white;
-  padding: 20px 0;
-}
+
 
 .form-container {
   background: linear-gradient(to bottom, #274A7D, #9AB8DF);

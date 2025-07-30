@@ -43,12 +43,22 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <!-- Scripts header-footer-->
   <script src="/header-footer/header-footer.js"></script>
-  <script src="/Login/session.js"></script>
-  <script>
-        cargarHeader();
-        cargarFooter();
-  </script>
+  <!-- Scripts -->
+    <script src="/header-footer/header-footer.js"></script>
+    <script>
+      cargarHeader().then(() => {
+        const script = document.createElement('script');
+        script.src = "/Login/session.js";
+        script.onload = () => {
+        manejarSesion(); // llama solo después de estar cargado
+    };
+    document.body.appendChild(script);
+  });
+
+  cargarFooter();
+</script>
   <script src="./carrito/carrito.js"></script>
     <script src="./carrito/main.js"></script>
 </body>

@@ -17,12 +17,6 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
   const email = document.getElementById('email').value.trim();
   const password = document.getElementById('password').value.trim();
 
-  // Validar campos vacíos
-  if (email === "" || password === "") {
-    alert("Por favor, completa todos los campos.");
-    return;
-  }
-  // Validar campos vacíos
   if (email === "" || password === "") {
     alert("Por favor, completa todos los campos.");
     return;
@@ -35,7 +29,7 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
     alert("¡Inicio de sesión exitoso!, Redirigiendo a la página principal");
 
     // Guardar el usuario activo
-    localStorage.setItem('usuarioActivo', email);
+    localStorage.setItem('usuario', JSON.stringify(usuarioValido)); // <- compatible con session.js
 
     // Redirigir a la página principal
     window.location.href = 'index.html';
