@@ -5,36 +5,49 @@ if (!localStorage.getItem('usuarios')) {
     { email: "jesustema@netshop.com", password: "cliente123" },
     { email: "Benedicto@netshop.com", password: "userpass1" },
     { email: "Rebecams@netshop.com", password: "userpass2" },
+    { email: "asd", password: "asd" },
     { email: "Alfred12@netshop.com", password: "userpass2" }
   ];
   localStorage.setItem('usuarios', JSON.stringify(usuariosPrueba));
 }
 
-// Validar login al enviar el formulario
+//valida los datos del usuario antes de inicar sesion
 document.getElementById('loginForm').addEventListener('submit', function (e) {
-  e.preventDefault();
-
   const email = document.getElementById('email').value.trim();
   const password = document.getElementById('password').value.trim();
 
-  if (email === "" || password === "") {
-    alert("Por favor, completa todos los campos.");
-    return;
-  }
+  e.preventDefault();
 
-  const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
-  const usuarioValido = usuarios.find(user => user.email === email && user.password === password);
-
-  if (usuarioValido) {
-    alert("¡Inicio de sesión exitoso!, Redirigiendo a la página principal");
-
-    // Guardar el usuario activo
-    localStorage.setItem('usuario', JSON.stringify(usuarioValido)); // <- compatible con session.js
-
-    // Redirigir a la página principal
-    window.location.href = 'index.html';
+  if (email.length == 0 && password.length == 0) {
+    alertify.error("Ingrese sus datos para continuar");
   } else {
-    alert("Nombre de usuario o contraseña inválidos.");
+    if (email.length == 0) {
+      alertify.error("El correo electronico es necesario");
+    } else if (password.length == 0) {
+      alertify.error("La contrasena es necesaria");
+    } else {
+      const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+      let usuarioValido = 0;
+      usuarioValido =
+        usuarios.find(user => user.email === email && user.password === password);
+
+      if (usuarioValido) {
+
+        // Guardar el usuario activo
+        localStorage.setItem('usuarioActivo', email);
+
+        // Redirigir a la página principal
+        window.location.href = 'index.html';
+
+        alertify.success("Bienvenido " +
+          usuarioValido.email +
+          ", es un gusto verlo de nuevo");
+        // Guardar el usuario activo
+        localStorage.setItem('usuarioActivo', email);
+      } else {
+        alertify.error("Usuario y contrasena incorrectos");
+      }
+    }
   }
 });
 

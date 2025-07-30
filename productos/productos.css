@@ -1,27 +1,66 @@
+/* productos.css */
+
+.contenedor-productos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
 .card {
-    height: 100%;
-    margin-bottom: 24px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.2s ease-in-out;
+  background-color: #fff;
 }
 
-.img-producto {
-    width: 100%;
-    height: 220px;
-    object-fit: contain;
-    background: #f5efe7;
-    padding: 10px;
-    border-radius: 8px 8px 0 0;
-    transition: transform 0.3s ease;
+.card:hover {
+  transform: scale(1.02);
 }
 
-.img-producto:hover {
-    transform: scale(1.08);
-    z-index: 2;
+.card-img-top {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
 }
 
-.producto-info {
-    padding: 16px;
-    text-align: center;
+.card-body {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.card-text {
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+}
+
+.btn-group {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card select,
+.card input[type="number"] {
+  width: 48%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.card button {
+  margin-top: 10px;
 }
