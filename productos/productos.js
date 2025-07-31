@@ -1,79 +1,105 @@
 const contenedor = document.getElementById('catalogo-productos');
 
-productos.map((producto) => {
+contenedor.innerHTML = ''; // Limpiar contenido previo
+
+productos.forEach((producto, index) => {
     contenedor.innerHTML += `
-        <div class="card m-2" style="width: 18rem;">
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex align-items-stretch">
+      <div class="card w-100">
         <img src="${producto.imagen}" class="card-img-top" alt="${producto.producto}">
-        <div class="card-body">
-            <h5 class="card-title">${producto.producto}</h5>
-            <p class="card-text">${producto.descripcion}</p>
-            <p class="card-text">$${producto.precio.toFixed(2)}</p>
-            <div class="mb-3">
-                <h6>Tallas disponibles:</h6>
-                <div class="d-flex flex-wrap">
-                    ${producto.tallas.map(talla => 
-                        `<span class="badge bg-secondary tallas-badge m-1">${talla}</span>`
-                    ).join('')}
-                </div>
-            </div>
-            <button 
-                onclick="verDetalles(this)"
-                class="btn btn-outline-secondary mb-2"
-                data-producto="${producto.producto}"
-                data-categoria="${"Hombres"}"
-                data-descripcion="${producto.descripcion.replace(/"/g, '&quot;')}"
-                data-tallas='${JSON.stringify(producto.tallas)}'
-                data-imagen="${producto.imagen}"
-                data-precio="${producto.precio}"
-                data-preciooferta="${producto.precioOferta}"
-                data-descuento="${producto.descuento || 0}"
-            >
-                Ver detalles
-            </button>
-            <button 
-                onclick="addCart(this)", 
-                class="btn fondo-negro-medio d-flex align-items-center gap-2 add-to-cart"
-                data-producto="${producto.producto}"
-                data-categoria="${producto.categoria}"
-                data-descripcion="${producto.descripcion.replace(/"/g, '&quot;')}"
-                data-tallas='${JSON.stringify(producto.tallas)}'
-                data-imagen="${producto.imagen}"
-                data-precio="${producto.precio}"
-                data-preciooferta="${producto.precioOferta}"
-                data-descuento="${producto.descuento}"
-            >
-                <span>Añadir al carrito</span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                    class="bi bi-cart-check-fill" viewBox="0 0 16 16">
-                    <path
-                        d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m-1.646-7.646-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L8 8.293l2.646-2.647a.5.5 0 0 1 .708.708" />
-                </svg>
-            </button>
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">${producto.producto}</h5>
+          <p class="card-text flex-grow-1">${producto.descripcion}</p>
+          <p class="card-text precio">$${producto.precio.toFixed(2)}</p>
+
+          <label for="talla-select-${index}" class="form-label">Selecciona talla:</label>
+          <select class="form-select mb-3" id="talla-select-${index}">
+            ${producto.tallas.map(talla => `<option value="${talla}">${talla}</option>`).join('')}
+          </select>
+
+          <label for="cantidad-input-${index}" class="form-label">Cantidad:</label>
+          <input type="number" min="1" value="1" class="form-control mb-3" id="cantidad-input-${index}" />
+
+          <button 
+            class="btn btn-outline-secondary mb-2"
+            onclick="verDetalles(${index})"
+          >
+            Ver detalles
+          </button>
+
+          <button 
+            class="btn fondo-negro-medio d-flex align-items-center gap-2 add-to-cart mt-auto"
+            onclick="addCart(${index})"
+          >
+            <span>Añadir al carrito</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-cart-check-fill" viewBox="0 0 16 16">
+                <path
+                    d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m-1.646-7.646-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L8 8.293l2.646-2.647a.5.5 0 0 1 .708.708" />
+            </svg>
+          </button>
         </div>
+      </div>
     </div>
     `;
 });
 
-const addCart = (e) => {
-    const producto = {
-        producto: e.dataset.producto,
-        categoria: e.dataset.categoria,
-        descripcion: e.dataset.descripcion,
-        tallas: JSON.parse(e.dataset.tallas),
-        imagen: e.dataset.imagen,
-        precio: Number(e.dataset.precio),
-        precioOferta: Number(e.dataset.preciooferta),
-        descuento: Number(e.dataset.descuento),
-    };
-    let cart = JSON.parse(localStorage.getItem("carrito")) || [];
-    const existingProductIndex = cart.findIndex(item => item.producto === producto.producto);
-    if (existingProductIndex !== -1) {
-        cart[existingProductIndex].cantidad += 1;
-    } else {
-        producto.cantidad = 1;
-        cart.push(producto);
-    }
-    localStorage.setItem("carrito", JSON.stringify(cart));
-    alert("Producto agregadd al carrito que esta en la cookie");
+function addCart(index) {
+    const producto = productos[index];
 
+    const tallaSelect = document.getElementById(`talla-select-${index}`);
+    const cantidadInput = document.getElementById(`cantidad-input-${index}`);
+
+    const talla = tallaSelect.value;
+    let cantidad = parseInt(cantidadInput.value);
+
+    if (!talla) {
+      alert("Por favor selecciona una talla.");
+      return;
+    }
+    if (isNaN(cantidad) || cantidad < 1) {
+      alert("Por favor ingresa una cantidad válida.");
+      return;
+    }
+
+    const productoParaCarrito = {
+        producto: producto.producto,
+        categoria: producto.categoria || "Hombres",
+        descripcion: producto.descripcion,
+        talla: talla,
+        imagen: producto.imagen,
+        precio: producto.precio,
+        precioOferta: producto.precioOferta,
+        descuento: producto.descuento || 0,
+        cantidad: cantidad
+    };
+
+    let cart = JSON.parse(localStorage.getItem("carrito")) || [];
+
+    const existingIndex = cart.findIndex(item => item.producto === productoParaCarrito.producto && item.talla === talla);
+
+    if (existingIndex !== -1) {
+      cart[existingIndex].cantidad += cantidad;
+    } else {
+      cart.push(productoParaCarrito);
+    }
+
+    localStorage.setItem("carrito", JSON.stringify(cart));
+    alert(`${cantidad} unidad(es) de ${producto.producto} (Talla: ${talla}) agregada(s) al carrito.`);
 }
+
+function verDetalles(index) {
+    const producto = productos[index];
+
+    // Asignar datos al modal
+    document.getElementById('modalProductoImagen').src = producto.imagen;
+    document.getElementById('modalProductoImagen').alt = producto.producto;
+    document.getElementById('modalProductoTitulo').textContent = producto.producto;
+    document.getElementById('modalProductoDescripcion').textContent = producto.descripcion;
+    document.getElementById('modalProductoPrecio').textContent = `$${producto.precio.toFixed(2)}`;
+
+    // Mostrar el modal usando Bootstrap 5
+    const modal = new bootstrap.Modal(document.getElementById('productoModal'));
+    modal.show();
+}
+
