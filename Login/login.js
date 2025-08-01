@@ -18,25 +18,37 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
   const email = document.getElementById('email').value.trim();
   const password = document.getElementById('password').value.trim();
 
-  if (!email && !password) {
+  e.preventDefault();
+
+  if (email.length == 0 && password.length == 0) {
     alertify.error("Ingrese sus datos para continuar");
-  } else if (!email) {
-    alertify.error("El correo electrónico es necesario");
-  } else if (!password) {
-    alertify.error("La contraseña es necesaria");
   } else {
-    const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
-    const usuarioValido = usuarios.find(user => user.email === email && user.password === password);
-
-    if (usuarioValido) {
-      // Guardar usuario completo en localStorage
-      localStorage.setItem('usuario', JSON.stringify(usuarioValido));
-
-      // Mostrar mensaje y redirigir
-      alertify.success(`Bienvenido ${usuarioValido.email}, es un gusto verlo de nuevo`);
-      window.location.href = 'index.html';
+    if (email.length == 0) {
+      alertify.error("El correo electronico es necesario");
+    } else if (password.length == 0) {
+      alertify.error("La contrasena es necesaria");
     } else {
-      alertify.error("Usuario y contraseña incorrectos");
+      const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+      let usuarioValido = 0;
+      usuarioValido =
+        usuarios.find(user => user.email === email && user.password === password);
+
+      if (usuarioValido) {
+
+        // Guardar el usuario activo
+        localStorage.setItem('usuarioActivo', email);
+
+        // Redirigir a la página principal
+        window.location.href = 'index.html';
+
+        alertify.success("Bienvenido " +
+          usuarioValido.email +
+          ", es un gusto verlo de nuevo");
+        // Guardar el usuario activo
+        localStorage.setItem('usuarioActivo', email);
+      } else {
+        alertify.error("Usuario y contrasena incorrectos");
+      }
     }
   }
 });
@@ -50,6 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
     togglePassword.addEventListener('click', function () {
       const isPassword = passwordInput.getAttribute('type') === 'password';
       passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+
       this.classList.toggle('bi-eye-fill');
       this.classList.toggle('bi-eye-slash-fill');
     });
