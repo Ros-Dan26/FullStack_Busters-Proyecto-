@@ -1,7 +1,10 @@
+// 1. Obtiene el contenedor donde se mostrarán los productos
 const contenedor = document.getElementById('catalogo-productos');
 
-contenedor.innerHTML = ''; // Limpiar contenido previo
+// 2. Limpia el contenido previo del contenedor
+contenedor.innerHTML = '';
 
+// 3. Recorre el arreglo de productos y genera una tarjeta para cada uno
 productos.forEach((producto, index) => {
     contenedor.innerHTML += `
     <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex align-items-stretch">
@@ -12,14 +15,17 @@ productos.forEach((producto, index) => {
           <p class="card-text flex-grow-1">${producto.descripcion}</p>
           <p class="card-text precio">$${producto.precio.toFixed(2)}</p>
 
+          <!-- Selector de talla -->
           <label for="talla-select-${index}" class="form-label">Selecciona talla:</label>
           <select class="form-select mb-3" id="talla-select-${index}">
             ${producto.tallas.map(talla => `<option value="${talla}">${talla}</option>`).join('')}
           </select>
 
+          <!-- Selector de cantidad -->
           <label for="cantidad-input-${index}" class="form-label">Cantidad:</label>
           <input type="number" min="1" value="1" class="form-control mb-3" id="cantidad-input-${index}" />
 
+          <!-- Botón para ver detalles del producto -->
           <button 
             class="btn btn-outline-secondary mb-2"
             onclick="verDetalles(${index})"
@@ -27,6 +33,7 @@ productos.forEach((producto, index) => {
             Ver detalles
           </button>
 
+          <!-- Botón para añadir el producto al carrito -->
           <button 
             class="btn fondo-negro-medio d-flex align-items-center gap-2 add-to-cart mt-auto"
             onclick="addCart(${index})"
@@ -44,15 +51,18 @@ productos.forEach((producto, index) => {
     `;
 });
 
+// 4. Función para añadir productos al carrito
 function addCart(index) {
     const producto = productos[index];
 
+    // Obtiene la talla y cantidad seleccionadas por el usuario
     const tallaSelect = document.getElementById(`talla-select-${index}`);
     const cantidadInput = document.getElementById(`cantidad-input-${index}`);
 
     const talla = tallaSelect.value;
     let cantidad = parseInt(cantidadInput.value);
 
+    // Validación de talla y cantidad
     if (!talla) {
       alert("Por favor selecciona una talla.");
       return;
@@ -62,6 +72,7 @@ function addCart(index) {
       return;
     }
 
+    // Crea el objeto del producto para el carrito
     const productoParaCarrito = {
         producto: producto.producto,
         categoria: producto.categoria || "Hombres",
@@ -74,8 +85,10 @@ function addCart(index) {
         cantidad: cantidad
     };
 
+    // Obtiene el carrito actual del localStorage
     let cart = JSON.parse(localStorage.getItem("carrito")) || [];
 
+    // Si el producto ya está en el carrito con la misma talla, suma la cantidad
     const existingIndex = cart.findIndex(item => item.producto === productoParaCarrito.producto && item.talla === talla);
 
     if (existingIndex !== -1) {
@@ -84,21 +97,23 @@ function addCart(index) {
       cart.push(productoParaCarrito);
     }
 
+    // Guarda el carrito actualizado en localStorage
     localStorage.setItem("carrito", JSON.stringify(cart));
     alert(`${cantidad} unidad(es) de ${producto.producto} (Talla: ${talla}) agregada(s) al carrito.`);
 }
 
+// 5. Función para mostrar los detalles del producto en un modal
 function verDetalles(index) {
     const producto = productos[index];
 
-    // Asignar datos al modal
+    // Asigna los datos del producto al modal
     document.getElementById('modalProductoImagen').src = producto.imagen;
     document.getElementById('modalProductoImagen').alt = producto.producto;
     document.getElementById('modalProductoTitulo').textContent = producto.producto;
     document.getElementById('modalProductoDescripcion').textContent = producto.descripcion;
     document.getElementById('modalProductoPrecio').textContent = `$${producto.precio.toFixed(2)}`;
 
-    // Mostrar el modal usando Bootstrap 5
+    // Muestra el modal usando Bootstrap 5
     const modal = new bootstrap.Modal(document.getElementById('productoModal'));
     modal.show();
 }
