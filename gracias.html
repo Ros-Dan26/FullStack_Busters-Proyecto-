@@ -52,7 +52,7 @@
   </style>
 </head>
 
-<body onload="cargarHeader(); cargarFooter();" style="font-family: 'Montserrat', sans-serif;" >
+<body style="font-family: 'Montserrat', sans-serif;" >
   <!-- Header -->
 <div id="header-container"></div>
   <!-- Main -->
@@ -71,6 +71,19 @@
 
     <!-- Scripts -->
   <script src="/contactus/contactus.js"></script>
-  <script src="/header-footer/header-footer.js"></script>
+  <!-- Scripts -->
+    <script src="/header-footer/header-footer.js"></script>
+    <script>
+      cargarHeader().then(() => {
+        const script = document.createElement('script');
+        script.src = "/Login/session.js";
+        script.onload = () => {
+        manejarSesion(); // llama solo después de estar cargado
+    };
+    document.body.appendChild(script);
+  });
+
+  cargarFooter();
+</script>
 </body>
 </html>
