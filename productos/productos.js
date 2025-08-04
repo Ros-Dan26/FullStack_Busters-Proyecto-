@@ -5,7 +5,7 @@ const contenedor = document.getElementById('catalogo-productos');
 contenedor.innerHTML = '';
 
 // 3. Carga los productos desde el archivo JSON
-fetch('productos/catalogo_productos.json')
+fetch('/productos/catalogo_productos.json')
   .then(response => response.json())
   .then(productos => {
     // 4. Recorre el arreglo de productos y genera una tarjeta para cada uno

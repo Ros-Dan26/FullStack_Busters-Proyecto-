@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
      */
     document.addEventListener('click', e => {
         if (e.target.id === 'finalizar-compra') {
-            window.location.href = "finalizar-compra.html";
+            window.location.href = "/finalizar-compra/finalizar-compra.html";
         }
     });
 });
