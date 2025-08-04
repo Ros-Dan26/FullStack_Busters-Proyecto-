@@ -1,4 +1,5 @@
-// Crear usuarios de prueba si no existen
+// Verifica si ya existen usuarios en el localStorage
+// Si no existen, crea una lista de usuarios de prueba
 if (!localStorage.getItem('usuarios')) {
   const usuariosPrueba = [
     { email: "admin@netshop.com", password: "123456" },
@@ -11,49 +12,36 @@ if (!localStorage.getItem('usuarios')) {
   localStorage.setItem('usuarios', JSON.stringify(usuariosPrueba));
 }
 
-// Validar los datos del usuario antes de iniciar sesión
+// Escucha el evento de envío del formulario de login
 document.getElementById('loginForm').addEventListener('submit', function (e) {
-  e.preventDefault();
+  e.preventDefault(); // Evita que el formulario se envíe automáticamente
 
   const email = document.getElementById('email').value.trim();
   const password = document.getElementById('password').value.trim();
 
-  e.preventDefault();
-
-  if (email.length == 0 && password.length == 0) {
+  // Validación básica de campos
+  if (email.length === 0 && password.length === 0) {
     alertify.error("Ingrese sus datos para continuar");
+  } else if (email.length === 0) {
+    alertify.error("El correo electrónico es necesario");
+  } else if (password.length === 0) {
+    alertify.error("La contraseña es necesaria");
   } else {
-    if (email.length == 0) {
-      alertify.error("El correo electronico es necesario");
-    } else if (password.length == 0) {
-      alertify.error("La contrasena es necesaria");
+    // Verifica si el usuario existe en localStorage
+    const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+    const usuarioValido = usuarios.find(user => user.email === email && user.password === password);
+
+    if (usuarioValido) {
+      localStorage.setItem('usuarioActivo', email); // Guarda el usuario activo
+      alertify.success("Bienvenido " + usuarioValido.email + ", es un gusto verlo de nuevo");
+      window.location.href = 'index.html'; // Redirige al home
     } else {
-      const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
-      let usuarioValido = 0;
-      usuarioValido =
-        usuarios.find(user => user.email === email && user.password === password);
-
-      if (usuarioValido) {
-
-        // Guardar el usuario activo
-        localStorage.setItem('usuarioActivo', email);
-
-        // Redirigir a la página principal
-        window.location.href = 'index.html';
-
-        alertify.success("Bienvenido " +
-          usuarioValido.email +
-          ", es un gusto verlo de nuevo");
-        // Guardar el usuario activo
-        localStorage.setItem('usuarioActivo', email);
-      } else {
-        alertify.error("Usuario y contrasena incorrectos");
-      }
+      alertify.error("Usuario y contraseña incorrectos");
     }
   }
 });
 
-// Mostrar/ocultar contraseña
+// Funcionalidad para mostrar u ocultar la contraseña
 document.addEventListener('DOMContentLoaded', function () {
   const togglePassword = document.getElementById('togglePassword');
   const passwordInput = document.getElementById('password');
@@ -63,6 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const isPassword = passwordInput.getAttribute('type') === 'password';
       passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
 
+      // Alterna íconos visuales
       this.classList.toggle('bi-eye-fill');
       this.classList.toggle('bi-eye-slash-fill');
     });
