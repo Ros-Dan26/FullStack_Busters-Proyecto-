@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sesión Cerrada</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <!-- Aquí puedes poner más estilos si lo deseas -->
+  <style>
+    main {
+      min-height: 70vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .mensaje {
+      font-size: 1.5rem;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div id="header-container"></div>
+
+  <!-- Contenido principal -->
+  <main>
+    <div class="mensaje">
+      <p>Tu sesión ha sido cerrada correctamente.</p>
+      <p>Serás redirigido al inicio de sesión en unos segundos...</p>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <div id="footer-container"></div>
+
+  <!-- Scripts -->
+  <script src="/header-footer/header-footer.js"></script>
+  <script src="/Login/session.js"></script>
+  <script>
+    cargarHeader();
+    cargarFooter();
+
+    // Limpia la sesión y redirige
+    localStorage.removeItem('usuario');
+    setTimeout(() => {
+      window.location.href = 'login.html';
+    }, 3000);
+  </script>
+</body>
+</html>
+

@@ -1,36 +1,49 @@
-  <!--Iconos Bootstrap-->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-    <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Pattaya&display=swap" rel="stylesheet">
+<!--Iconos Bootstrap-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Pattaya&display=swap" rel="stylesheet">
 
-  <header class="bg-header text-white">
-    <div class="container-fluid d-flex align-items-center justify-content-between px-4 py-3">
-      <div class="d-flex align-items-center">
-        <img src="/assets/Logo_Net.jpeg" alt="Logo" height="110" width="110">
-        <div class="logo-text ms-3">
-            <span class="line1">Net-Shopping</span><br>
-            <span class="line2">Online</span>
-        </div>
-        
+<header class="bg-header text-white">
+  <div class="container-fluid d-flex align-items-center justify-content-between px-4 py-3">
+    <div class="d-flex align-items-center">
+      <img src="/assets/Logo_Net.jpeg" alt="Logo" height="110" width="110">
+      <div class="logo-text ms-3">
+        <span class="line1">Net-Shopping</span><br>
+        <span class="line2">Online</span>
       </div>
-      <nav class="navbar navbar-expand-lg navbar-dark py-2 mb-3">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarMenu">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-        <ul class="nav collapse navbar-collapse justify-content-between" id="navbarMenu">
-            
-          <li class="nav-item"><a class="nav-link text-white fw-bold" href="index.html">INICIO</a></li>
-          <li class="nav-item"><a class="nav-link text-white fw-bold" href="aboutus.html">SOBRE NOSOTROS</a></li>
-          <li class="nav-item"><a class="nav-link text-white fw-bold" href="contactus.html">CONTÁCTANOS</a></li>
-          <li class="nav-item"><a class="nav-link text-white fw-bold" href="productos.html">PRODUCTOS</a></li>
-          <li class="nav-item"><a class="nav-link text-white fw-bold" href="registroproductos.html">REGISTRO PRODUCTOS</a></li>
-        <div class="d-flex align-items-center">
-          <li class="nav-item"><a class="nav-link text-white me-3" href="login.html"><i class="bi bi-person-circle" style="font-size: 1.6rem;"></i></a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="carrito.html" ><i class="bi bi-cart3" style="font-size: 1.6rem;" ></i></a></li>
-        </div>
-        </ul>
-        
-      </nav>
     </div>
-  </header>
+    <nav class="navbar navbar-expand-lg navbar-dark py-2 mb-3">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <ul class="nav collapse navbar-collapse justify-content-between" id="navbarMenu">
+        <li class="nav-item"><a class="nav-link text-white fw-bold" href="/index/index.html">INICIO</a></li>
+        <li class="nav-item"><a class="nav-link text-white fw-bold" href="/aboutus/aboutus.html">SOBRE NOSOTROS</a></li>
+        <li class="nav-item"><a class="nav-link text-white fw-bold" href="/contactus/contactus.html">CONTÁCTANOS</a></li>
+        <li class="nav-item"><a class="nav-link text-white fw-bold" href="/productos/productos.html">PRODUCTOS</a></li>
+        <li class="nav-item"><a class="nav-link text-white fw-bold" href="/registroproductos/registroproductos.html">REGISTRO PRODUCTOS</a></li>
+
+        <div class="d-flex align-items-center">
+          <li class="nav-item dropdown" id="userDropdown" style="display: none;">
+            <a class="nav-link text-white dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-circle me-1"></i><span id="usernameDisplay"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/index/index.html">Ir a inicio</a></li>
+              <li><a class="dropdown-item" href="#" onclick="logout()">Cerrar sesión</a></li>
+            </ul>
+          </li>
+          <li class="nav-item" id="user-name">
+            <a class="nav-link text-white d-flex align-items-center" href="/Login/login.html">
+              <i class="bi bi-person-circle me-1" ></i> INICIAR SESIÓN
+            </a>
+          </li>
+          <li class="nav-item"><a class="nav-link text-white" href="/carrito/carrito.html"><i class="bi bi-cart3"></i></a></li>
+        </div>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- Incluir session.js -->
+<script src="/Login/session.js"></script>

@@ -20,6 +20,7 @@ document.getElementById('enviar-registro').addEventListener('submit', function (
     if (contrasena === contrasenaConf) {
         resultadoIgualdad = "iguales"
 
+        // Creamos un objeto que tiene los datos del registro 
         const datos = {
             nombre_registro: nombre,
             apellidos_registro: apellidos,
@@ -28,15 +29,16 @@ document.getElementById('enviar-registro').addEventListener('submit', function (
             contrasena_registro: contrasena
         }
 
+        // Variable que mandará los datos al JSON
         let datosRegistroJSON;
 
         // -- VERIFICA SI EXISTE EL JSON EN EL LOCAL -- \\
         if (localStorage.getItem("DatosRegistro")) {
             // SI NO EXISTE LO CREA
-            let datosRegistroGuardados = JSON.parse(localStorage.getItem("DatosRegistro"));
-            datosRegistroGuardados.push(datos);
+            let datosRegistroGuardados = JSON.parse(localStorage.getItem("DatosRegistro")); // Genera el json
+            datosRegistroGuardados.push(datos); // Al ser un array le ingresa el objeto con los datos
             datosRegistroJSON = JSON.stringify(datosRegistroGuardados);
-            localStorage.setItem("DatosRegistro", datosRegistroJSON);
+            localStorage.setItem("DatosRegistro", datosRegistroJSON); // Sube el json al localstorage
         }else{
             // SI EXISTE LO TOMA Y SOBRE ESCRIBE
             datos_usuarios_registro.push(datos)
@@ -49,11 +51,9 @@ document.getElementById('enviar-registro').addEventListener('submit', function (
     }
     else {
         resultadoIgualdad = "Diferentes"
+        // -- POPUP DE CONTRASEÑAS INCORRECTAS -- \\
         mostrarPopupRegistroConInc(event);
     }
-
-    console.log("Formulario válido, ejecutando acción...");
-
 });
 
 
@@ -65,7 +65,7 @@ function mostrarPopupRegistro(event) {
 
 function cerrarPopupRegistro() {
     document.getElementById("popup-registro").style.display = "none";
-    window.location.href = "login.html";
+    window.location.href = "/Login/login.html";
 }
 
 // -- POPUP CONTRASEÑA NO COINCIDE -- \\
