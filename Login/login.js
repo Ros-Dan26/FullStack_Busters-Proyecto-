@@ -27,27 +27,64 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Lógica del login
   document.getElementById('loginForm').addEventListener('submit', function (e) {
-    e.preventDefault();
+    e.preventDefault();  
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value.trim();
 
     if (email.length === 0 && password.length === 0) {
-      alertify.error("Ingrese sus datos para continuar");
+      //alertify.error("Ingrese sus datos para continuar");
+      mostrarPopupRegistroDatosFaltantes(e);
     } else if (email.length === 0) {
-      alertify.error("El correo electrónico es necesario");
+      //alertify.error("El correo electrónico es necesario");
+      mostrarPopupRegistroDatosFaltantes(e);
     } else if (password.length === 0) {
-      alertify.error("La contraseña es necesaria");
+      //alertify.error("La contraseña es necesaria");
+      mostrarPopupRegistroDatosFaltantes(e);
     } else {
       const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
       const usuarioValido = usuarios.find(user => user.email === email && user.password === password);
 
       if (usuarioValido) {
         localStorage.setItem('usuarioActivo', email);
-        alertify.success("Bienvenido " + usuarioValido.email + ", es un gusto verlo de nuevo");
-        window.location.href = '/index/index.html';
+        mostrarPopupRegistro(e);
+        //alertify.success("Bienvenido " + usuarioValido.email + ", es un gusto verlo de nuevo");
+        //window.location.href = '/index/index.html';
       } else {
-        alertify.error("Usuario y contraseña incorrectos");
+        //alertify.error("Usuario y contraseña incorrectos");
+        mostrarPopupRegistroConInc(e);
       }
     }
   });
 });
+
+
+// -- POPUP INICIO SESION EXITOSO -- \\
+function mostrarPopupRegistro(event) {
+    event.preventDefault();
+    document.getElementById("popup-login").style.display = "flex";
+}
+
+function cerrarPopupRegistro() {
+    document.getElementById("popup-login").style.display = "none";
+    window.location.href = "/index/index.html";
+}
+
+// -- POPUP CONTRASEÑA O USUARIO NO COINCIDE -- \\
+function mostrarPopupRegistroConInc(event) {
+    event.preventDefault();
+    document.getElementById("popup-login-Con-Inc").style.display = "flex";
+}
+
+function cerrarPopupRegistroConInc() {
+    document.getElementById("popup-login-Con-Inc").style.display = "none";
+}
+
+// -- POPUP Datos faltantes NO COINCIDE -- \\
+function mostrarPopupRegistroDatosFaltantes(event) {
+    event.preventDefault();
+    document.getElementById("popup-login-DatosFalt").style.display = "flex";
+}
+
+function cerrarPopupRegistroDatosFaltantes() {
+    document.getElementById("popup-login-DatosFalt").style.display = "none";
+}
