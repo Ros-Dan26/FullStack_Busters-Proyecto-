@@ -48,3 +48,89 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 // Fin del script de hero
+
+// Carrusel Infinito de Marcas - Nombres Unicos
+document.addEventListener('DOMContentLoaded', () => {
+    const track = document.querySelector('.brands-carousel-track');
+    let slides = Array.from(track.children);
+    const slideCount = slides.length;
+
+    // Duplicar slides para efecto infinito
+    slides.forEach(slide => track.appendChild(slide.cloneNode(true)));
+    slides.forEach(slide => track.insertBefore(slide.cloneNode(true), track.firstChild));
+
+    slides = Array.from(track.children); // actualizamos slides después de duplicar
+    let currentIndex = slideCount; // empezamos en el 1er slide del set original del medio
+
+    // Obtener ancho total de cada slide (incluye margen)
+    function getSlideWidth() {
+        const slide = slides[0];
+        const style = window.getComputedStyle(slide);
+        return slide.offsetWidth + parseFloat(style.marginLeft) + parseFloat(style.marginRight);
+    }
+
+    let slideWidth = getSlideWidth();
+
+    // Función para mover carrusel
+    function moveCarousel(index, animate = true) {
+        if (!animate) {
+            track.style.transition = 'none';
+        } else {
+            track.style.transition = 'transform 0.5s ease-in-out';
+        }
+        const offset = slideWidth * index;
+        track.style.transform = `translateX(-${offset}px)`;
+
+        if (!animate) {
+            // Forzar repaint para que el siguiente cambio con animación funcione bien
+            track.offsetHeight;
+            track.style.transition = 'transform 0.5s ease-in-out';
+        }
+    }
+
+    // Lógica para loop infinito
+    function checkBounds() {
+        if (currentIndex >= slideCount * 2) {
+            // si pasamos el final, saltamos sin animación a la posición inicial
+            currentIndex = slideCount;
+            moveCarousel(currentIndex, false);
+        } else if (currentIndex < slideCount) {
+            // si retrocedemos antes del inicio, saltamos al final real
+            currentIndex = slideCount * 2 - 1;
+            moveCarousel(currentIndex, false);
+        }
+    }
+
+    // Mover a siguiente slide con animación y luego revisar límites
+    function nextSlide() {
+        currentIndex++;
+        moveCarousel(currentIndex);
+        setTimeout(checkBounds, 600); // espera la transición antes de corregir
+    }
+
+    // Mover a slide anterior con animación y luego revisar límites
+    function prevSlide() {
+        currentIndex--;
+        moveCarousel(currentIndex);
+        setTimeout(checkBounds, 600);
+    }
+
+    // Opcional: añadir botones para controlar (ejemplo)
+    // Puedes agregar botones con clases .brands-left y .brands-right y activar así:
+    /*
+    document.querySelector('.brands-left').addEventListener('click', prevSlide);
+    document.querySelector('.brands-right').addEventListener('click', nextSlide);
+    */
+
+    // Resize handler para recalcular ancho si cambia la pantalla
+    window.addEventListener('resize', () => {
+        slideWidth = getSlideWidth();
+        moveCarousel(currentIndex, false);
+    });
+
+    // Inicializamos posicionando en el primer slide original
+    moveCarousel(currentIndex, false);
+
+    // Si quieres autoplay automático cada 1000 milisegundos:
+    setInterval(nextSlide, 1000);
+});

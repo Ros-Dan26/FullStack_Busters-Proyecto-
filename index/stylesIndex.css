@@ -87,8 +87,7 @@ section>h2 {
     min-height: 400px;
     overflow: hidden;
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+    align-items: stretch;
 }
 
 .hero__video {
@@ -98,78 +97,107 @@ section>h2 {
     width: 100vw;
     height: 100vh;
     object-fit: cover;
+    object-position: center center;
     z-index: 1;
-    filter: brightness(0.72) grayscale(18%);
+    filter: brightness(0.76) grayscale(20%);
     pointer-events: none;
+    transition: filter 0.3s;
+}
+
+/* Opcional: mejor rendimiento en móviles para vídeo */
+@media (max-width: 600px) {
+    .hero__video {
+        min-width: 100vw;
+        min-height: 100vh;
+        /* Si necesitas cambiar el video por una imagen en móviles para ahorrar datos, implementa JS */
+    }
 }
 
 .hero__overlay {
     position: relative;
-    width: 100%;
     z-index: 2;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100vh;
     justify-content: flex-start;
+    min-height: 100vh;
     pointer-events: none;
 }
 
 .hero__texts {
-    margin-top: 4vw;
+    margin-top: 3vw;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     pointer-events: all;
 }
 
 .hero__title {
-    font-size: clamp(1.1rem, 3vw, 2.2rem);
-    letter-spacing: 0.04em;
-    font-weight: 700;
-    margin-bottom: 0.3rem;
+    font-size: clamp(1rem, 3vw, 1.7rem);
+    margin-bottom: 0.2rem;
     margin-top: 0;
+    font-weight: 700;
+    letter-spacing: 0.04em;
     line-height: 1.1;
-    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.22);
     color: #fff;
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.23);
 }
 
 .hero__subtitle {
-    font-size: clamp(0.8rem, 1.5vw, 1rem);
+    font-size: clamp(0.8rem, 1.5vw, 1.1rem);
     font-weight: 400;
     margin-bottom: 0;
     margin-top: 0;
-    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
-    color:#fff
+    color: #fff;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.13);
 }
 
+/* Botón lo más bajo posible, pequeño y centrado */
 .hero__cta {
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: absolute;
     left: 50%;
-    bottom: 3vw;
+    bottom: 10vw;
     transform: translateX(-50%);
     background: transparent;
     color: #fff;
-    font-weight: 500;
-    font-size: 0.74rem;
+    font-size: 0.7rem;
     text-decoration: none;
-    border: 1.5px solid #fff;
+    border: 1px solid #fff;
     border-radius: 2rem;
+    padding: 0.30rem 0.85rem;
+    transition: background 0.3s, border 0.3s, transform 0.2s;
     box-shadow: none;
-    padding: 0.38rem 1rem;
-    transition: background 0.3s, color 0.3s, border 0.3s, transform 0.25s;
-    cursor: pointer;
     pointer-events: all;
+    cursor: pointer;
 }
 
 .hero__cta:hover,
 .hero__cta:focus {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: #34d1c9;
-    transform: translateX(-50%) scale(1.05);
+    background: rgba(255, 255, 255, 0.11);
+    border-color: #30cfc9;
+    color: #fff;
+    transform: translateX(-50%) scale(1.04);
+}
+
+/* Responsive breakpoints */
+@media (max-width: 900px) {
+    .hero__title {
+        font-size: 1.25rem;
+    }
+
+    .hero__subtitle {
+        font-size: 1rem;
+    }
 }
 
 @media (max-width: 600px) {
     .hero__texts {
-        margin-top: 3vw;
+        margin-top: 10vw;
     }
 
     .hero__title {
@@ -177,14 +205,16 @@ section>h2 {
     }
 
     .hero__subtitle {
-        font-size: 0.7rem;
+        font-size: 0.73rem;
     }
 
     .hero__cta {
-        font-size: 0.65rem;
-        padding: 0.32rem 0.7rem;
+        font-size: 0.63rem;
+        padding: 0.22rem 0.65rem;
+        bottom: 2vw;
     }
 }
+
 
 /* 5. CARRUSEL DE PRODUCTOS */
 .carousel {
@@ -511,4 +541,37 @@ section>h2 {
         width: 60px;
         height: 60px;
     }
+}
+
+/*carrusel de marcas*/
+.brands-carousel {
+    width: 100%;
+    overflow: hidden;
+    margin: 2rem 0;
+}
+
+.brands-carousel-track-container {
+    overflow: hidden;
+    width: 100%;
+}
+
+.brands-carousel-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    will-change: transform;
+}
+
+.brands-carousel-slide {
+    min-width: 120px;
+    /* ajusta según desees tamaño de iconos */
+    margin: 0 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.brands-carousel-slide img {
+    max-width: 100%;
+    height: auto;
+    display: block;
 }
