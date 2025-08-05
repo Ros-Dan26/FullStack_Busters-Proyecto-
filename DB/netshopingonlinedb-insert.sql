@@ -3180,6 +3180,14 @@ INSERT INTO paypals(id_user, email) VALUES
 ('100', (select email from users where id=16));
 
 
+-- insert de productos
+insert into products (id_user,id_subcategory,id_status,id_size,id_gender_product,id_color,name,model,description,details,price,id_brand) 
+values(10,5,1,1,1,46,"Yeezy","Boost","tenis casual comodos","parte superior YEEZY Primekni",3500,2);
+
+-- insert de imagenes
+values (1,"https://cdn-images.farfetch-contents.com/17/03/72/28/17037228_35781287_600.jpg");
+
+
 
 
 
