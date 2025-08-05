@@ -30,3 +30,21 @@ prevButton.addEventListener('click', () => {
     currentIndex = (currentIndex - 1 + slides.length) % slides.length;
     moveToSlide(currentIndex);
 });
+
+//hero 
+document.addEventListener('DOMContentLoaded', () => {
+    const video = document.querySelector('.hero__video');
+    //forzar autoplay en navegadores compatibles
+    video.muted = true; // Silenciar el video para autoplay
+    video.play().catch(error => {
+        //mostar un fallback visual si el autoplay falla
+        video.poster = 'fallback-image.jpg'; // Reemplaza con tu imagen de fallback
+        video.controls = true; // Mostrar controles para que el usuario pueda reproducirlo manualmente
+    });
+    //reinicio seguro en caso de errores
+    video.addEventListener('ended', () => {
+        video.currentTime = 0;
+        video.play();
+    });
+});
+// Fin del script de hero

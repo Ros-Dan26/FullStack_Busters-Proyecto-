@@ -1,7 +1,7 @@
 /* ===================================================================
-   styles.css — Landing Page de Sneakers
-   Paleta: #f5efe7 & #213555 | Tipografía Montserrat
-   Responsividad completa con media queries
+    styles.css — Landing Page de Sneakers
+    Paleta: #f5efe7 & #213555 | Tipografía Montserrat
+    Responsividad completa con media queries
    =================================================================== */
 
 /* 1. VARIABLES GLOBALES */
@@ -14,7 +14,7 @@
     --color-muted: rgba(33, 53, 85, 0.7);
 
     /* Tipografía */
-    --font-sans: 'Montserrat', sans-serif;
+    --font-sans: "Montserrat", sans-serif;
     --title-lg: 2.5rem;
     --title-sm: 1.75rem;
 
@@ -81,63 +81,109 @@ section>h2 {
 
 /* 4. HERO SECTION */
 .hero {
-    background: linear-gradient(135deg, #f5efe7 0%, #e0d3cb 100%);
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    min-height: 400px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 
-.hero__container {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+.hero__video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: 1;
+    filter: brightness(0.72) grayscale(18%);
+    pointer-events: none;
+}
+
+.hero__overlay {
+    position: relative;
+    width: 100%;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: var(--spacing-lg);
-    padding: 0 var(--spacing-lg);
+    height: 100vh;
+    justify-content: flex-start;
+    pointer-events: none;
+}
+
+.hero__texts {
+    margin-top: 4vw;
+    pointer-events: all;
 }
 
 .hero__title {
-    font-size: var(--title-lg);
+    font-size: clamp(1.1rem, 3vw, 2.2rem);
+    letter-spacing: 0.04em;
     font-weight: 700;
-    color: var(--color-primary);
-    margin-bottom: var(--spacing);
-    text-align: center;
+    margin-bottom: 0.3rem;
+    margin-top: 0;
+    line-height: 1.1;
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.22);
+    color: #fff;
 }
 
 .hero__subtitle {
-    font-size: 1.125rem;
-    color: var(--color-muted);
-    margin-bottom: var(--spacing-lg);
-    text-align: center;
+    font-size: clamp(0.8rem, 1.5vw, 1rem);
+    font-weight: 400;
+    margin-bottom: 0;
+    margin-top: 0;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+    color:#fff
 }
 
 .hero__cta {
-    background-color: var(--color-primary);
-    color: var(--color-bg);
-    border: none;
-    padding: var(--spacing-xs) var(--spacing-lg);
-    font-size: 1rem;
-    border-radius: var(--radius);
+    display: inline-block;
+    position: absolute;
+    left: 50%;
+    bottom: 3vw;
+    transform: translateX(-50%);
+    background: transparent;
+    color: #fff;
+    font-weight: 500;
+    font-size: 0.74rem;
+    text-decoration: none;
+    border: 1.5px solid #fff;
+    border-radius: 2rem;
+    box-shadow: none;
+    padding: 0.38rem 1rem;
+    transition: background 0.3s, color 0.3s, border 0.3s, transform 0.25s;
     cursor: pointer;
-    transition: background var(--transition), transform var(--transition);
+    pointer-events: all;
 }
 
 .hero__cta:hover,
 .hero__cta:focus {
-    background-color: #1b2f4a;
-    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.12);
+    border-color: #34d1c9;
+    transform: translateX(-50%) scale(1.05);
 }
 
-.hero__image {
-    text-align: center;
-}
+@media (max-width: 600px) {
+    .hero__texts {
+        margin-top: 3vw;
+    }
 
-.hero__img {
-    width: 100%;
-    border-radius: var(--radius);
-    transition: transform var(--transition);
-}
+    .hero__title {
+        font-size: 1rem;
+    }
 
-.hero__img:hover {
-    transform: scale(1.05);
+    .hero__subtitle {
+        font-size: 0.7rem;
+    }
+
+    .hero__cta {
+        font-size: 0.65rem;
+        padding: 0.32rem 0.7rem;
+    }
 }
 
 /* 5. CARRUSEL DE PRODUCTOS */
