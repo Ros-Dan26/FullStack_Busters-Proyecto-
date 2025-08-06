@@ -94,7 +94,8 @@ function addCart(index) {
 
     // Guarda el carrito actualizado en localStorage
     localStorage.setItem("carrito", JSON.stringify(cart));
-    alert(`${cantidad} unidad(es) de ${producto.producto} (Talla: ${talla}) agregada(s) al carrito.`);
+    //alert(`${cantidad} unidad(es) de ${producto.producto} (Talla: ${talla}) agregada(s) al carrito.`);
+    crearPopUpUniversal(cantidad, producto.producto, talla); // POP UP 
 }
 
 // 6. Función para mostrar los detalles del producto en un modal
@@ -113,3 +114,26 @@ function verDetalles(index) {
     modal.show();
 }
 
+
+
+// -- POP UP -- \\
+function crearPopUpUniversal(cantidad, producto, talla){
+  const contenedor = document.getElementById('PopUp-Universal');
+  let palabra = cantidad > 1 ? "Unidades": "Unidad";
+
+    contenedor.innerHTML = `
+        <div class="popup-Diseño" id="popup-registro">
+                <div class="popup-Diseño-Contenido">
+                    <p><b> Su Producto ha sido añadido al carrito </b> </p>
+                    <p>${producto}</p>
+                    <button onclick="cerrarPopupUniversal()">Seguir Comprando</button>
+                    <button onclick=window.location.href='/carrito/carrito.html'>Ir a carrito </button>
+                </div>
+        </div>
+      `;
+}
+
+function cerrarPopupUniversal() {
+    const contenedor = document.getElementById("PopUp-Universal");
+    contenedor.innerHTML = '';
+}

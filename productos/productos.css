@@ -97,3 +97,33 @@ body{
     background-color: #1b2f4a;
     transform: translateY(-2px);
 }
+
+/* POP UP*/
+.popup-Diseño{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.popup-Diseño-Contenido{
+  background: #F5EFE7 ;
+  color: #274A7D;
+  border-radius: 20px;
+  padding: 30px;
+  text-align: center;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+.popup-Diseño-Contenido button{
+  border-radius: 0.5rem;
+  background-color: #F5EFE7;
+  padding: 8px 18px;
+  margin-top: 13px;
+}
