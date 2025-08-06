@@ -1,32 +1,61 @@
-// Espera a que el DOM esté completamente cargado
 document.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('recoverForm');
+  const popup = document.getElementById('popup-reset');
+  const popupMessage = document.getElementById('popup-message-reset');
 
-  // Captura el formulario por su ID y agrega un evento de submit
-  document.getElementById('recoverForm').addEventListener('submit', function (e) {
-    e.preventDefault(); // Evita que se recargue la página
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
 
-    // Obtiene el valor del campo de email y lo limpia de espacios
     const email = document.getElementById('recoverEmail').value.trim();
 
-    // Validación básica: si el campo está vacío, mostrar error
     if (!email) {
-      alertify.error("Por favor, ingresa tu correo electrónico");
+      mostrarPopupReset("Por favor, ingresa tu correo electrónico", true);
       return;
     }
 
-    // Recupera la lista de usuarios desde localStorage (si existe)
-    const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+    if (!esCorreoValido(email)) {
+      mostrarPopupReset("Este correo no es válido", true);
+      return;
+    }
 
-    // Verifica si el correo ingresado existe en la base local
+    const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
     const existe = usuarios.find(user => user.email === email);
 
     if (existe) {
-      // Si existe, simula el envío del correo de recuperación
-      alertify.success("Se ha enviado un enlace de recuperación a " + email);
-      // Aquí podrías generar un token o redirigir a una página "reset-password"
+      mostrarPopupReset("Se ha enviado un enlace de recuperación a " + email, false);
     } else {
-      // Si no existe el correo, muestra mensaje de error
-      alertify.error("Este correo no está registrado");
+      mostrarPopupReset("Este correo no está registrado", true);
+    }
+  });
+
+  window.addEventListener('click', function (event) {
+    if (event.target === popup) {
+      cerrarPopupReset();
     }
   });
 });
+
+function mostrarPopupReset(mensaje, esError = false) {
+  const popup = document.getElementById('popup-reset');
+  const popupMessage = document.getElementById('popup-message-reset');
+
+  popupMessage.textContent = mensaje;
+
+  if (esError) {
+    popupMessage.classList.add('popup-error');
+  } else {
+    popupMessage.classList.remove('popup-error');
+  }
+
+  popup.style.display = 'flex';
+}
+
+function cerrarPopupReset() {
+  const popup = document.getElementById('popup-reset');
+  popup.style.display = 'none';
+}
+
+function esCorreoValido(email) {
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(email);
+}

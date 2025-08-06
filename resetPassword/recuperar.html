@@ -42,23 +42,37 @@
       </form>
     </div>
   </div>
+<!-- Popup personalizado para recuperación -->
+<div id="popup-reset" class="popup-reset">
+  <div class="popup-content-reset">
+    <p id="popup-message-reset"></p>
+    <button class="btn-reset" onclick="cerrarPopupReset()">Aceptar</button>
+  </div>
+</div>
 
-<!-- Scripts header-footer-->
+
+ <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <!-- scripts-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <!-- Scripts -->
     <script src="/header-footer/header-footer.js"></script>
-   
-  <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-  <script src="/Contactus/Contactus.js"></script>
-  <script src="/Login/login.js"></script>
-  <script>
-    cargarHeader().then(() => {
-      const script = document.createElement('script');
-      script.src = "/Login/session.js";
-      script.onload = () => manejarSesion();
-      document.body.appendChild(script);
-    });
-    cargarFooter();
-  </script>
+    <script>
+        cargarHeader().then(() => {
+            const script = document.createElement('script');
+            script.src = "/Login/session.js";
+            script.onload = () => {
+                manejarSesion(); // llama solo después de estar cargado
+            };
+            document.body.appendChild(script);
+        });
+
+        cargarFooter();
+    </script>
+    <script src="/resetPassword/recuperar.js"></script>
 </body>
+
 </html>
