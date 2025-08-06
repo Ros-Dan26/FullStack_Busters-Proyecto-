@@ -25,7 +25,7 @@ fetch('/productos/catalogo_productos.json')
             <label for="cantidad-input-${index}" class="form-label">Cantidad:</label>
             <input type="number" min="1" value="1" class="form-control mb-3" id="cantidad-input-${index}" />
             <button class="product-card__btn" onclick="verDetalles(${index})">Ver detalles</button>
-            <button class="btn fondo-negro-medio d-flex align-items-center gap-2 add-to-cart mt-auto" onclick="addCart(${index})">
+            <button class="aniadir-carrito_btn" onclick="addCart(${index})">
               <span>Añadir al carrito</span>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                   class="bi bi-cart-check-fill" viewBox="0 0 16 16">

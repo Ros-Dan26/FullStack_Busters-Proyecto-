@@ -1,6 +1,11 @@
 /* productos.css */
 body{
-  background-color: #213555;
+ font-family: "Montserrat", sans-serif;
+    background-color: #f5efe7;
+    color: #274A7D;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
 }
 .contenedor-productos {
   display: grid;
@@ -84,20 +89,33 @@ body{
   padding: 1rem;
 }
 .product-card__btn {
-    background-color: var(--color-primary);
-    color: var(--color-bg);
-    border:1px ;
-    padding: var(--spacing-xs) var(--spacing-lg);
-    border-radius: var(--radius);
+    background-color: #213555;
+    color: #f5efe7;
+    border:1px solid #f5efe7;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
     cursor: pointer;
-    transition: background var(--transition), transform var(--transition);
+    transition: background 0.3s ease, transform 0.3s ease;
 }
 .product-card__btn:hover,
 .product-card__btn:focus {
     background-color: #1b2f4a;
     transform: translateY(-2px);
 }
-
+.aniadir-carrito_btn {
+    background-color: #213555;
+    color: #f5efe7;
+    border:1px solid #f5efe7;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+.aniadir-carrito_btn:hover,
+.aniadir-carrito_btn:focus {
+    background-color: #1b2f4a;
+    transform: translateY(-2px);
+}
 /* POP UP*/
 .popup-Diseño{
   position: fixed;
@@ -126,4 +144,23 @@ body{
   background-color: #F5EFE7;
   padding: 8px 18px;
   margin-top: 13px;
+}
+
+/* Aplica el mismo estilo a los botones del acordeón */
+#filterAccordion .accordion-button {
+    background-color: #E5D5C3;
+    color: #242322;
+    border: 1px solid #f5efe7;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem !important;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+    font-family: "Montserrat", sans-serif;
+}
+
+#filterAccordion .accordion-button:hover,
+#filterAccordion .accordion-button:focus {
+    background-color: #1b2f4a;
+    color: #f5efe7;
+    transform: translateY(-2px);
 }
