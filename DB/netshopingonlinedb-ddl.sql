@@ -1,5 +1,4 @@
 create database netshopingonlinedb;
-
 use netshopingonlinedb;
 
 CREATE TABLE banks (
@@ -9,11 +8,6 @@ CREATE TABLE banks (
 );
 
 CREATE TABLE genders (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL
-);
-
-CREATE TABLE genders_products (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL
 );
@@ -44,18 +38,6 @@ CREATE TABLE variants_types (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     description VARCHAR(256) NOT NULL
-);
-
-CREATE TABLE categories (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL
-);
-
-CREATE TABLE subcategories (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    id_category INT NOT NULL,
-    name VARCHAR(50) NOT NULL,
-    FOREIGN KEY (id_category) REFERENCES categories(id) ON DELETE CASCADE
 );
 
 CREATE TABLE shipments (
@@ -139,8 +121,8 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL,
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    deleted TIMESTAMP DEFAULT NULL
-    
+    deleted TIMESTAMP DEFAULT NULL,
+    FOREIGN KEY (id_gender) REFERENCES genders(id) ON DELETE CASCADE
 );
 
 CREATE TABLE avatars (
@@ -171,13 +153,6 @@ CREATE TABLE cd_cards (
     FOREIGN KEY (id_bank) REFERENCES banks(id) ON DELETE CASCADE
 );
 
-CREATE TABLE paypals (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    id_user INT NOT NULL,
-    email VARCHAR(128) NOT NULL,
-    details VARCHAR(256) NOT NULL DEFAULT 'Sin detalles',
-    FOREIGN KEY (id_user) REFERENCES users(id) ON DELETE CASCADE
-);
 
 CREATE TABLE types (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -227,11 +202,9 @@ CREATE TABLE sales (
 CREATE TABLE products (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_user INT NOT NULL,
-    id_subcategory INT NOT NULL,
     id_status INT NOT NULL,
     id_size INT NOT NULL,
     id_brand INT NOT NULL,
-    id_gender_product INT NOT NULL,
     id_color INT NOT NULL,
     
     name VARCHAR(256) NOT NULL,
@@ -245,11 +218,9 @@ CREATE TABLE products (
     deleted TIMESTAMP DEFAULT NULL,
     
     FOREIGN KEY (id_user) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (id_subcategory) REFERENCES subcategories(id) ON DELETE CASCADE,
     FOREIGN KEY (id_status) REFERENCES status(id) ON DELETE CASCADE,
     FOREIGN KEY (id_size) REFERENCES sizes(id) ON DELETE CASCADE,
     FOREIGN KEY (id_brand) REFERENCES brands(id) ON DELETE CASCADE,
-    FOREIGN KEY (id_gender_product) REFERENCES genders_products(id) ON DELETE CASCADE,
     FOREIGN KEY (id_color) REFERENCES colors_products(id) ON DELETE CASCADE
 );
 
