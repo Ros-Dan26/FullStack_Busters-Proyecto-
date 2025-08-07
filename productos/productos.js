@@ -24,8 +24,8 @@ fetch('/productos/catalogo_productos.json')
             </select>
             <label for="cantidad-input-${index}" class="form-label">Cantidad:</label>
             <input type="number" min="1" value="1" class="form-control mb-3" id="cantidad-input-${index}" />
-            <button class="btn btn-outline-secondary mb-2" onclick="verDetalles(${index})">Ver detalles</button>
-            <button class="btn fondo-negro-medio d-flex align-items-center gap-2 add-to-cart mt-auto" onclick="addCart(${index})">
+            <button class="product-card__btn" onclick="verDetalles(${index})">Ver detalles</button>
+            <button class="aniadir-carrito_btn" onclick="addCart(${index})">
               <span>Añadir al carrito</span>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                   class="bi bi-cart-check-fill" viewBox="0 0 16 16">
@@ -94,7 +94,8 @@ function addCart(index) {
 
     // Guarda el carrito actualizado en localStorage
     localStorage.setItem("carrito", JSON.stringify(cart));
-    alert(`${cantidad} unidad(es) de ${producto.producto} (Talla: ${talla}) agregada(s) al carrito.`);
+    //alert(`${cantidad} unidad(es) de ${producto.producto} (Talla: ${talla}) agregada(s) al carrito.`);
+    crearPopUpUniversal(cantidad, producto.producto, talla); // POP UP 
 }
 
 // 6. Función para mostrar los detalles del producto en un modal
@@ -113,3 +114,26 @@ function verDetalles(index) {
     modal.show();
 }
 
+
+
+// -- POP UP -- \\
+function crearPopUpUniversal(cantidad, producto, talla){
+  const contenedor = document.getElementById('PopUp-Universal');
+  let palabra = cantidad > 1 ? "Unidades": "Unidad";
+
+    contenedor.innerHTML = `
+        <div class="popup-Diseño" id="popup-registro">
+                <div class="popup-Diseño-Contenido">
+                    <p><b> Su Producto ha sido añadido al carrito </b> </p>
+                    <p>${producto}</p>
+                    <button onclick="cerrarPopupUniversal()">Seguir Comprando</button>
+                    <button onclick=window.location.href='/carrito/carrito.html'>Ir a carrito </button>
+                </div>
+        </div>
+      `;
+}
+
+function cerrarPopupUniversal() {
+    const contenedor = document.getElementById("PopUp-Universal");
+    contenedor.innerHTML = '';
+}

@@ -140,7 +140,7 @@ html, body{
 }
 
 .popup-content-registro{
-  background: linear-gradient(180deg, #274A7D, #9AB8DF);
+  background: #274A7D  ;
   color: #F5EFE7;
   border-radius: 20px;
   padding: 30px;
@@ -171,7 +171,7 @@ html, body{
 }
 
 .popup-content-registro-Con-in {
-  background: linear-gradient(180deg, #274A7D, #9AB8DF);
+  background: #274A7D  ;
   color: #F5EFE7;
   border-radius: 20px;
   padding: 30px;

@@ -35,7 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
         } else {
             // Si la validación falla, avisamos al usuario
-            alert("Por favor completa todos los campos correctamente.");
+            //alert("Por favor completa todos los campos correctamente.");
+            crearPopUpUniversal(); // POP UP 
         }
     });
 
@@ -96,3 +97,24 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+
+// -- POP UP -- \\
+function crearPopUpUniversal(){
+  const contenedor = document.getElementById('PopUp-Universal');
+
+    contenedor.innerHTML = `
+        <div class="popup-Diseño" id="popup-registro">
+                <div class="popup-Diseño-Contenido">
+                    <p><b> Por favor completa todos los campos correctamente. </b> </p>
+                    <div><img src="/Pagina_registro/incorrecto.png"></div>
+                    <button onclick="cerrarPopupUniversal()">Aceptar</button>
+                </div>
+        </div>
+      `;
+}
+
+function cerrarPopupUniversal() {
+    const contenedor = document.getElementById("PopUp-Universal");
+    contenedor.innerHTML = '';
+}

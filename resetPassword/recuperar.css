@@ -119,7 +119,7 @@ form {
 
 
 .popup-reset {
-  display: none;
+ display: none;
   position: fixed;
   top: 0;
   left: 0;
@@ -132,7 +132,7 @@ form {
 }
 
 .popup-content-reset {
-  background: linear-gradient(180deg, #0b4192, #367cd7);
+  background: #274A7D;
   color: #F5EFE7;
   border-radius: 20px;
   padding: 30px;
@@ -141,13 +141,10 @@ form {
 }
 
 .popup-content-reset button.btn-reset {
-  border-radius: 30px;
-  background-color: #4076bd;
+  border-radius: 0.5rem;
+  background-color: #9AB8DF;
   padding: 10px 20px;
   margin-top: 15px;
-  font-weight: bold;
-  border: none;
-  cursor: pointer;
 }
 
 .popup-error {

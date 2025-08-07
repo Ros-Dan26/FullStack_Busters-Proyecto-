@@ -124,8 +124,8 @@ form {
 }
 
 
-/* Popup de login exitoso */
-.popup-login{
+/* Pop up */
+.popup-login {
   display: none;
   position: fixed;
   top: 0;
@@ -138,8 +138,8 @@ form {
   z-index: 1000;
 }
 
-.popup-content-login{
-  background: linear-gradient(180deg, #274A7D, #9AB8DF);
+.popup-content-login {
+  background: #274A7D;
   color: #F5EFE7;
   border-radius: 20px;
   padding: 30px;
@@ -147,8 +147,8 @@ form {
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
 }
 
-.popup-content-login button{
-  border-radius: 30px;
+.popup-content-login button {
+  border-radius: 0.5rem;
   background-color: #9AB8DF;
   padding: 10px 20px;
   margin-top: 15px;
