@@ -1,6 +1,6 @@
 body {
   font-family: 'Montserrat', sans-serif;
-  
+
   margin: 0;
   padding: 0;
   font-size: large;
@@ -25,26 +25,26 @@ body {
 
 /* Botón enviar */
 
-#btnEnviar{
+#btnEnviar {
   color: white;
- background-color:#407CEB;
- border-color: #407CEB; 
- 
+  background-color: #407CEB;
+  border-color: #407CEB;
+  border-radius: 0.5rem;
 }
 
-.btn-container{
-      text-align: center;
-      margin-top: 20px;
+.btn-container {
+  text-align: center;
+  margin-top: 20px;
 }
 
-#important{
+#important {
   color: red;
 }
 
 
 
 /* POP UP */
-.popup-Diseño{
+.popup-Diseño {
   position: fixed;
   top: 0;
   left: 0;
@@ -57,8 +57,8 @@ body {
   z-index: 100;
 }
 
-.popup-Diseño-Contenido{
-  background: #274A7D  ;
+.popup-Diseño-Contenido {
+  background: #274A7D;
   color: #F5EFE7;
   border-radius: 20px;
   padding: 30px;
@@ -66,7 +66,7 @@ body {
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
 }
 
-.popup-Diseño-Contenido button{
+.popup-Diseño-Contenido button {
   border-radius: 0.5rem;
   background-color: #9AB8DF;
   padding: 8px 18px;

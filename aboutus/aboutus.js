@@ -53,8 +53,8 @@ const integrantes = [
         información: "Analista de datos Jr.",
         biografia: "Ingeniera Industrial egresada del Instituto Tecnológico de Querétaro, con experiencia en análisis de datos con herramientas como la Power Plataform de Microsoft, Excel (tablas dinámicas, formulas, macros y scripts), Python y MySQL Workbench. Apasionada por la tecnología y el aprendizaje continuo.",
         rol: "Desarrollador FullStack",
-        linkedin:"",
-        portafolio:""
+        linkedin:"http://www.linkedin.com/in/rebeca-martinez-sanchez",
+        portafolio:"https://rebecamartinezsan.github.io"
 
     }
     , {
