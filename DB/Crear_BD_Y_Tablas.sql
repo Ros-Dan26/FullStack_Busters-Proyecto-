@@ -1,0 +1,226 @@
+create database netshopingonlinedb;
+use netshopingonlinedb;
+
+-- DROP DATABASE netshopingonlinedb;
+
+-- TABLA BANCOS
+CREATE TABLE banks (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(120) NOT NULL,
+    url VARCHAR(512) NOT NULL
+);
+
+-- TABLA GENEROS
+CREATE TABLE genders (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL
+);
+
+-- TABLA TAGS
+CREATE TABLE tags (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL
+);
+
+-- TABLA DE COLORES
+CREATE TABLE colors_products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    hex_code VARCHAR(10) NOT NULL
+);
+
+-- TABLA TALLAS
+CREATE TABLE sizes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(6) NOT NULL
+    
+);
+
+-- TABLA DE MARCAS
+CREATE TABLE brands (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    url VARCHAR(256) NOT NULL
+);
+
+-- TABLA DE ESTATUS
+CREATE TABLE status (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL
+);
+
+-- TABLA VARIANTES
+CREATE TABLE variants_types (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    description VARCHAR(256) NOT NULL
+);
+
+-- TABLA envíos
+CREATE TABLE shipments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    price DECIMAL(8,2),
+    address_details VARCHAR(256) NOT NULL
+);
+
+-- TABLA USUARIOS
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_gender INT NOT NULL,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    middle_name VARCHAR(50) NOT NULL,
+    preferences VARCHAR(256) NOT NULL DEFAULT "ND",
+    email VARCHAR(100) NOT NULL UNIQUE,
+    phone VARCHAR(12) NOT NULL UNIQUE,
+    mobile VARCHAR(12) NOT NULL UNIQUE,
+    nickname VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted TIMESTAMP DEFAULT NULL,
+    FOREIGN KEY (id_gender) REFERENCES genders(id) ON DELETE CASCADE
+);
+
+-- TABLA AVATARS
+CREATE TABLE avatars (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_user INT NOT NULL,
+    url VARCHAR(1024) NOT NULL,
+    FOREIGN KEY (id_user) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- TABLA TRANSFERENCIAS
+CREATE TABLE bank_transfers (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_user INT NOT NULL,
+    id_bank INT NOT NULL,
+    identification_number VARCHAR(50) NOT NULL,
+    details VARCHAR(256) NOT NULL DEFAULT 'Sin detalles',
+    FOREIGN KEY (id_user) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_bank) REFERENCES banks(id) ON DELETE CASCADE
+);
+
+-- TABLA TARJETAS
+CREATE TABLE cd_cards (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_user INT NOT NULL,
+    id_bank INT NOT NULL,
+    cardholder_name VARCHAR(128) NOT NULL,
+    card_number VARCHAR(20) NOT NULL,
+    expiratio_date DATE NOT NULL,
+    FOREIGN KEY (id_user) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_bank) REFERENCES banks(id) ON DELETE CASCADE
+);
+
+-- TABLA TIPOS
+CREATE TABLE types (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(120) NOT NULL
+);
+
+-- TABLA ESTADOS
+CREATE TABLE states (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(120) NOT NULL
+);
+
+-- TABLA CIUDADES
+CREATE TABLE cities (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_state INT NOT NULL,
+    name VARCHAR(120) NOT NULL,
+    FOREIGN KEY (id_state) REFERENCES states(id) ON DELETE CASCADE
+);
+
+-- TABLA DIRECCIONES
+CREATE TABLE address (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_user INT NOT NULL,
+    id_type INT NOT NULL,
+    id_city INT NOT NULL,
+    name VARCHAR(120) NOT NULL,
+    number INT NOT NULL,
+    cp_code INT NOT NULL,
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted TIMESTAMP DEFAULT NULL,
+    FOREIGN KEY (id_user) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_city) REFERENCES cities(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_type) REFERENCES types(id) ON DELETE CASCADE
+);
+
+-- TABLA VENTAS
+CREATE TABLE sales (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_user INT NOT NULL,
+    id_shipment INT NOT NULL,
+    payment_details VARCHAR(256) NOT NULL,
+    time_sale TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    discount DECIMAL(4, 2) DEFAULT 0.0,
+    FOREIGN KEY (id_user) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_shipment) REFERENCES shipments(id) ON DELETE CASCADE
+);
+
+-- TABLA PRODUCTOS
+CREATE TABLE products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_user INT NOT NULL,
+    id_status INT NOT NULL,
+    id_size INT NOT NULL,
+    id_brand INT NOT NULL,
+    id_color INT NOT NULL,
+    
+    name VARCHAR(256) NOT NULL,
+    model VARCHAR(256) NOT NULL,
+    description VARCHAR(1024) NOT NULL,
+    details VARCHAR(1024) NOT NULL,
+    price DECIMAL(8, 2) DEFAULT 0.0,
+    
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted TIMESTAMP DEFAULT NULL,
+    
+    FOREIGN KEY (id_user) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_status) REFERENCES status(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_size) REFERENCES sizes(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_brand) REFERENCES brands(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_color) REFERENCES colors_products(id) ON DELETE CASCADE
+);
+
+-- TABLA TIPO DE PRODUCTOS
+CREATE TABLE types_products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_variant_type INT NOT NULL,
+    id_product INT NOT NULL,
+    FOREIGN KEY (id_variant_type) REFERENCES variants_types(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_product) REFERENCES products(id) ON DELETE CASCADE
+);
+
+-- TABLA TAGS DE PRODUCTOS
+CREATE TABLE tags_products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_product INT NOT NULL,
+    id_tag INT NOT NULL,
+    FOREIGN KEY (id_product) REFERENCES products(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_tag) REFERENCES tags(id) ON DELETE CASCADE
+);
+
+-- TABLA SOLICITUD DE COMPRA
+CREATE TABLE purcharse_request (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_user INT NOT NULL,
+    id_product INT NOT NULL,
+    FOREIGN KEY (id_user) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_product) REFERENCES products(id) ON DELETE CASCADE
+);
+
+-- TABLA DE IMAGENES
+CREATE TABLE images_products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_product INT NOT NULL,
+    url VARCHAR(1024) NOT NULL,
+    FOREIGN KEY (id_product) REFERENCES products(id) ON DELETE CASCADE
+);
+

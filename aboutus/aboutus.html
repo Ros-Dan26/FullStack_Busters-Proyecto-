@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <!--
+    Metadatos esenciales para la correcta visualización y compatibilidad:
+    - charset: Define la codificación de caracteres.
+    - viewport: Permite el diseño responsive en dispositivos móviles.
+    - title: Título de la pestaña/navegador.
+    - Bootstrap y Bootstrap Icons: Framework CSS y librería de íconos para estilos y componentes responsivos.
+    - aboutus.css: Estilos personalizados para esta página.
+    - header-footer.css y header-footer.js: Estilos y scripts para el header y footer reutilizables en todo el sitio.
+  -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sobre Nosotros - Net-Shopping Online</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="aboutus.css">
+  <!-- Header & Footer -->
+  <link rel="stylesheet" href="/header-footer/header-footer.css">
+  <script defer src="/header-footer/header-footer.js"></script>
+</head>
+
+<body style="font-family: 'Montserrat', sans-serif;">
+  <!--
+    Contenedor del header. El contenido se inserta dinámicamente mediante JS
+    para mantener la coherencia en todas las páginas del sitio.
+  -->
+  <div id="header-container"></div>
+
+  <!--
+    Sección principal "Sobre Nosotros":
+    - Presenta la misión, visión y funcionalidades clave de la plataforma.
+    - Utiliza Bootstrap para el diseño responsivo y tarjetas para destacar el contenido.
+  -->
+  <section class="about-section py-5" id="colortexto">
+    <div class="container">
+      <div class="row justify-content-center mb-4">
+        <div class="col-lg-8 text-center">
+          <h1 class="mb-3 fw-bold"><span style="color: #213555;">Sobre Net-Shopping Online</span></h1>
+          <p class="lead bold">
+            Una plataforma de e-commerce tipo marketplace que conecta a vendedores independientes con compradores
+            potenciales, promoviendo el comercio digital seguro, ágil y accesible.
+          </p>
+        </div>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+          <!--
+            Tarjeta con información detallada sobre la plataforma:
+            - Experiencia de usuario, funcionalidades principales y valores del equipo.
+            - El color y estilo se definen en aboutus.css.
+          -->
+          <div class="card border-0 shadow-sm p-4 text-justify" id="colortexto2">
+            <p>
+              En Net-Shopping Online buscamos ofrecer una experiencia moderna, intuitiva y funcional. Nuestra plataforma
+              permite explorar productos por categorías, gestionar cuentas de vendedor o comprador, y simular compras
+              fácilmente desde cualquier dispositivo.
+            </p>
+            <p>
+              Entre sus principales funcionalidades destacan: registro y autenticación de usuarios, catálogo dinámico
+              con filtros, carrito de compras editable, reseñas por producto y paneles diferenciados según el tipo de
+              cuenta.
+            </p>
+            <p>
+              También contamos con una sección de contacto con soporte directo, enlaces a redes sociales y medidas de
+              seguridad básicas como encriptación de contraseñas.
+            </p>
+            <p>
+              Todo esto ha sido desarrollado por un equipo comprometido con la colaboración, los tiempos de entrega y la
+              mejora continua del diseño, usabilidad y estructura del sitio.
+            </p>
+            <p class="fw-semibold text-center" style="color: #213555;">
+              En Net-Shopping Online, transformamos ideas en experiencias digitales reales.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!--
+    Sección del equipo:
+    - Muestra dinámicamente las tarjetas de cada integrante usando JS (aboutus.js).
+    - Al hacer clic en una tarjeta, se abre un modal con información detallada.
+    - El contenedor #contenedor-dinamico es llenado por renderizarIntegrantes() en aboutus.js.
+  -->
+  <section class="team-section">
+    <div class="container py-4">
+      <h1 class="text-center mb-4 team-title">Nuestro Equipo</h1>
+      <div id="contenedor-dinamico" class="team-container"></div>
+    </div>
+    <!--
+      Modal Bootstrap para mostrar detalles de cada integrante.
+      El contenido se actualiza dinámicamente desde aboutus.js.
+    -->
+    <div class="modal fade" id="modalIntegrante" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content p-3">
+          <div class="row align-items-center">
+            <!-- Columna imagen (más grande y centrada) -->
+            <div class="col-5 text-center">
+              <img id="modalFoto" src="" alt="" class="rounded mb-2"
+                style="width: 110px; height: 110px; object-fit: cover;">
+            </div>
+            <!-- Columna iconos (centrados verticalmente) -->
+            <div class="col-7 text-center" id="modalIcons">
+              <!-- Aquí van los íconos desde JS -->
+            </div>
+          </div>
+          <h4 id="modalNombre" class="text-center mb-1 mt-3"></h4>
+          <div id="modalPuesto" class="text-center mb-2"></div>
+          <div id="modalInfo" class="mb-3 text-secondary text-center" style="white-space:pre-line;"></div>
+          <button type="button" class="btn btn-outline-secondary d-block mx-auto"
+            data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!--
+    Sección de frases/motivacionales:
+    - Carousel de Bootstrap con frases de misión y visión del equipo.
+    - Puedes agregar más slides según sea necesario.
+  -->
+  <section class="quotes-section py-5">
+    <div id="quotesCarousel" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active text-center">
+          <blockquote class="blockquote">
+            <p class="mb-4">"Innovamos juntos para transformar ideas en experiencias digitales reales."</p>
+            <footer class="blockquote-footer">Misión del equipo</footer>
+          </blockquote>
+        </div>
+        <div class="carousel-item text-center">
+          <blockquote class="blockquote">
+            <p class="mb-4">"Colaboración, creatividad y compromiso en cada línea de código."</p>
+            <footer class="blockquote-footer">Visión del equipo</footer>
+          </blockquote>
+        </div>
+        <!-- Agrega más slides aquí -->
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#quotesCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+        <span class="visually-hidden">Anterior</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#quotesCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+        <span class="visually-hidden">Siguiente</span>
+      </button>
+    </div>
+  </section>
+
+  <!--
+    Contenedor del footer. El contenido se inserta dinámicamente mediante JS
+    para mantener la coherencia en todas las páginas del sitio.
+  -->
+  <div id="footer-container"></div>
+
+  <!--
+    Scripts:
+    - Bootstrap JS para componentes interactivos.
+    - aboutus.js: Lógica para renderizar el equipo y manejar el modal.
+    - header-footer.js: Inserta header y footer dinámicamente.
+    - Script inline: Carga el header y, tras cargarlo, inserta el script de sesión y ejecuta la función de manejo de sesión.
+      Finalmente, carga el footer.
+  -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="aboutus.js"></script>
+  <!-- Scripts -->
+  <script src="/header-footer/header-footer.js"></script>
+  <script>
+    // Carga el header y, una vez cargado, inserta el script de sesión y ejecuta la función de manejo de sesión.
+    cargarHeader().then(() => {
+      const script = document.createElement('script');
+      script.src = "/Login/session.js";
+      script.onload = () => {
+        manejarSesion(); // llama solo después de estar cargado
+      };
+      document.body.appendChild(script);
+    });
+
+    // Carga el footer dinámicamente.
+    cargarFooter();
+  </script>
+</body>
+
+</html>

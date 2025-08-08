@@ -1,7 +1,7 @@
 /* ===================================================================
-   styles.css — Landing Page de Sneakers
-   Paleta: #f5efe7 & #213555 | Tipografía Montserrat
-   Responsividad completa con media queries
+    styles.css — Landing Page de Sneakers
+    Paleta: #f5efe7 & #213555 | Tipografía Montserrat
+    Responsividad completa con media queries
    =================================================================== */
 
 /* 1. VARIABLES GLOBALES */
@@ -14,7 +14,7 @@
     --color-muted: rgba(33, 53, 85, 0.7);
 
     /* Tipografía */
-    --font-sans: 'Montserrat', sans-serif;
+    --font-sans: "Montserrat", sans-serif;
     --title-lg: 2.5rem;
     --title-sm: 1.75rem;
 
@@ -81,64 +81,140 @@ section>h2 {
 
 /* 4. HERO SECTION */
 .hero {
-    background: linear-gradient(135deg, #f5efe7 0%, #e0d3cb 100%);
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    min-height: 400px;
+    overflow: hidden;
+    display: flex;
+    align-items: stretch;
 }
 
-.hero__container {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+.hero__video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    object-position: center center;
+    z-index: 1;
+    filter: brightness(0.76) grayscale(20%);
+    pointer-events: none;
+    transition: filter 0.3s;
+}
+
+/* Opcional: mejor rendimiento en móviles para vídeo */
+@media (max-width: 600px) {
+    .hero__video {
+        min-width: 100vw;
+        min-height: 100vh;
+        /* Si necesitas cambiar el video por una imagen en móviles para ahorrar datos, implementa JS */
+    }
+}
+
+.hero__overlay {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: var(--spacing-lg);
-    padding: 0 var(--spacing-lg);
+    justify-content: flex-start;
+    min-height: 100vh;
+    pointer-events: none;
+}
+
+.hero__texts {
+    margin-top: 3vw;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: all;
 }
 
 .hero__title {
-    font-size: var(--title-lg);
+    font-size: clamp(1rem, 3vw, 1.7rem);
+    margin-bottom: 0.2rem;
+    margin-top: 0;
     font-weight: 700;
-    color: var(--color-primary);
-    margin-bottom: var(--spacing);
-    text-align: center;
+    letter-spacing: 0.04em;
+    line-height: 1.1;
+    color: #fff;
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.23);
 }
 
 .hero__subtitle {
-    font-size: 1.125rem;
-    color: var(--color-muted);
-    margin-bottom: var(--spacing-lg);
-    text-align: center;
+    font-size: clamp(0.8rem, 1.5vw, 1.1rem);
+    font-weight: 400;
+    margin-bottom: 0;
+    margin-top: 0;
+    color: #fff;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.13);
 }
 
+/* Botón lo más bajo posible, pequeño y centrado */
 .hero__cta {
-    background-color: var(--color-primary);
-    color: var(--color-bg);
-    border: none;
-    padding: var(--spacing-xs) var(--spacing-lg);
-    font-size: 1rem;
-    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 50%;
+    bottom: 10vw;
+    transform: translateX(-50%);
+    background: transparent;
+    color: #fff;
+    font-size: 0.7rem;
+    text-decoration: none;
+    border: 1px solid #fff;
+    border-radius: 2rem;
+    padding: 0.30rem 0.85rem;
+    transition: background 0.3s, border 0.3s, transform 0.2s;
+    box-shadow: none;
+    pointer-events: all;
     cursor: pointer;
-    transition: background var(--transition), transform var(--transition);
 }
 
 .hero__cta:hover,
 .hero__cta:focus {
-    background-color: #1b2f4a;
-    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.11);
+    border-color: #30cfc9;
+    color: #fff;
+    transform: translateX(-50%) scale(1.04);
 }
 
-.hero__image {
-    text-align: center;
+/* Responsive breakpoints */
+@media (max-width: 900px) {
+    .hero__title {
+        font-size: 1.25rem;
+    }
+
+    .hero__subtitle {
+        font-size: 1rem;
+    }
 }
 
-.hero__img {
-    width: 100%;
-    border-radius: var(--radius);
-    transition: transform var(--transition);
+@media (max-width: 600px) {
+    .hero__texts {
+        margin-top: 10vw;
+    }
+
+    .hero__title {
+        font-size: 1rem;
+    }
+
+    .hero__subtitle {
+        font-size: 0.73rem;
+    }
+
+    .hero__cta {
+        font-size: 0.63rem;
+        padding: 0.22rem 0.65rem;
+        bottom: 2vw;
+    }
 }
 
-.hero__img:hover {
-    transform: scale(1.05);
-}
 
 /* 5. CARRUSEL DE PRODUCTOS */
 .carousel {
@@ -465,4 +541,44 @@ section>h2 {
         width: 60px;
         height: 60px;
     }
+}
+
+/*carrusel de marcas*/
+.brands-carousel {
+    width: 100%;
+    overflow: hidden;
+    margin: 2rem 0;
+}
+
+.brands-carousel-track-container {
+    overflow: hidden;
+    width: 100%;
+}
+
+.brands-carousel-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    will-change: transform;
+}
+
+.brands-carousel-slide {
+    min-width: 120px;
+    /* ajusta según desees tamaño de iconos */
+    margin: 0 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.brands-carousel-slide img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+.brands-carousel-title{
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: var(--spacing-lg);
+    color: var(--color-primary);
 }

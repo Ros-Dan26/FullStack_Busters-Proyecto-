@@ -1,14 +1,21 @@
+// Espera a que todo el DOM esté cargado antes de ejecutar el script
 document.addEventListener("DOMContentLoaded", () => {
     const container = document.getElementById('carrito-productos');
     let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
+    // Mostrar mensaje si el carrito está vacío
     if (carrito.length === 0) {
         container.innerHTML = '<p class="text-center">No hay productos en el carrito.</p>';
         return;
     }
 
+    // Renderizar el contenido del carrito
     renderizarCarrito();
 
+    /**
+     * Recorre los productos del carrito y los muestra en tarjetas tipo Bootstrap.
+     * También muestra el total y el botón de finalizar compra.
+     */
     function renderizarCarrito() {
         container.innerHTML = "";
         let total = 0;
@@ -21,8 +28,8 @@ document.addEventListener("DOMContentLoaded", () => {
             col.className = "col d-flex justify-content-center";
 
             col.innerHTML = `
-                <div class="card h-100">
-                    <img src="${producto.imagen}" class="card-img-top" alt="${producto.producto}">
+                <div class="card h-100" style="width: 18rem;">
+                    <img src="${producto.imagen}" class="card-img-top img-fluid" alt="${producto.producto}" style="height: 200px; object-fit: contain;">
                     <div class="card-body d-flex flex-column justify-content-between">
                         <div>
                             <h5 class="card-title">${producto.producto}</h5>
@@ -40,6 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
             container.appendChild(col);
         });
 
+        // Crear resumen con total y botón de finalizar compra
         const resumen = document.createElement('div');
         resumen.className = 'text-center w-100 mt-5';
         resumen.innerHTML = `
@@ -51,6 +59,10 @@ document.addEventListener("DOMContentLoaded", () => {
         container.appendChild(resumen);
     }
 
+    /**
+     * Escucha clics en el contenedor del carrito.
+     * Si se hace clic en el botón "Eliminar", se elimina ese producto del carrito.
+     */
     container.addEventListener('click', e => {
         if (e.target.closest('.eliminar-item')) {
             const index = parseInt(e.target.closest('.eliminar-item').dataset.index);
@@ -60,9 +72,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    /**
+     * Redirige al usuario a la página de finalización de compra
+     * cuando hace clic en el botón "Finalizar compra".
+     */
     document.addEventListener('click', e => {
         if (e.target.id === 'finalizar-compra') {
-            window.location.href = "finalizar-compra.html";
+            window.location.href = "/finalizar-compra/finalizar-compra.html";
         }
     });
 });

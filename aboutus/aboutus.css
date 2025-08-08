@@ -1,23 +1,48 @@
-#colortexto2{
+/*
+===============================================================================
+aboutus.css
+===============================================================================
+Este archivo contiene los estilos personalizados para la página "Sobre Nosotros"
+del proyecto Net-Shopping Online. Define la apariencia de la sección del equipo,
+el modal de integrantes, la sección principal y el carrusel de frases.
+
+ESTRUCTURA PRINCIPAL:
+- Colores de fondo personalizados para secciones.
+- Estilos para la sección del equipo y tarjetas de integrantes.
+- Estilos para el modal de detalles de integrantes.
+- Estilos responsivos para dispositivos móviles.
+- Estilos para la sección principal y el carrusel de frases.
+*/
+
+/* =======================
+    Colores de fondo
+   ======================= */
+#colortexto2 {
     background-color: #E5D5C3;
-}
-#colortexto{
-    background-color: #F5EFE7;
+    /* Fondo para tarjetas informativas */
 }
 
-/* Estilos generales para la sección del equipo */
+#colortexto {
+    background-color: #F5EFE7;
+    /* Fondo general de la sección principal */
+}
+
+/* =======================
+    Sección del equipo
+   ======================= */
 .team-section {
     background-color: #F5EFE7;
     padding: 4rem 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Montserrat", sans-serif;
 }
 
+/* Título de la sección del equipo */
 .team-title {
     text-align: center;
     margin-bottom: 3rem;
     position: relative;
     padding-bottom: 1rem;
-    color: #2c3e50;
+    color: #213555;
     font-weight: 700;
 }
 
@@ -29,26 +54,25 @@
     transform: translateX(-50%);
     width: 80px;
     height: 3px;
-    background: linear-gradient(90deg, #213555, #D5B99C,#213555);
+    background: linear-gradient(90deg, #213555, #D5B99C, #213555);
 }
 
-/* Contenedor de las tarjetas */
+/* Contenedor flexible para las tarjetas del equipo */
 .team-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1rem;
+    gap: 1.5rem;
 }
 
-/* Estilos para cada tarjeta de integrante */
+/* Tarjeta individual de integrante */
 .team-card {
     width: 100%;
-    max-width: 350px;
-    background: white;
-    border-radius: 10px;
+    max-width: 220px;
+    min-width: 160px;
+    margin-bottom: 1.5rem;
+    background: #F5EFE7;
+    border-radius: 0.5rem;
     overflow: hidden;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
@@ -57,15 +81,17 @@
 }
 
 .team-card:hover {
+    font-size: 1rem;
     transform: translateY(-10px);
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
 }
 
-/* Estilos para la imagen - AJUSTE AUTOMÁTICO */
+/* Imagen cuadrada y responsiva en la tarjeta */
 .team-card-img-container {
     position: relative;
     width: 100%;
-    padding-top: 100%; /* Relación 1:1 (cuadrada) */
+    padding-top: 100%;
+    /* Relación 1:1 (cuadrada) */
     overflow: hidden;
 }
 
@@ -84,7 +110,7 @@
     transform: scale(1.05);
 }
 
-/* Estilos para el cuerpo de la tarjeta */
+/* Cuerpo de la tarjeta: nombre, rol, etc. */
 .team-card-body {
     padding: 2rem;
     flex-grow: 1;
@@ -93,10 +119,12 @@
 }
 
 .team-card-name {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    margin-bottom: rem;
+    /* (Nota: posible error, debería ser un valor numérico) */
     color: #213555;
     font-weight: 700;
+    text-align: center;
 }
 
 .team-card-info {
@@ -113,39 +141,41 @@
     flex-grow: 1;
 }
 
-/* Estilos para el rol */
+/* Rol destacado en la tarjeta */
 .team-card-role {
     align-self: flex-start;
-    background: linear-gradient(135deg, #213555, #D5B99C,#213555);
-    color: D5B99C;
+    background: #213555;
+    color: #D5B99C;
     padding: 0.5rem 1.2rem;
-    border-radius: 50px;
-    font-size: 0.8rem;
+    border-radius: 0.5rem;
+    font-size: 0.5rem;
     font-weight: 600;
     letter-spacing: 1px;
     text-transform: uppercase;
     margin-top: auto;
 }
 
-/* Efecto de hover para el rol */
 .team-card:hover .team-card-role {
-    background: linear-gradient(135deg, #3F74B8, #D5B99C);
+    background: linear-gradient(135deg, #3F74B8, #3F74B8);
     box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
 }
 
-/* Responsive design */
+/* =======================
+    Responsive Design
+   ======================= */
 @media (max-width: 768px) {
     .team-container {
         flex-direction: column;
         align-items: center;
     }
-    
+
     .team-card {
         max-width: 100%;
     }
-    
+
     .team-card-img-container {
-        padding-top: 75%; /* Cambiar relación de aspecto para móviles */
+        padding-top: 75%;
+        /* Relación de aspecto diferente en móviles */
     }
 }
 
@@ -153,46 +183,118 @@
     .team-card-body {
         padding: 1.5rem;
     }
-    
+
     .team-card-name {
         font-size: 1.3rem;
     }
 }
 
+/* =======================
+    Modal de integrante
+   ======================= */
+.modal-content {
+    background: #f5efe7;
+    border-radius: 18px;
+    border: 2px solid #21355522;
+    box-shadow: 0 8px 24px rgba(33, 53, 85, .14);
+    font-family: 'Montserrat', sans-serif;
+    color: #213555;
+}
+
+#modalIcons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.6rem;
+    background: transparent;
+}
+
+.modal-icon-link {
+    background: #213555;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    transition: background 0.18s;
+}
+
+.modal-icon-link:hover {
+    background: #f5efe7;
+    box-shadow: 0 3px 16px #21355525;
+}
+
+.modal-icon-img {
+    width: 40px;
+    height: 40px;
+    filter: brightness(0) saturate(100%) invert(13%) sepia(34%) saturate(2170%) hue-rotate(181deg) brightness(91%) contrast(98%);
+    background: #f5efe7;
+    border-radius: 7px;
+    padding: 2px;
+    transition: filter 0.2s, background 0.18s;
+}
+
+.modal-icon-link:hover .modal-icon-img {
+    filter: none;
+    background: #213555;
+}
+
+/* =======================
+    Sección principal "Sobre Nosotros"
+   ======================= */
 .about-section {
-  background-color: #7f98b2;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    background-color: #7f98b2;
+    font-family: "Montserrat", sans-serif;
 }
 
 .about-section h1 {
-  font-size: 2.5rem;
-  color: #212529;
+    font-size: 2.5rem;
+    color: #213555;
 }
 
 .about-section p {
-  font-size: 1.05rem;
-  line-height: 1.7;
-  color: #4f4f4f;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: #213555;
 }
 
 .about-section .card {
-  border-radius: 1rem;
-  transition: box-shadow 0.3s ease;
+    border-radius: 1rem;
+    transition: box-shadow 0.3s ease;
 }
 
 .about-section .card:hover {
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
 
+/* =======================
+    Utilidades y extras
+   ======================= */
 .text-justify {
-  text-align: justify;
+    text-align: justify;
 }
 
 .bold {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 .fw-semibold {
     text-align: center;
     color: #00C0FF;
+}
+
+/* =======================
+    Sección de frases/carrusel
+   ======================= */
+.quotes-section {
+    background: #F5EFE7;
+}
+
+.blockquote {
+    font-size: 1.3rem;
+    color: #213555;
+}
+
+.carousel-item {
+    transition: opacity 300ms ease;
 }

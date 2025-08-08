@@ -1,4 +1,4 @@
-/* Fondo general y fuente */
+/* Estilos globales */
 html, body {
   height: 100%;
   margin: 0;
@@ -9,18 +9,19 @@ html, body {
   flex-direction: column;
 }
 
-/* Contenedor principal del login */
+/* Contenedor principal del módulo */
 .login-container {
   flex: 1;
   display: flex;
+  flex-direction: row;
   width: 100vw;
   padding: 2rem;
 }
 
-/* Columna izquierda con imagen */
+/* Sección izquierda con imagen */
 .login-left {
   flex: 1;
-  background: #3c5a99;
+  background: #ececec;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -30,11 +31,9 @@ html, body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 0.5rem;
-  display: block;
 }
 
-/* Columna derecha con formulario */
+/* Sección derecha con formulario */
 .login-right {
   flex: 1;
   display: flex;
@@ -43,11 +42,10 @@ html, body {
   align-items: center;
   background: linear-gradient(135deg, #3c5a99 0%, #6e8ecb 100%);
   color: #fff;
-  padding: 2rem;
 }
 
 .login-title {
-  font-size: 2.6rem;
+  font-size: 1.7rem;
   font-weight: bold;
   margin-bottom: 2.5rem;
   letter-spacing: 2px;
@@ -59,14 +57,14 @@ form {
   max-width: 440px;
 }
 
-/* Etiquetas */
+/* Etiquetas del formulario */
 .login-label {
   font-weight: 500;
   font-size: 1.08rem;
   margin-bottom: 0.4rem;
 }
 
-/* Inputs */
+/* Campos de entrada */
 .login-input {
   padding: 0.8rem;
   border: none;
@@ -80,19 +78,7 @@ form {
   outline: 2px solid #377dff;
 }
 
-/* Enlace recuperar contraseña */
-.forgot-link {
-  color: #c0c8d7;
-  font-size: 0.97rem;
-  text-decoration: none;
-}
-
-.forgot-link:hover {
-  color: #fff;
-  text-decoration: underline;
-}
-
-/* Botones */
+/* Botones del formulario */
 .login-btn {
   background: #377dff;
   border-radius: 12px;
@@ -109,26 +95,31 @@ form {
   background: #285bb5;
 }
 
-/* Contenedor del campo de contraseña */ 
-.password-wrapper {
-  position: relative;
+/* RESPONSIVE para móviles y pantallas pequeñas */
+@media (max-width: 992px) {
+  .login-container {
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  .login-left {
+    display: none; /* Oculta imagen en móviles */
+  }
+
+  .login-right {
+    width: 100%;
+  }
+
+  .login-title {
+    font-size: 1.5rem;
+    text-align: center;
+  }
 }
-
-/* Icono de mostrar/ocultar contraseña */
-.toggle-password {
-  position: absolute;
-  top: 50%;
-  right: 15px;
-  transform: translateY(-50%);
-  cursor: pointer;
-  color: #666;
-  font-size: 1.2rem;
-}
+  /* Popup de recuperación */
 
 
-/* Pop up */
-.popup-login {
-  display: none;
+.popup-reset {
+ display: none;
   position: fixed;
   top: 0;
   left: 0;
@@ -140,7 +131,7 @@ form {
   z-index: 1000;
 }
 
-.popup-content-login {
+.popup-content-reset {
   background: #274A7D;
   color: #F5EFE7;
   border-radius: 20px;
@@ -149,37 +140,15 @@ form {
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
 }
 
-.popup-content-login button {
+.popup-content-reset button.btn-reset {
   border-radius: 0.5rem;
   background-color: #9AB8DF;
   padding: 10px 20px;
   margin-top: 15px;
 }
 
-
-
-/* Responsivo */
-@media (max-width: 992px) {
-  .login-container {
-    flex-direction: column;
-    padding: 1rem;
-  }
-  .login-left {
-    display: none; /* Oculta imagen en móviles */
-  }
-
-  .login-left, .login-right {
-    flex: none;
-    width: 100%;
-    height: auto;
-  }
-
-  .login-image {
-    height: 250px;
-    object-fit: cover;
-  }
-
-  .login-title {
-    font-size: 2rem;
-  }
+.popup-error {
+  color: #f0e3e3; /* rojo fuerte para errores */
+  font-weight: 700;
 }
+
