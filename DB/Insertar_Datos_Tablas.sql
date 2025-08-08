@@ -2921,6 +2921,65 @@ INSERT INTO colors_products(hex_code, name) VALUES
 ('#FFE4E1',' Rosa Antiguo'),
 ('#FFF0F5',' Lavanda');
 
+
+INSERT INTO sizes(name) VALUES
+('_06_0'),
+('_06_5'),
+('_07_0'),
+('_07_5'),
+('_08_0'),
+('_08_5'),
+('_09_0'),
+('_09_5'),
+('_10_0'),
+('_10_5'),
+('_11_0'),
+('_11_5'),
+('_12_0'),
+('_12_5'),
+('_13_0'),
+('_13_5'),
+('_14_0'),
+('_14_5'),
+('_15_0'),
+('_15_5'),
+('_16_0'),
+('_16_5'),
+('_17_0'),
+('_17_5'),
+('_18_0'),
+('_18_5'),
+('_19_0'),
+('_19_5'),
+('_20_0'),
+('_20_5'),
+('_21_0'),
+('_21_5'),
+('_22_0'),
+('_22_5'),
+('_23_0'),
+('_23_5'),
+('_24_0'),
+('_24_5'),
+('_25_0'),
+('_25_5'),
+('_26_0'),
+('_26_5'),
+('_27_0'),
+('_27_5'),
+('_28_0'),
+('_28_5'),
+('_29_0'),
+('_29_5'),
+('_30_0'),
+('_30_5'),
+('_31_0'),
+('_31_5'),
+('_32_0'),
+('_32_5'),
+('_33_0');
+
+
 INSERT INTO status(name) VALUES
 ('Nuevo'),
 ('Usado'),
@@ -3135,27 +3194,4 @@ INSERT INTO paypals(id_user, email) VALUES
 ('97', (select email from users where id=2)),
 ('99', (select email from users where id=10)),
 ('100', (select email from users where id=16));
-
-
--- insertart tallas de productos
-insert into sizes (_27_0) values (1);
-
--- insert de productos
-insert into products (id_user,id_status,id_size,id_color,name,model,description,details,price,id_brand) 
-values(10,1,1,46,"Yeezy","Boost","tenis casual comodos","parte superior YEEZY Primekni",3500,2);
-
-insert into products (id_user,id_status,id_size,id_color,name,model,description,details,price,id_brand) 
-values(23,1,1,52," Kyrie 5","Nike SB Dunk Low Jarritos","Tenis de colección en colaboración con jarritos","Color amarillo con café",5510,1);
-
-insert into products (id_user,id_status,id_size,id_color,name,model,description,details,price,id_brand) 
-values(16,1,1,21," Kyrie 5","Tenis ZX 500 RM Goku de adidas x Dragon Ball","Tenis de colección en colaboración con Dragon Ball","Color Naranja",9577,2);
-
--- insert de imagenes
-insert into images_products(id_product,url) values (2,"https://cdn-images.farfetch-contents.com/17/03/72/28/17037228_35781287_600.jpg");
-
-insert into images_products(id_product,url) values (3,"https://acdn-us.mitiendanube.com/stores/003/194/492/products/16-10b0c4deb57f4e33b717304358564763-1024-1024.png");
-
-insert into images_products(id_product,url) values (4,"https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTjFuYc-Nn705WfWU_IDpgtrtc8T-8XNT-aObYnl5ZsRsfGZrFAsuTchuqWxR1sQ_8HIFrtjYkSB6xfL0c8Nb8NgY-PKfoYdrxtmu9sEs5Ago-kvoag0ej0i2E");
-
-
 
