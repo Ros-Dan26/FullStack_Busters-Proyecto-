@@ -1,7 +1,8 @@
 create database netshopingonlinedb;
 use netshopingonlinedb;
 
--- DROP DATABASE netshopingonlinedb;
+-- Ultima version 07/08/25
+ -- DROP DATABASE netshopingonlinedb;
 
 -- TABLA BANCOS
 CREATE TABLE banks (
@@ -189,15 +190,6 @@ CREATE TABLE products (
     FOREIGN KEY (id_color) REFERENCES colors_products(id) ON DELETE CASCADE
 );
 
--- TABLA TIPO DE PRODUCTOS
-CREATE TABLE types_products (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    id_variant_type INT NOT NULL,
-    id_product INT NOT NULL,
-    FOREIGN KEY (id_variant_type) REFERENCES variants_types(id) ON DELETE CASCADE,
-    FOREIGN KEY (id_product) REFERENCES products(id) ON DELETE CASCADE
-);
-
 -- TABLA TAGS DE PRODUCTOS
 CREATE TABLE tags_products (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -223,4 +215,17 @@ CREATE TABLE images_products (
     url VARCHAR(1024) NOT NULL,
     FOREIGN KEY (id_product) REFERENCES products(id) ON DELETE CASCADE
 );
+
+/* TABLAS DESCARTADAS
+-- TABLA TIPO DE PRODUCTOS
+CREATE TABLE types_products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_variant_type INT NOT NULL,
+    id_product INT NOT NULL,
+    FOREIGN KEY (id_variant_type) REFERENCES variants_types(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_product) REFERENCES products(id) ON DELETE CASCADE
+);
+
+
+*/
 
