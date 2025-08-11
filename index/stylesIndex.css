@@ -272,53 +272,90 @@ section>h2 {
     right: var(--spacing);
 }
 
-/* Tarjetas */
-.product-card {
-    background-color: var(--color-bg);
-    border-radius: var(--radius);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    padding: var(--spacing);
-    text-align: center;
-    transition: transform var(--transition), box-shadow var(--transition);
+/* seccion de productos destacados */
+.card-container{
+    display: grid; /*usamos grid para alinear las cards*/
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* columnas responsivas */
+    gap: 20px; /*espacio entre cards*/
+    justify-content: center; /*centramos las cards horizontalmente*/
+    padding: 20px; /*espaciado interno general*/
+}
+/*estilo individual para cada card*/
+.card{
+    border: 1px solid #ddd; /*borde gris claro*/
+    border-radius: 8px; /*esquinas redondeadas*/
+    background-color: white; /*fondo blanco*/
+    overflow: hidden; /*oculta contenido que sobresalga*/
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /*sombra ligera*/
+    display: flex; /*flex para alinear contenido*/
+    flex-direction: column; /*apila contenido verticalmente*/
+    width: 250px; /*ancho fijo cada tarjeta*/
+    padding: 15px; /*espacio interno*/
+    background-color: #fff; /*fondo blanco para destacar sobre el fondo general*/
+    font-family: var(--font-sans); /*tipografía Montserrat*/
+    transition: transform 0.2s ease; /*animación suave cuando pase el ratón*/
 }
 
-.product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+/*efecto al pasar el ratón por encima*/
+.card:hover {
+    transform: translateY(-5px); /*eleva la tarjeta ligeramente*/
 }
 
-.product-card__img {
-    width: 100%;
-    border-radius: var(--radius);
-    margin-bottom: var(--spacing);
+/* imagen del producto */
+.card img {
+    width: 100%; /*imagen ocupa todo el ancho de la tarjeta*/
+    height: 180px; /*mantiene proporciones de la imagen*/
+    object-fit: cover; /*cubre el área sin distorsionar la imagen*/
+    border-radius: 4px; /*esquinas redondeadas para la imagen*/
+    margin-bottom: 10px; /*espacio debajo de la imagen*/
 }
 
-.product-card__name {
-    font-size: 1.125rem;
-    font-weight: 700;
-    color: var(--color-primary);
-    margin-bottom: var(--spacing-xs);
+/*contenido interior*/
+.card-content {
+    padding: 15px; /*espacio interno*/
+    flex-grow: 1; /*ocupa todo el espacio disponible*/
 }
 
-.product-card__price {
-    color: var(--color-accent);
-    margin-bottom: var(--spacing);
+/* título de cada producto */
+.card-content h3{
+    margin-top: 0; /*sin espacio extra arriba*/
+    font-size: var(--title-sm); /*tamaño de fuente más grande*/
+    color: var(--color-primary); /*color primario para el título*/
+    font-weight: 700; /*negrita para destacar el título*/
+    margin-bottom: 10px; /*espacio debajo del título*/
+}
+/*texto general de descripcion*/
+.card-content p {
+    color: var(--color-primary); /* color primario para el texto*/
+    font-size: 0.9rem; /* tamaño de fuente más pequeño */
+    margin: 5px 0; /* margen vertical */
+}
+/* precio del producto */
+.price {
+    font-weight: bold; /* negrita para destacar el precio */
+    color: var(--color-accent); /* color de acento para el precio */
+    font-size: 1.1rem; /* tamaño de fuente ligeramente más grande */
+    margin-bottom: 10px; /* espacio debajo del precio */
 }
 
-.product-card__btn {
-    background-color: var(--color-primary);
-    color: var(--color-bg);
-    border: none;
-    padding: var(--spacing-xs) var(--spacing-lg);
-    border-radius: var(--radius);
-    cursor: pointer;
+/*boton*/
+.card-actions{
+    padding: 15px; /*espacio interno*/
+    text-align: center; /*centrar contenido*/
+}
+.card-actions button {
+    background-color: var(--color-primary); /* color primario para el botón */
+    color: white; /* texto blanco */
+    border: none; /* sin borde */
+    padding: 10px 15px; /* espaciado interno */
+    border-radius: var(--radius); /* esquinas redondeadas */
+    cursor: pointer; /* cursor de mano al pasar por encima */
+    font-size: 0.9rem; /* tamaño de fuente más pequeño */
     transition: background var(--transition), transform var(--transition);
 }
-
-.product-card__btn:hover,
-.product-card__btn:focus {
-    background-color: #1b2f4a;
-    transform: translateY(-2px);
+.card-actions button:hover{
+    background-color: rgba(33, 53, 85, 0.8); /* color más oscuro al pasar el ratón */
+    transform: translateY(-2px); /* eleva ligeramente el botón */
 }
 
 /* 6. TESTIMONIOS */

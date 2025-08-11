@@ -1,36 +1,3 @@
-// 1. Seleccionamos elementos clave
-const track = document.querySelector('.carousel__track');
-const slides = Array.from(track.children);
-const prevButton = document.querySelector('.carousel__button--prev');
-const nextButton = document.querySelector('.carousel__button--next');
-
-// 2. Calculamos el ancho de cada slide (incluye margen derecho)
-const slideWidth = slides[0].getBoundingClientRect().width +
-    parseFloat(getComputedStyle(slides[0]).marginRight);
-
-// 3. Función para mover la pista al índice dado
-function moveToSlide(index) {
-    const offset = slideWidth * index;
-    track.style.transform = `translateX(-${offset}px)`;
-}
-
-// 4. Índice de la slide actualmente visible
-let currentIndex = 0;
-
-// 5. Manejar clic en “Siguiente” con loop
-nextButton.addEventListener('click', () => {
-    // (currentIndex + 1) modulo total de slides → vuelve a 0 al pasar el último
-    currentIndex = (currentIndex + 1) % slides.length;
-    moveToSlide(currentIndex);
-});
-
-// 6. Manejar clic en “Anterior” con loop
-prevButton.addEventListener('click', () => {
-    // (currentIndex - 1 + total) modulo total → va al último si estamos en 0
-    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-    moveToSlide(currentIndex);
-});
-
 //hero 
 document.addEventListener('DOMContentLoaded', () => {
     const video = document.querySelector('.hero__video');
@@ -134,3 +101,61 @@ document.addEventListener('DOMContentLoaded', () => {
     // Si quieres autoplay automático cada 1000 milisegundos:
     setInterval(nextSlide, 1000);
 });
+
+
+// Script para cargar productos destacados
+//opciones para la peticion fetch (GET por defecto, pero lo indicamos igual)
+const requestOptions = {
+    method: 'GET',
+    redirect: "follow"
+};
+
+// URL de la API que devuelve todos los productos en formato JSON
+const API_URL = 'http://jft314.ddns.net:8080/nso/api/v1/nso/product/all'; 
+
+/**
+ * función que  obtiene los productos desde el backend y los muestra en la página
+ */
+function cargarProductos(){
+    fetch(API_URL, requestOptions) // hacemos la peticion GET a la API
+        .then(response => {
+            if(!response.ok){
+                throw new Error("Error en la solicitud: " + response.status);
+            }
+            return response.json(); // convertimos la respuesta a JSON
+        })
+        .then(data =>{
+            //seleccionamos el contenedor donde iran las cards
+            const container = document.getElementById('cardContainer');
+            //validamos que data sea un array
+            if(Array.isArray(data)){
+                //recorremos cada producto en el array
+                data.forEach(product => {
+                    //creamos el div que sera la card
+                    const card = document.createElement('div');
+                    card.className = 'card'; //asignamos la clase css
+
+                    //obtenemos las propiedades del objecto (adaptar segun la API)
+                    let productDescription = product.description || 'Sin descripción disponible';
+                    //insertamos el contenido HTML de la card
+                    card.innerHTML = `
+                        <h3>${product.name}</h3>
+                        <p class="price">${product.price}</p>
+                        <p>${product.description}</p>
+                    `;
+                    //agregamos la card al contenedor
+                    container.appendChild(card);
+                });
+            }else{
+                //si no es  un array, mostramos un mensaje de error
+                container.textContent = 'No se encontraron productos.';
+            }
+        })
+        .catch(error => {
+            console.error("Error al cargar productos:", error);
+            document.getElementById('cardContainer').textContent = 'Error al cargar productos.';
+        });
+}
+// Llamamos a la función para cargar los productos al cargar la página
+cargarProductos();
+// Fin del script de productos destacados
