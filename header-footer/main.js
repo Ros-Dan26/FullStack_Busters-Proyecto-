@@ -1,5 +1,8 @@
-document.addEventListener("DOMContentLoaded", () => {
-})
+document.addEventListener('DOMContentLoaded', () => {
+  cargarHeader();
+  cargarFooter();
+});
+
 
 
 const verDetalles = (e) => {
