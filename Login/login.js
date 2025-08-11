@@ -4,7 +4,7 @@
 document.addEventListener('DOMContentLoaded', function () {
   
   // ------------------------------
-  // Crear usuarios de prueba en localStorage si no existen
+  // Crear usuarios de prueba si no existen en localStorage
   // ------------------------------
   if (!localStorage.getItem('usuarios')) {
     const usuariosPrueba = [
@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
       { email: "asd", password: "asd" },
       { email: "alfred12@netshop.com", password: "userpass2" }
     ];
+    // Guardamos el array de usuarios como JSON en localStorage
     localStorage.setItem('usuarios', JSON.stringify(usuariosPrueba));
   }
 
@@ -26,32 +27,28 @@ document.addEventListener('DOMContentLoaded', function () {
 
   if (togglePassword && passwordInput) {
     togglePassword.addEventListener('click', function () {
-      // Cambiar el tipo del input entre 'password' y 'text' para mostrar u ocultar la contraseña
+      // Cambiar tipo del input entre 'password' y 'text'
       const isPassword = passwordInput.getAttribute('type') === 'password';
       passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
 
-      // Cambiar el icono del ojo (visible / oculto)
+      // Cambiar icono (ojo abierto / cerrado)
       this.classList.toggle('bi-eye-fill');
       this.classList.toggle('bi-eye-slash-fill');
     });
   }
 
   // ------------------------------
-  // Manejo del evento submit del formulario de login
+  // Manejo del formulario de login
   // ------------------------------
   document.getElementById('loginForm').addEventListener('submit', function (e) {
-    e.preventDefault();  // Evitar recarga de página
+    e.preventDefault(); // Evitar recarga de página
 
-    // Obtener valores de email y contraseña
+    // Obtener email y contraseña ingresados
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value.trim();
 
-    // Validaciones para campos vacíos
-    if (email.length === 0 && password.length === 0) {
-      mostrarPopupRegistroDatosFaltantes(e);
-    } else if (email.length === 0) {
-      mostrarPopupRegistroDatosFaltantes(e);
-    } else if (password.length === 0) {
+    // Validaciones: campos vacíos
+    if (!email || !password) {
       mostrarPopupRegistroDatosFaltantes(e);
     } else {
       // Buscar usuario en localStorage
@@ -59,13 +56,13 @@ document.addEventListener('DOMContentLoaded', function () {
       const usuarioValido = usuarios.find(user => user.email === email && user.password === password);
 
       if (usuarioValido) {
-        // Si es válido, guardar el usuario activo en localStorage como objeto JSON
+        // Guardar el usuario activo
         localStorage.setItem('usuarioActivo', JSON.stringify(usuarioValido));
 
         // Mostrar popup de login exitoso
         mostrarPopupRegistro(e);
       } else {
-        // Mostrar popup de error de usuario o contraseña incorrectos
+        // Mostrar popup de error (usuario o contraseña incorrectos)
         mostrarPopupRegistroConInc(e);
       }
     }
@@ -73,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // ------------------------------
-// Funciones para mostrar y cerrar popups
+// POPUPS de mensajes
 // ------------------------------
 
 // Popup: Login exitoso
@@ -82,8 +79,16 @@ function mostrarPopupRegistro(event) {
   document.getElementById("popup-login").style.display = "flex";
 }
 function cerrarPopupRegistro() {
+  // Ocultar popup
   document.getElementById("popup-login").style.display = "none";
-  window.location.href = "/index/index.html";  // Redirigir al inicio
+
+  // Si la función manejarSesion está disponible, actualizar navbar
+  if (typeof manejarSesion === "function") {
+    manejarSesion();
+  }
+
+  // Redirigir al inicio
+  window.location.href = "/index/index.html";
 }
 
 // Popup: Usuario o contraseña incorrectos

@@ -3,6 +3,14 @@ function cargarHeader() {
     .then(response => response.text())
     .then(data => {
       document.getElementById('header-container').innerHTML = data;
+
+      // Cargar session.js y luego llamar manejarSesion
+      const script = document.createElement('script');
+      script.src = '/Login/session.js';
+      script.onload = () => {
+        manejarSesion();
+      };
+      document.body.appendChild(script);
     });
 }
 
@@ -14,3 +22,7 @@ function cargarFooter() {
     });
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+  cargarHeader();
+  cargarFooter();
+});

@@ -112,6 +112,10 @@ header img {
   width: 10pc;
 }
 }
+.nav-link.dropdown-toggle::after {
+  display: none;
+}
+
 
 /*
 <div class="col-md-3 mb-3 footer-col-spacing">

@@ -37,7 +37,7 @@
 
   <!-- Scripts -->
   <script src="/header-footer/header-footer.js"></script>
-  <script src="/Login/session.js"></script>
+  <script src="session.js"></script>
   <script>
     cargarHeader();
     cargarFooter();
@@ -45,7 +45,7 @@
     // Limpia la sesión y redirige
     localStorage.removeItem('usuario');
     setTimeout(() => {
-      window.location.href = 'login.html';
+      window.location.href = '/login/login.html';
     }, 3000);
   </script>
 </body>
