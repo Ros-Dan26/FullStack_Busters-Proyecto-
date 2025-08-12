@@ -273,89 +273,121 @@ section>h2 {
 }
 
 /* seccion de productos destacados */
-.card-container{
-    display: grid; /*usamos grid para alinear las cards*/
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* columnas responsivas */
-    gap: 20px; /*espacio entre cards*/
-    justify-content: center; /*centramos las cards horizontalmente*/
-    padding: 20px; /*espaciado interno general*/
-}
-/*estilo individual para cada card*/
-.card{
-    border: 1px solid #ddd; /*borde gris claro*/
-    border-radius: 8px; /*esquinas redondeadas*/
-    background-color: white; /*fondo blanco*/
-    overflow: hidden; /*oculta contenido que sobresalga*/
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /*sombra ligera*/
-    display: flex; /*flex para alinear contenido*/
-    flex-direction: column; /*apila contenido verticalmente*/
-    width: 250px; /*ancho fijo cada tarjeta*/
-    padding: 15px; /*espacio interno*/
-    background-color: #fff; /*fondo blanco para destacar sobre el fondo general*/
-    font-family: var(--font-sans); /*tipografía Montserrat*/
-    transition: transform 0.2s ease; /*animación suave cuando pase el ratón*/
+/* Scroll horizontal */
+.featured-container {
+    display: flex;
+    overflow-x: auto;
+    gap: 15px;
+    padding: 20px;
 }
 
-/*efecto al pasar el ratón por encima*/
-.card:hover {
-    transform: translateY(-5px); /*eleva la tarjeta ligeramente*/
+.featured-container::-webkit-scrollbar {
+    height: 8px;
 }
 
-/* imagen del producto */
+.featured-container::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+}
+
+/* Tarjeta producto */
+.card {
+    background: white;
+    border-radius: 8px;
+    flex: 0 0 220px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
 .card img {
-    width: 100%; /*imagen ocupa todo el ancho de la tarjeta*/
-    height: 180px; /*mantiene proporciones de la imagen*/
-    object-fit: cover; /*cubre el área sin distorsionar la imagen*/
-    border-radius: 4px; /*esquinas redondeadas para la imagen*/
-    margin-bottom: 10px; /*espacio debajo de la imagen*/
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
 }
 
-/*contenido interior*/
 .card-content {
-    padding: 15px; /*espacio interno*/
-    flex-grow: 1; /*ocupa todo el espacio disponible*/
+    padding: 10px;
 }
 
-/* título de cada producto */
-.card-content h3{
-    margin-top: 0; /*sin espacio extra arriba*/
-    font-size: var(--title-sm); /*tamaño de fuente más grande*/
-    color: var(--color-primary); /*color primario para el título*/
-    font-weight: 700; /*negrita para destacar el título*/
-    margin-bottom: 10px; /*espacio debajo del título*/
+.card-content h3 {
+    font-size: 1em;
+    margin: 5px 0;
 }
-/*texto general de descripcion*/
-.card-content p {
-    color: var(--color-primary); /* color primario para el texto*/
-    font-size: 0.9rem; /* tamaño de fuente más pequeño */
-    margin: 5px 0; /* margen vertical */
-}
-/* precio del producto */
+
 .price {
-    font-weight: bold; /* negrita para destacar el precio */
-    color: var(--color-accent); /* color de acento para el precio */
-    font-size: 1.1rem; /* tamaño de fuente ligeramente más grande */
-    margin-bottom: 10px; /* espacio debajo del precio */
+    font-weight: bold;
+    color: #007BFF;
 }
 
-/*boton*/
-.card-actions{
-    padding: 15px; /*espacio interno*/
-    text-align: center; /*centrar contenido*/
+.card button {
+    margin: 10px;
+    padding: 8px;
+    border: none;
+    background: #007BFF;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
 }
-.card-actions button {
-    background-color: var(--color-primary); /* color primario para el botón */
-    color: white; /* texto blanco */
-    border: none; /* sin borde */
-    padding: 10px 15px; /* espaciado interno */
-    border-radius: var(--radius); /* esquinas redondeadas */
-    cursor: pointer; /* cursor de mano al pasar por encima */
-    font-size: 0.9rem; /* tamaño de fuente más pequeño */
-    transition: background var(--transition), transform var(--transition);
+
+.card button:hover {
+    background: #0056b3;
 }
-.card-actions button:hover{
-    background-color: rgba(33, 53, 85, 0.8); /* color más oscuro al pasar el ratón */
-    transform: translateY(-2px); /* eleva ligeramente el botón */
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.modal-content {
+    background: white;
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    position: relative;
+    border-radius: 8px;
+}
+
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.modal-images {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    margin-bottom: 10px;
+}
+
+.modal-images img {
+    max-height: 200px;
+    border-radius: 4px;
+}
+
+#addToCartBtn {
+    background: #28a745;
+    color: white;
+    padding: 10px;
+    border: none;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+#addToCartBtn:hover {
+    background: #218838;
 }
 
 /* 6. TESTIMONIOS */
@@ -613,9 +645,39 @@ section>h2 {
     display: block;
 }
 
-.brands-carousel-title{
+.brands-carousel-title {
     text-align: center;
     font-weight: 700;
     margin-bottom: var(--spacing-lg);
     color: var(--color-primary);
+}
+
+/* POP UP*/
+.popup-Diseño {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.popup-Diseño-Contenido {
+    background: #F5EFE7;
+    color: #274A7D;
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+.popup-Diseño-Contenido button {
+    border-radius: 0.5rem;
+    background-color: #F5EFE7;
+    padding: 8px 18px;
+    margin-top: 13px;
 }

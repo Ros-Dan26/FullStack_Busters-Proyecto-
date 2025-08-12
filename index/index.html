@@ -45,26 +45,51 @@
                 <li class="brands-carousel-slide"><img src="/index/imgIndex/marcas/fila.svg" alt="Fila"></li>
                 <li class="brands-carousel-slide"><img src="/index/imgIndex/marcas/jordan.svg" alt="Jordan"></li>
                 <li class="brands-carousel-slide"><img src="/index/imgIndex/marcas/lacoste.svg" alt="Lacoste"></li>
-                <li class="brands-carousel-slide"><img src="/index/imgIndex/marcas/newbalance.svg" alt="NewBalance"></li>
+                <li class="brands-carousel-slide"><img src="/index/imgIndex/marcas/newbalance.svg" alt="NewBalance">
+                </li>
                 <li class="brands-carousel-slide"><img src="/index/imgIndex/marcas/nike.svg" alt="Nike"></li>
                 <li class="brands-carousel-slide"><img src="/index/imgIndex/marcas/off-white.svg" alt="Off-White"></li>
                 <li class="brands-carousel-slide"><img src="/index/imgIndex/marcas/puma.svg" alt="Puma"></li>
                 <li class="brands-carousel-slide"><img src="/index/imgIndex/marcas/reebok.svg" alt="Reebok"></li>
                 <li class="brands-carousel-slide"><img src="/index/imgIndex/marcas/supreme.svg" alt="Supreme"></li>
                 <li class="brands-carousel-slide"><img src="/index/imgIndex/marcas/k-swiss.svg" alt="K-Swiss"></li>
-                <li class="brands-carousel-slide"><img src="/index/imgIndex/marcas/underarmour.svg" alt="Under Armour"></li>
+                <li class="brands-carousel-slide"><img src="/index/imgIndex/marcas/underarmour.svg" alt="Under Armour">
+                </li>
                 <li class="brands-carousel-slide"><img src="/index/imgIndex/marcas/Vans.svg" alt="Vans"></li>
                 <li class="brands-carousel-slide"><img src="/index/imgIndex/marcas/adidas.svg" alt="Adidas"></li>
             </ul>
         </div>
     </section>
 
-    <!--seccion de productos-->
-    <section>
-        <h2">Nuestros Productos Destacados</h2>
-        <div id="cardContainer" class="card-container">
-            <!--el contenido se genera con javaScript-->
+    <!--seccion de productos destacados-->
+    <section class="featured-section">
+        <h2>Nuestros Productos Destacados</h2>
+        <div id="featuredContainer" class="featured-container">
         </div>
+        <!--modal para detalles-->
+        <div id="productModal" class="modal">
+            <div class="modal-content">
+                <span class="modal-close">&times;</span>
+                <div id="modalImages" class="modal-images"></div>
+                <h3 id="modalName"></h3>
+                <p id="modalPrice" class="price"></p>
+                <p id="modalDescription"></p>
+                <p id="modalDetails"></p>
+                <!-- Select de talla -->
+                <label for="sizeSelect"><strong>Talla:</strong></label>
+                <select id="sizeSelect">
+                    <!-- Opciones generadas dinámicamente -->
+                </select>
+
+                <!-- Cantidad -->
+                <label for="quantityInput"><strong>Cantidad:</strong></label>
+                <input type="number" id="quantityInput" min="1" value="1">
+
+                <button id="addToCartBtn">Agregar al Carrito</button>
+            </div>
+        </div>
+        <!-- Contenedor para Pop-up Universal -->
+        <div id="PopUp-Universal"></div>
     </section>
 
     <!-- testimonios-->

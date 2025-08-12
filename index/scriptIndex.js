@@ -104,58 +104,182 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 // Script para cargar productos destacados
-//opciones para la peticion fetch (GET por defecto, pero lo indicamos igual)
-const requestOptions = {
-    method: 'GET',
-    redirect: "follow"
+const API_URL = "http://jft314.ddns.net:8080/nso/api/v1/nso/product/all";
+const requestOptions = { method: "GET", redirect: "follow" };
+
+const featuredContainer = document.getElementById("featuredContainer");
+
+// Modal elementos
+const modal = document.getElementById("productModal");
+const modalClose = document.querySelector(".modal-close");
+const modalImages = document.getElementById("modalImages");
+const modalName = document.getElementById("modalName");
+const modalPrice = document.getElementById("modalPrice");
+const modalDescription = document.getElementById("modalDescription");
+const modalDetails = document.getElementById("modalDetails");
+const sizeSelect = document.getElementById("sizeSelect");
+const quantityInput = document.getElementById("quantityInput");
+const addToCartBtn = document.getElementById("addToCartBtn");
+
+let currentProduct = null; // Guardará el producto actual que se abrió en el modal
+
+// Carga de productos destacados
+fetch(API_URL, requestOptions)
+    .then(res => res.json())
+    .then(data => {
+        if (!Array.isArray(data)) return;
+        const destacados = data.sort(() => 0.5 - Math.random()).slice(0, 5);
+
+        destacados.forEach(item => {
+            const prod = item.products;
+            const imgs = item.images;
+            const firstImg = imgs && imgs.length ? imgs[0].url : "https://via.placeholder.com/300x180?text=Sin+Imagen";
+
+            const card = document.createElement("div");
+            card.className = "card";
+            card.innerHTML = `
+            <img src="${firstImg}" alt="${prod.name}">
+            <div class="card-content">
+                <h3>${prod.name}</h3>
+                <p class="price">$${parseFloat(prod.price).toFixed(2)}</p>
+            </div>
+            <button>Ver más</button>
+        `;
+
+            card.querySelector("button").addEventListener("click", () => {
+                mostrarModal(prod, imgs);
+            });
+
+            featuredContainer.appendChild(card);
+        });
+    })
+    .catch(err => console.error("Error:", err));
+
+// Mostrar modal con datos y campos de talla/cantidad
+function mostrarModal(prod, imgs) {
+    currentProduct = { ...prod, images: imgs };
+
+    // Imágenes
+    modalImages.innerHTML = "";
+    if (imgs && imgs.length > 0) {
+        imgs.forEach(img => {
+            const el = document.createElement("img");
+            el.src = img.url;
+            modalImages.appendChild(el);
+        });
+    } else {
+        modalImages.innerHTML = `<img src="https://via.placeholder.com/300x180?text=Sin+Imagen">`;
+    }
+
+    // Datos básicos
+    modalName.textContent = prod.name;
+    modalPrice.textContent = `$${parseFloat(prod.price).toFixed(2)}`;
+    modalDescription.textContent = prod.description || "Sin descripción";
+    modalDetails.textContent = prod.details || "";
+
+    // Llenar opciones de talla
+    sizeSelect.innerHTML = "";
+    if (prod.size) {
+        // Si en la API la talla viene como único valor
+        let option = document.createElement("option");
+        option.value = prod.size;
+        option.textContent = prod.size;
+        sizeSelect.appendChild(option);
+    } else {
+        // Si quieres manejar tallas por catálogo se podría poner manual
+        ["26", "27", "28", "29"].forEach(talla => {
+            let option = document.createElement("option");
+            option.value = talla;
+            option.textContent = talla;
+            sizeSelect.appendChild(option);
+        });
+    }
+
+    quantityInput.value = 1;
+
+    modal.style.display = "block";
+}
+
+// Evento cerrar modal
+modalClose.onclick = () => modal.style.display = "none";
+window.onclick = (e) => { if (e.target === modal) modal.style.display = "none"; };
+
+// Evento agregar al carrito
+addToCartBtn.onclick = () => {
+    if (!currentProduct) return;
+
+    const talla = sizeSelect.value;
+    const cantidad = parseInt(quantityInput.value);
+
+    // Validaciones
+    if (!talla) {
+        alert("Por favor selecciona una talla.");
+        return;
+    }
+    if (isNaN(cantidad) || cantidad < 1) {
+        alert("Por favor ingresa una cantidad válida.");
+        return;
+    }
+
+    // Crear objeto para el carrito
+    const productoParaCarrito = {
+        producto: currentProduct.name,
+        categoria: currentProduct.categoria || "Hombres",
+        descripcion: currentProduct.description,
+        talla: talla,
+        imagen: currentProduct.images && currentProduct.images.length > 0
+            ? currentProduct.images[0].url
+            : "https://via.placeholder.com/300x180?text=Sin+Imagen",
+        precio: currentProduct.price,
+        precioOferta: currentProduct.precioOferta || null,
+        descuento: currentProduct.descuento || 0,
+        cantidad: cantidad
+    };
+
+    // Obtener carrito actual del localStorage
+    let cart = JSON.parse(localStorage.getItem("carrito")) || [];
+
+    // Buscar si ya existe el mismo producto y talla (comparación correcta)
+    const existingIndex = cart.findIndex(item => 
+        item.producto === productoParaCarrito.producto && item.talla === talla
+    );
+
+    // Si ya existe, solo aumentar cantidad
+    if (existingIndex !== -1) {
+        cart[existingIndex].cantidad += cantidad;
+    } else {
+        cart.push(productoParaCarrito);
+    }
+
+    // Guardar carrito actualizado
+    localStorage.setItem("carrito", JSON.stringify(cart));
+
+    // Mostrar popup
+    crearPopUpUniversal(cantidad, currentProduct.name, talla);
+
+    // Cerrar modal
+    modal.style.display = "none";
 };
 
-// URL de la API que devuelve todos los productos en formato JSON
-const API_URL = 'http://jft314.ddns.net:8080/nso/api/v1/nso/product/all'; 
+// POP UP universal
+function crearPopUpUniversal(cantidad, producto, talla) {
+    const contenedor = document.getElementById('PopUp-Universal');
+    let palabra = cantidad > 1 ? "Unidades" : "Unidad";
 
-/**
- * función que  obtiene los productos desde el backend y los muestra en la página
- */
-function cargarProductos(){
-    fetch(API_URL, requestOptions) // hacemos la peticion GET a la API
-        .then(response => {
-            if(!response.ok){
-                throw new Error("Error en la solicitud: " + response.status);
-            }
-            return response.json(); // convertimos la respuesta a JSON
-        })
-        .then(data =>{
-            //seleccionamos el contenedor donde iran las cards
-            const container = document.getElementById('cardContainer');
-            //validamos que data sea un array
-            if(Array.isArray(data)){
-                //recorremos cada producto en el array
-                data.forEach(product => {
-                    //creamos el div que sera la card
-                    const card = document.createElement('div');
-                    card.className = 'card'; //asignamos la clase css
-
-                    //obtenemos las propiedades del objecto (adaptar segun la API)
-                    let productDescription = product.description || 'Sin descripción disponible';
-                    //insertamos el contenido HTML de la card
-                    card.innerHTML = `
-                        <h3>${product.name}</h3>
-                        <p class="price">${product.price}</p>
-                        <p>${product.description}</p>
-                    `;
-                    //agregamos la card al contenedor
-                    container.appendChild(card);
-                });
-            }else{
-                //si no es  un array, mostramos un mensaje de error
-                container.textContent = 'No se encontraron productos.';
-            }
-        })
-        .catch(error => {
-            console.error("Error al cargar productos:", error);
-            document.getElementById('cardContainer').textContent = 'Error al cargar productos.';
-        });
+    contenedor.innerHTML = `
+      <div class="popup-Diseño" id="popup-registro">
+          <div class="popup-Diseño-Contenido">
+              <p><b> Su Producto ha sido añadido al carrito </b> </p>
+              <p>${producto} - Talla ${talla} (${cantidad} ${palabra})</p>
+              <button onclick="cerrarPopupUniversal()">Seguir Comprando</button>
+              <button onclick=window.location.href='/carrito/carrito.html'>Ir a carrito </button>
+          </div>
+      </div>
+  `;
 }
-// Llamamos a la función para cargar los productos al cargar la página
-cargarProductos();
+
+function cerrarPopupUniversal() {
+    const contenedor = document.getElementById("PopUp-Universal");
+    contenedor.innerHTML = '';
+}
 // Fin del script de productos destacados
