@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Perfil</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
+  <!-- Alertify CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/alertifyjs@1.11.0/build/css/alertify.min.css" rel="stylesheet" />
+  <!-- Tu CSS personalizado -->
+  <link rel="stylesheet" href="perfil.css" />
+  <!-- Header & Footer CSS -->
+  <link rel="stylesheet" href="/header-footer/header-footer.css" />
+
+  <!-- Header & Footer JS -->
+  <script defer src="/header-footer/header-footer.js"></script>
+</head>
+
+<body>
+  <!-- Header -->
+  <div id="header-container"></div>
+
+  <main class="container my-5">
+    <div class="row perfil-user shadow rounded p-4">
+      <!-- Menú lateral -->
+      <div class="col-12 col-md-3 border-end mb-4 mb-md-0 d-flex flex-column align-items-center">
+        <div class="text-center mb-4 w-100">
+          <img
+            src="/perfil/img/images.png"
+            class="rounded-circle img-fluid mb-2 foto-perfil"
+            id="foto-perfil"
+            alt="Foto perfil"
+          />
+          <input type="file" id="cargar-foto" accept="image/*" class="form-control mt-2" />
+          <button class="btn btn-primary btn-sm mt-2 w-100 btn-editar-foto">Cambiar foto</button>
+        </div>
+
+        <ul class="nav flex-column w-100">
+          <li class="nav-item">
+            <a href="#" class="nav-link active" data-section="cuenta">Mi cuenta</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link" data-section="pedidos">Mis pedidos</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link" data-section="direccion">Dirección</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link" data-section="logout">Cerrar sesión</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Contenido dinámico -->
+      <div class="col-12 col-md-9" id="perfil-contenido"></div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <div id="footer-container"></div>
+
+  <!-- Dialog para Confirmar Cerrar Sesión -->
+  <dialog id="popupCerrarSesion" class="popup-cerrar-sesion">
+    <div class="popup-inner">
+      <p class="popup-text">¿Estás seguro que quieres cerrar sesión?</p>
+      <div class="d-flex justify-content-end gap-2">
+        <button id="btnCancelarCerrarSesion" type="button" class="btn btn-light">Cancelar</button>
+        <button id="btnConfirmarCerrarSesion" type="button" class="btn btn-confirm">Sí, cerrar sesión</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+  <script src="/header-footer/header-footer.js"></script>
+  <script>
+    cargarHeader().then(() => {
+      const script = document.createElement('script');
+      script.src = "/Login/session.js";
+      script.onload = () => {
+        manejarSesion();
+      };
+      document.body.appendChild(script);
+    });
+    cargarFooter();
+  </script>
+
+  <script src="perfil.js"></script>
+</body>
+</html>
