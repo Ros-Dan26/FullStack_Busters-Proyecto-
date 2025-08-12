@@ -1,7 +1,48 @@
+<!--
+===============================================================================
+index.html
+===============================================================================
+Página principal de Net-Shopping Online.
+Esta página sirve como landing page y punto de entrada al marketplace.
+Incluye secciones de bienvenida, marcas, productos destacados, testimonios,
+promociones y modales para interacción avanzada.
+
+ESTRUCTURA GENERAL:
+- Head: Metadatos, fuentes, frameworks, estilos y scripts globales.
+- Header: Se inserta dinámicamente para mantener coherencia en todo el sitio.
+- Hero: Sección principal con video de fondo y llamado a la acción.
+- Carrusel de marcas: Muestra logos de marcas asociadas.
+- Productos destacados: Cards generadas dinámicamente y modal de detalles.
+- Testimonios: Cards de clientes, generadas por JS.
+- Banner promocional: Oferta destacada y botón de acceso rápido.
+- Modal Bootstrap: Modal genérico para futuras funcionalidades.
+- Footer: Se inserta dinámicamente.
+- Scripts: Librerías, utilidades y lógica de la página.
+
+NOTAS:
+- El diseño es responsive y utiliza Bootstrap 5.
+- El header y footer se cargan dinámicamente vía JS para mantener consistencia.
+- Los estilos personalizados están en stylesIndex.css.
+- La lógica de productos, testimonios y modales está en scriptIndex.js.
+- Se usan librerías externas como jQuery, Bootstrap, AlertifyJS y EmailJS.
+-->
+
 <!doctype html>
 <html lang="es">
 
 <head>
+    <!--
+        Metadatos y dependencias globales:
+        - charset: Codificación de caracteres.
+        - viewport: Responsive design.
+        - title: Título de la pestaña/navegador.
+        - jQuery: Para manipulación DOM y AJAX.
+        - Bootstrap: Framework CSS y JS para diseño y componentes responsivos.
+        - Bootstrap Icons: Íconos vectoriales.
+        - AlertifyJS: Notificaciones y alertas personalizadas.
+        - stylesIndex.css: Estilos personalizados para la página principal.
+        - header-footer.css y header-footer.js: Header y footer reutilizables.
+    -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Pagina Principal - Net-Shopping Online</title>
@@ -16,10 +57,22 @@
 </head>
 
 <body style="font-family: 'Montserrat', sans-serif;">
-    <!-- Header -->
+    <!--
+        HEADER DINÁMICO:
+        El header se inserta automáticamente mediante JS para mantener la coherencia
+        en todas las páginas del sitio. El contenido se define en header-footer.js.
+    -->
     <div id="header-container"></div>
 
-    <!--Hero section semantico-->
+    <!--
+        HERO SECTION:
+        Sección principal de bienvenida con video de fondo y llamado a la acción.
+        - <video>: Video de fondo, autoplay, sin sonido, en loop.
+        - .hero__overlay: Capa semitransparente para mejorar la legibilidad.
+        - .hero__texts: Título y subtítulo principales.
+        - .hero__cta: Botón que dirige a la página de productos.
+        Accesibilidad: aria-label en el video.
+    -->
     <section class="hero">
         <video class="hero__video" src="imgIndex/sneakerVideo.mp4" autoplay muted loop playsinline preload="auto"
             aria-label="Background hero video"></video>
@@ -35,7 +88,15 @@
             <a href="/productos/productos.html" class="hero__cta">Ir a Productos</a>
         </div>
     </section>
-    <!-- Carrusel de marcas-->
+
+    <!--
+        CARRUSEL DE MARCAS:
+        Muestra logos de marcas asociadas en un carrusel horizontal.
+        - .brands-carousel-title: Título de la sección.
+        - .brands-carousel-track: Contenedor de slides (logos).
+        - Cada <li>: Logo de una marca, con alt para accesibilidad.
+        El movimiento y animación se definen en CSS/JS.
+    -->
     <section class="brands-carousel" aria-label="Carrusel de marcas">
         <h2 class="brands-carousel-title">Marcas que confían en nosotros</h2>
         <div class="brands-carousel-track-container">
@@ -45,28 +106,35 @@
                 <li class="brands-carousel-slide"><img src="/index/imgIndex/marcas/fila.svg" alt="Fila"></li>
                 <li class="brands-carousel-slide"><img src="/index/imgIndex/marcas/jordan.svg" alt="Jordan"></li>
                 <li class="brands-carousel-slide"><img src="/index/imgIndex/marcas/lacoste.svg" alt="Lacoste"></li>
-                <li class="brands-carousel-slide"><img src="/index/imgIndex/marcas/newbalance.svg" alt="NewBalance">
-                </li>
+                <li class="brands-carousel-slide"><img src="/index/imgIndex/marcas/newbalance.svg" alt="NewBalance"></li>
                 <li class="brands-carousel-slide"><img src="/index/imgIndex/marcas/nike.svg" alt="Nike"></li>
                 <li class="brands-carousel-slide"><img src="/index/imgIndex/marcas/off-white.svg" alt="Off-White"></li>
                 <li class="brands-carousel-slide"><img src="/index/imgIndex/marcas/puma.svg" alt="Puma"></li>
                 <li class="brands-carousel-slide"><img src="/index/imgIndex/marcas/reebok.svg" alt="Reebok"></li>
                 <li class="brands-carousel-slide"><img src="/index/imgIndex/marcas/supreme.svg" alt="Supreme"></li>
                 <li class="brands-carousel-slide"><img src="/index/imgIndex/marcas/k-swiss.svg" alt="K-Swiss"></li>
-                <li class="brands-carousel-slide"><img src="/index/imgIndex/marcas/underarmour.svg" alt="Under Armour">
-                </li>
+                <li class="brands-carousel-slide"><img src="/index/imgIndex/marcas/underarmour.svg" alt="Under Armour"></li>
                 <li class="brands-carousel-slide"><img src="/index/imgIndex/marcas/Vans.svg" alt="Vans"></li>
                 <li class="brands-carousel-slide"><img src="/index/imgIndex/marcas/adidas.svg" alt="Adidas"></li>
             </ul>
         </div>
     </section>
 
-    <!--seccion de productos destacados-->
+    <!--
+        PRODUCTOS DESTACADOS:
+        Sección que muestra productos destacados en formato de cards.
+        - #featuredContainer: Contenedor donde JS inserta dinámicamente los productos.
+        - Modal personalizado (no Bootstrap) para mostrar detalles del producto seleccionado.
+        - Incluye selección de talla, cantidad y botón para agregar al carrito.
+        - #PopUp-Universal: Contenedor para mensajes emergentes universales.
+        La lógica de renderizado y eventos está en scriptIndex.js.
+    -->
     <section class="featured-section">
         <h2>Nuestros Productos Destacados</h2>
         <div id="featuredContainer" class="featured-container">
+            <!-- Productos generados dinámicamente por JS -->
         </div>
-        <!--modal para detalles-->
+        <!-- Modal para detalles de producto -->
         <div id="productModal" class="modal">
             <div class="modal-content">
                 <span class="modal-close">&times;</span>
@@ -80,11 +148,9 @@
                 <select id="sizeSelect">
                     <!-- Opciones generadas dinámicamente -->
                 </select>
-
                 <!-- Cantidad -->
                 <label for="quantityInput"><strong>Cantidad:</strong></label>
                 <input type="number" id="quantityInput" min="1" value="1">
-
                 <button id="addToCartBtn">Agregar al Carrito</button>
             </div>
         </div>
@@ -92,86 +158,43 @@
         <div id="PopUp-Universal"></div>
     </section>
 
-    <!-- testimonios-->
-    <section class="testimonials" aria-labelledby="testimonials-title">
-        <!--titulo de la seccion-->
-        <h2 id="testimonials-title" class="testimonials__title">
-            Lo que dicen nuestros clientes
-        </h2>
-        <!-- contenedor de tarjetas-->
-        <div class="testimonials__grid">
-            <!--testimonio 1-->
-            <article class="testimonial">
-                <!--foto de cliente-->
-                <img src="imgIndex/shoesNikeRojo.webp" alt="Foto de Maria Gonzales" class="testimonial__photo" />
-
-                <!--cita con el texto de la resenia-->
-                <blockquote class="testimonial__quote">
-                    <p>
-                        Me encantaron mis nuevos sneakers, ¡son súper cómodas y con mucho estilo!
-                    </p>
-                </blockquote>
-                <!-- Calificación de estrellas -->
-                <div class="testimonial__rating" aria-label="5 de 5 estrellas">
-                    <span class="star" aria-hidden="true">★</span>
-                    <span class="star" aria-hidden="true">★</span>
-                    <span class="star" aria-hidden="true">★</span>
-                    <span class="star" aria-hidden="true">★</span>
-                    <span class="star" aria-hidden="true">★</span>
-                </div>
-
-                <!--autor de la resenia-->
-                <cite class="testimonial__author">Maria Gonzales</cite>
-            </article>
-            <!-- Testimonio #2 -->
-            <article class="testimonial">
-                <img src="imgIndex/shoesNikeRojo.webp" alt="Foto de Carlos Ramírez" class="testimonial__photo" />
-                <blockquote class="testimonial__quote">
-                    <p>
-                        Excelente atención y envío rapidísimo. Mis zapatillas llegaron en perfectas condiciones.
-                    </p>
-                </blockquote>
-                <div class="testimonial__rating" aria-label="4 de 5 estrellas">
-                    <span class="star" aria-hidden="true">★</span>
-                    <span class="star" aria-hidden="true">★</span>
-                    <span class="star" aria-hidden="true">★</span>
-                    <span class="star" aria-hidden="true">★</span>
-                    <span class="star" aria-hidden="true">☆</span>
-                </div>
-                <cite class="testimonial__author">Carlos Ramírez</cite>
-            </article>
-
-            <!-- Testimonio #3 -->
-            <article class="testimonial">
-                <img src="imgIndex/shoesNikeRojo.webp" alt="Foto de Ana López" class="testimonial__photo" />
-                <blockquote class="testimonial__quote">
-                    <p>
-                        Diseño único y calidad premium. Definitivamente mi tienda de confianza.
-                    </p>
-                </blockquote>
-                <div class="testimonial__rating" aria-label="5 de 5 estrellas">
-                    <span class="star" aria-hidden="true">★</span>
-                    <span class="star" aria-hidden="true">★</span>
-                    <span class="star" aria-hidden="true">★</span>
-                    <span class="star" aria-hidden="true">★</span>
-                    <span class="star" aria-hidden="true">★</span>
-                </div>
-                <cite class="testimonial__author">Ana López</cite>
-            </article>
+    <!--
+        TESTIMONIOS:
+        Sección que muestra testimonios de clientes en formato de cards.
+        - #testimonialsContainer: Contenedor donde JS inserta las cards.
+        El contenido se genera dinámicamente desde scriptIndex.js.
+    -->
+    <section class="testimonials-section">
+        <h2>Testimonios de nuestros clientes</h2>
+        <div id="testimonialsContainer" class="testimonials-container">
+            <!-- Cards generadas dinámicamente por JS -->
         </div>
     </section>
 
-    <!--Banner promocional-->
+    <!--
+        BANNER PROMOCIONAL:
+        Sección fija para destacar una promoción especial.
+        - .promo-banner__text: Texto de la oferta.
+        - .promo-banner__btn: Botón que dirige a productos en promoción.
+        Accesibilidad: role="region" y aria-label.
+    -->
     <section class="promo-banner" role="region" aria-label="Promocion especial">
-        <!--texto de la oferta-->
         <p class="promo-banner__text">
             🚚 ¡Envío gratis en compras mayores a $999!
         </p>
-        <button class="promo-banner__btn" type="button" aria-label="Ver productos en promocion">
+        <button class="promo-banner__btn" type="button" aria-label="Ver productos en promocion"
+            onclick="window.location.href='/productos/productos.html'">
             Ver productos
         </button>
     </section>
 
+    <!--
+        MODAL BOOTSTRAP (GENÉRICO):
+        Modal de Bootstrap preparado para futuras funcionalidades.
+        - id="staticBackdrop": Modal estático, no se cierra con teclado ni clic fuera.
+        - .modal-title, .modal-body, .modal-footer: Estructura estándar Bootstrap.
+        El contenido puede ser modificado dinámicamente según necesidades.
+    -->
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -191,16 +214,29 @@
         </div>
     </div>
 
-    <!-- Footer -->
+    <!--
+        FOOTER DINÁMICO:
+        El footer se inserta automáticamente mediante JS para mantener la coherencia
+        en todas las páginas del sitio. El contenido se define en header-footer.js.
+    -->
     <div id="footer-container"></div>
 
-    <!-- scripts-->
+    <!--
+        SCRIPTS Y DEPENDENCIAS:
+        - jQuery: Manipulación DOM y AJAX.
+        - Bootstrap JS: Componentes interactivos.
+        - EmailJS: Envío de correos desde el frontend.
+        - header-footer.js: Inserta header y footer dinámicamente.
+        - Script inline: Carga el header, luego el script de sesión y ejecuta la función de manejo de sesión.
+        - scriptIndex.js: Lógica personalizada para productos, testimonios, modales, etc.
+    -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <!-- Scripts -->
     <script src="/header-footer/header-footer.js"></script>
     <script>
+        // Carga el header y, una vez cargado, inserta el script de sesión y ejecuta la función de manejo de sesión.
         cargarHeader().then(() => {
             const script = document.createElement('script');
             script.src = "/Login/session.js";
@@ -209,7 +245,7 @@
             };
             document.body.appendChild(script);
         });
-
+        // Carga el footer dinámicamente.
         cargarFooter();
     </script>
     <script src="scriptIndex.js"></script>

@@ -6,544 +6,481 @@
 
 /* 1. VARIABLES GLOBALES */
 :root {
-    /* Colores */
-    --color-bg: #f5efe7;
-    --color-primary: #213555;
-    --color-accent: #213555;
-    --color-text: var(--color-primary);
-    --color-muted: rgba(33, 53, 85, 0.7);
+    /* Colores principales de la paleta */
+    --color-bg: #f5efe7;         /* Color de fondo general */
+    --color-primary: #213555;    /* Color principal para textos y elementos */
+    --color-accent: #213555;     /* Color de acento (igual que el principal aquí) */
+    --color-text: var(--color-primary); /* Color de texto por defecto */
+    --color-muted: rgba(33, 53, 85, 0.7); /* Color de texto atenuado/transparente */
 
-    /* Tipografía */
-    --font-sans: "Montserrat", sans-serif;
-    --title-lg: 2.5rem;
-    --title-sm: 1.75rem;
+    /* Tipografía base */
+    --font-sans: "Montserrat", sans-serif; /* Fuente principal para todo el sitio */
+    --title-lg: 2.5rem;    /* Tamaño grande para títulos principales */
+    --title-sm: 1.75rem;   /* Tamaño para subtítulos */
 
-    /* Espaciados */
-    --spacing-xxs: 0.25rem;
-    --spacing-xs: 0.5rem;
-    --spacing: 1rem;
-    --spacing-lg: 2rem;
-    --spacing-xl: 4rem;
+    /* Espaciados globales */
+    --spacing-xxs: 0.25rem; /* Espaciado extra extra pequeño */
+    --spacing-xs: 0.5rem;   /* Espaciado extra pequeño */
+    --spacing: 1rem;        /* Espaciado base */
+    --spacing-lg: 2rem;     /* Espaciado grande */
+    --spacing-xl: 4rem;     /* Espaciado extra grande */
 
     /* Bordes y radios */
-    --radius: 0.5rem;
-    /* 8px */
+    --radius: 0.5rem;       /* Radio de borde estándar (8px) */
 
     /* Transiciones */
-    --transition: 0.3s ease;
+    --transition: 0.3s ease; /* Transición suave para efectos visuales */
 
     /* Componentes */
-    --card-width: 280px;
-    --banner-padding: 0.75rem 1rem;
-    --banner-font-sm: 0.9rem;
+    --card-width: 280px;    /* Ancho base de tarjetas de producto */
+    --banner-padding: 0.75rem 1rem; /* Padding para banners promocionales */
+    --banner-font-sm: 0.9rem;       /* Tamaño de fuente pequeño para banners */
 }
 
 /* 2. RESET Y BASE GLOBAL */
+/* Elimina márgenes y paddings por defecto, y aplica box-sizing border-box a todos los elementos */
 *,
 *::before,
 *::after {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+    margin: 0;                /* Elimina márgenes por defecto */
+    padding: 0;               /* Elimina padding por defecto */
+    box-sizing: border-box;   /* Incluye el padding y el borde en el tamaño total del elemento */
 }
 
+/* Comportamiento suave de scroll en toda la página */
 html {
-    scroll-behavior: smooth;
+    scroll-behavior: smooth;  /* Hace que el desplazamiento sea suave al navegar */
 }
 
+/* Estilos base del body */
 body {
-    font-family: var(--font-sans);
-    background-color: var(--color-bg);
-    color: var(--color-text);
-    line-height: 1.6;
-    margin: 0;
-    padding: 0;
+    font-family: var(--font-sans);         /* Fuente principal definida en variables */
+    background-color: var(--color-bg);     /* Color de fondo general */
+    color: var(--color-text);              /* Color de texto principal */
+    line-height: 1.6;                      /* Altura de línea para mejor legibilidad */
+    margin: 0;                             /* Elimina margen exterior */
+    padding: 0;                            /* Elimina padding exterior */
 }
 
-/* Elimina márgenes laterales globales */
+/* Elimina márgenes laterales globales de los hijos directos del body */
 body>* {
-    margin-left: 0;
-    margin-right: 0;
+    margin-left: 0;    /* Sin margen izquierdo */
+    margin-right: 0;   /* Sin margen derecho */
 }
 
 /* 3. ESPACIADO GENERAL ENTRE SECCIONES */
+/* Aplica padding vertical y horizontal a cada sección */
 section {
-    padding: var(--spacing-xl) var(--spacing-lg);
+    padding: var(--spacing-xl) var(--spacing-lg); /* Espaciado superior/inferior y lateral */
 }
 
+/* Títulos de sección */
 section>h1,
 section>h2 {
-    font-size: var(--title-lg);
-    font-weight: 700;
-    color: var(--color-primary);
-    margin-bottom: var(--spacing-lg);
+    font-size: var(--title-lg);        /* Tamaño grande para títulos */
+    font-weight: 700;                  /* Negrita */
+    color: var(--color-primary);       /* Color principal */
+    margin-bottom: var(--spacing-lg);  /* Espaciado inferior */
 }
 
 /* 4. HERO SECTION */
+/* Contenedor principal del hero */
 .hero {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    min-height: 400px;
-    overflow: hidden;
-    display: flex;
-    align-items: stretch;
+    position: relative;        /* Posiciona elementos hijos absolutamente */
+    width: 100vw;              /* Ocupa todo el ancho de la ventana */
+    height: 100vh;             /* Ocupa todo el alto de la ventana */
+    min-height: 400px;         /* Altura mínima para pantallas pequeñas */
+    overflow: hidden;          /* Oculta desbordes */
+    display: flex;             /* Usa flexbox para alinear hijos */
+    align-items: stretch;      /* Estira los hijos verticalmente */
 }
 
+/* Video de fondo del hero */
 .hero__video {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    object-fit: cover;
-    object-position: center center;
-    z-index: 1;
-    filter: brightness(0.76) grayscale(20%);
-    pointer-events: none;
-    transition: filter 0.3s;
+    position: absolute;        /* Posiciona sobre el contenedor hero */
+    top: 0;                    /* Arriba */
+    left: 0;                   /* Izquierda */
+    width: 100vw;              /* Ancho completo */
+    height: 100vh;             /* Alto completo */
+    object-fit: cover;         /* Cubre todo el contenedor sin deformarse */
+    object-position: center center; /* Centra el video */
+    z-index: 1;                /* Detrás de la capa de contenido */
+    filter: brightness(0.76) grayscale(20%); /* Oscurece y desatura el video */
+    pointer-events: none;      /* No permite interacción */
+    transition: filter 0.3s;   /* Transición suave al cambiar el filtro */
 }
 
-/* Opcional: mejor rendimiento en móviles para vídeo */
+/* Mejor rendimiento en móviles para video */
 @media (max-width: 600px) {
     .hero__video {
-        min-width: 100vw;
-        min-height: 100vh;
+        min-width: 100vw;      /* Asegura que el video cubra el ancho */
+        min-height: 100vh;     /* Asegura que el video cubra el alto */
         /* Si necesitas cambiar el video por una imagen en móviles para ahorrar datos, implementa JS */
     }
 }
 
+/* Capa de superposición sobre el video */
 .hero__overlay {
-    position: relative;
-    z-index: 2;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    min-height: 100vh;
-    pointer-events: none;
+    position: relative;        /* Permite posicionar hijos relativos a este contenedor */
+    z-index: 2;                /* Encima del video */
+    width: 100%;               /* Ancho completo */
+    display: flex;             /* Flexbox para alinear contenido */
+    flex-direction: column;    /* Apila hijos verticalmente */
+    align-items: center;       /* Centra horizontalmente */
+    justify-content: flex-start; /* Alinea arriba */
+    min-height: 100vh;         /* Altura mínima igual a la ventana */
+    pointer-events: none;      /* Solo los hijos con pointer-events: all serán interactivos */
 }
 
+/* Contenedor de textos del hero */
 .hero__texts {
-    margin-top: 3vw;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    pointer-events: all;
+    margin-top: 3vw;           /* Espaciado superior responsivo */
+    width: 100%;               /* Ancho completo */
+    display: flex;             /* Flexbox para apilar textos */
+    flex-direction: column;    /* Apila verticalmente */
+    align-items: center;       /* Centra horizontalmente */
+    pointer-events: all;       /* Permite interacción (por ejemplo, selección de texto) */
 }
 
+/* Título principal del hero */
 .hero__title {
-    font-size: clamp(1rem, 3vw, 1.7rem);
-    margin-bottom: 0.2rem;
-    margin-top: 0;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    line-height: 1.1;
-    color: #fff;
-    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.23);
+    font-size: clamp(1rem, 3vw, 1.7rem); /* Tamaño responsivo entre 1rem y 1.7rem */
+    margin-bottom: 0.2rem;               /* Espaciado inferior */
+    margin-top: 0;                       /* Sin margen superior */
+    font-weight: 700;                    /* Negrita */
+    letter-spacing: 0.04em;              /* Espaciado entre letras */
+    line-height: 1.1;                    /* Altura de línea ajustada */
+    color: #fff;                         /* Texto blanco */
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.23); /* Sombra para contraste */
 }
 
+/* Subtítulo del hero */
 .hero__subtitle {
-    font-size: clamp(0.8rem, 1.5vw, 1.1rem);
-    font-weight: 400;
-    margin-bottom: 0;
-    margin-top: 0;
-    color: #fff;
-    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.13);
+    font-size: clamp(0.8rem, 1.5vw, 1.1rem); /* Tamaño responsivo */
+    font-weight: 400;                        /* Peso normal */
+    margin-bottom: 0;                        /* Sin margen inferior */
+    margin-top: 0;                           /* Sin margen superior */
+    color: #fff;                             /* Texto blanco */
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.13); /* Sombra ligera */
 }
 
-/* Botón lo más bajo posible, pequeño y centrado */
+/* Botón de llamada a la acción en el hero */
 .hero__cta {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    left: 50%;
-    bottom: 10vw;
-    transform: translateX(-50%);
-    background: transparent;
-    color: #fff;
-    font-size: 0.7rem;
-    text-decoration: none;
-    border: 1px solid #fff;
-    border-radius: 2rem;
-    padding: 0.30rem 0.85rem;
-    transition: background 0.3s, border 0.3s, transform 0.2s;
-    box-shadow: none;
-    pointer-events: all;
-    cursor: pointer;
+    display: flex;                           /* Flexbox para centrar contenido */
+    align-items: center;                     /* Centra verticalmente */
+    justify-content: center;                 /* Centra horizontalmente */
+    position: absolute;                      /* Posiciona sobre el hero */
+    left: 50%;                               /* Centra horizontalmente */
+    bottom: 10vw;                            /* Espaciado inferior responsivo */
+    transform: translateX(-50%);             /* Ajusta para centrar exactamente */
+    background: transparent;                 /* Fondo transparente */
+    color: #fff;                             /* Texto blanco */
+    font-size: 0.7rem;                       /* Tamaño pequeño */
+    text-decoration: none;                   /* Sin subrayado */
+    border: 1px solid #fff;                  /* Borde blanco */
+    border-radius: 2rem;                     /* Bordes redondeados */
+    padding: 0.30rem 0.85rem;                /* Espaciado interno */
+    transition: background 0.3s, border 0.3s, transform 0.2s; /* Transiciones suaves */
+    box-shadow: none;                        /* Sin sombra */
+    pointer-events: all;                     /* Permite interacción */
+    cursor: pointer;                         /* Cursor de mano */
 }
 
+/* Efecto hover/focus en el botón CTA */
 .hero__cta:hover,
 .hero__cta:focus {
-    background: rgba(255, 255, 255, 0.11);
-    border-color: #30cfc9;
-    color: #fff;
-    transform: translateX(-50%) scale(1.04);
+    background: rgba(255, 255, 255, 0.11);   /* Fondo blanco translúcido */
+    border-color: #30cfc9;                   /* Borde color acento */
+    color: #fff;                             /* Mantiene texto blanco */
+    transform: translateX(-50%) scale(1.04); /* Efecto de escala */
 }
 
-/* Responsive breakpoints */
+/* Responsive breakpoints para hero */
 @media (max-width: 900px) {
     .hero__title {
-        font-size: 1.25rem;
+        font-size: 1.25rem;                  /* Reduce tamaño en pantallas medianas */
     }
-
     .hero__subtitle {
-        font-size: 1rem;
+        font-size: 1rem;                     /* Reduce tamaño en pantallas medianas */
     }
 }
 
 @media (max-width: 600px) {
     .hero__texts {
-        margin-top: 10vw;
+        margin-top: 10vw;                    /* Más espacio arriba en móviles */
     }
-
     .hero__title {
-        font-size: 1rem;
+        font-size: 1rem;                     /* Tamaño más pequeño */
     }
-
     .hero__subtitle {
-        font-size: 0.73rem;
+        font-size: 0.73rem;                  /* Tamaño más pequeño */
     }
-
     .hero__cta {
-        font-size: 0.63rem;
-        padding: 0.22rem 0.65rem;
-        bottom: 2vw;
+        font-size: 0.63rem;                  /* Botón más pequeño */
+        padding: 0.22rem 0.65rem;            /* Menos padding */
+        bottom: 2vw;                         /* Más cerca del borde inferior */
     }
 }
-
 
 /* 5. CARRUSEL DE PRODUCTOS */
+/* Contenedor principal del carrusel */
 .carousel {
-    position: relative;
-    overflow: hidden;
-    padding-inline: var(--spacing-lg);
+    position: relative;                      /* Permite posicionar botones absolutamente */
+    overflow: hidden;                        /* Oculta slides fuera del área visible */
+    padding-inline: var(--spacing-lg);       /* Espaciado lateral */
 }
 
+/* Título del carrusel */
 .carousel__title {
-    text-align: center;
-    font-weight: 700;
-    margin-block: var(--spacing-lg) var(--spacing);
+    text-align: center;                      /* Centra el texto */
+    font-weight: 700;                        /* Negrita */
+    margin-block: var(--spacing-lg) var(--spacing); /* Espaciado arriba y abajo */
 }
 
+/* Contenedor de la pista del carrusel */
 .carousel__track-container {
-    overflow: hidden;
+    overflow: hidden;                        /* Oculta slides fuera del área visible */
 }
 
+/* Pista de slides del carrusel */
 .carousel__track {
-    display: flex;
-    transition: transform var(--transition);
+    display: flex;                           /* Flexbox para alinear slides horizontalmente */
+    transition: transform var(--transition); /* Transición suave al mover slides */
 }
 
+/* Slide individual del carrusel */
 .carousel__slide {
-    min-width: var(--card-width);
-    margin-right: var(--spacing);
-    display: flex;
-    justify-content: center;
+    min-width: var(--card-width);            /* Ancho mínimo definido por variable */
+    margin-right: var(--spacing);            /* Espaciado entre slides */
+    display: flex;                           /* Flexbox para centrar contenido */
+    justify-content: center;                 /* Centra horizontalmente */
 }
 
+/* Botones de navegación del carrusel */
 .carousel__button {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: var(--color-bg);
-    border: none;
-    font-size: 2rem;
-    color: var(--color-primary);
-    padding: var(--spacing-xs);
-    border-radius: var(--radius);
-    cursor: pointer;
-    transition: background var(--transition);
-    z-index: 1;
+    position: absolute;                      /* Posiciona sobre el carrusel */
+    top: 50%;                                /* Centra verticalmente */
+    transform: translateY(-50%);             /* Ajusta para centrar exactamente */
+    background: var(--color-bg);             /* Fondo igual al fondo general */
+    border: none;                            /* Sin borde */
+    font-size: 2rem;                         /* Tamaño grande */
+    color: var(--color-primary);             /* Color principal */
+    padding: var(--spacing-xs);              /* Espaciado interno */
+    border-radius: var(--radius);            /* Bordes redondeados */
+    cursor: pointer;                         /* Cursor de mano */
+    transition: background var(--transition);/* Transición suave */
+    z-index: 1;                              /* Encima de los slides */
 }
 
+/* Hover en botones del carrusel */
 .carousel__button:hover {
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.8);    /* Fondo blanco translúcido */
 }
 
+/* Posición de los botones prev/next */
 .carousel__button--prev {
-    left: var(--spacing);
+    left: var(--spacing);                    /* Botón izquierdo */
 }
-
 .carousel__button--next {
-    right: var(--spacing);
+    right: var(--spacing);                   /* Botón derecho */
 }
 
-/* seccion de productos destacados */
-/* Scroll horizontal */
+/* Sección de productos destacados: scroll horizontal */
 .featured-container {
-    display: flex;
-    overflow-x: auto;
-    gap: 15px;
-    padding: 20px;
+    display: flex;                           /* Flexbox para alinear tarjetas horizontalmente */
+    overflow-x: auto;                        /* Permite scroll horizontal */
+    gap: 15px;                               /* Espaciado entre tarjetas */
+    padding: 20px;                           /* Espaciado interno */
 }
 
+/* Estilos para la barra de scroll horizontal */
 .featured-container::-webkit-scrollbar {
-    height: 8px;
+    height: 8px;                             /* Altura de la barra de scroll */
 }
-
 .featured-container::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 4px;
+    background: #ccc;                        /* Color del "pulgar" del scroll */
+    border-radius: 4px;                      /* Bordes redondeados */
 }
 
-/* Tarjeta producto */
+/* Tarjeta de producto */
 .card {
-    background: white;
-    border-radius: 8px;
-    flex: 0 0 220px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+    background: white;                       /* Fondo blanco */
+    border-radius: 8px;                      /* Bordes redondeados */
+    flex: 0 0 220px;                         /* No crece, no se encoge, ancho fijo */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);/* Sombra ligera */
+    display: flex;                           /* Flexbox para apilar contenido */
+    flex-direction: column;                  /* Apila verticalmente */
+    overflow: hidden;                        /* Oculta desbordes */
 }
 
+/* Imagen de la tarjeta */
 .card img {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
+    width: 100%;                             /* Ocupa todo el ancho */
+    height: 150px;                           /* Altura fija */
+    object-fit: cover;                       /* Cubre el área sin deformarse */
 }
 
+/* Contenido de la tarjeta */
 .card-content {
-    padding: 10px;
+    padding: 10px;                           /* Espaciado interno */
 }
-
 .card-content h3 {
-    font-size: 1em;
-    margin: 5px 0;
+    font-size: 1em;                          /* Tamaño estándar */
+    margin: 5px 0;                           /* Espaciado arriba y abajo */
 }
 
+/* Precio destacado */
 .price {
-    font-weight: bold;
-    color: #007BFF;
+    font-weight: bold;                       /* Negrita */
+    color: #007BFF;                          /* Azul destacado */
 }
 
+/* Botón de la tarjeta */
 .card button {
-    margin: 10px;
-    padding: 8px;
-    border: none;
-    background: #007BFF;
-    color: white;
-    cursor: pointer;
-    border-radius: 4px;
+    margin: 10px;                            /* Espaciado exterior */
+    padding: 8px;                            /* Espaciado interno */
+    border: none;                            /* Sin borde */
+    background: #007BFF;                     /* Fondo azul */
+    color: white;                            /* Texto blanco */
+    cursor: pointer;                         /* Cursor de mano */
+    border-radius: 4px;                      /* Bordes redondeados */
 }
-
 .card button:hover {
-    background: #0056b3;
+    background: #0056b3;                     /* Azul más oscuro al pasar el mouse */
 }
 
-/* Modal */
+/* Modal de producto */
 .modal {
-    display: none;
-    position: fixed;
-    z-index: 100;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
+    display: none;                           /* Oculto por defecto */
+    position: fixed;                         /* Fijo en la pantalla */
+    z-index: 100;                            /* Encima de todo */
+    left: 0;                                 /* Desde el borde izquierdo */
+    top: 0;                                  /* Desde el borde superior */
+    width: 100%;                             /* Ancho completo */
+    height: 100%;                            /* Alto completo */
+    background-color: rgba(0, 0, 0, 0.6);    /* Fondo negro translúcido */
 }
-
 .modal-content {
-    background: white;
-    max-width: 600px;
-    margin: 50px auto;
-    padding: 20px;
-    position: relative;
-    border-radius: 8px;
+    background: white;                       /* Fondo blanco */
+    max-width: 600px;                        /* Ancho máximo */
+    margin: 50px auto;                       /* Centrado vertical y horizontal */
+    padding: 20px;                           /* Espaciado interno */
+    position: relative;                      /* Para posicionar el botón de cierre */
+    border-radius: 8px;                      /* Bordes redondeados */
 }
-
 .modal-close {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 24px;
-    cursor: pointer;
+    position: absolute;                      /* Posiciona sobre el modal */
+    top: 10px;                               /* Arriba */
+    right: 15px;                             /* A la derecha */
+    font-size: 24px;                         /* Tamaño grande */
+    cursor: pointer;                         /* Cursor de mano */
 }
-
 .modal-images {
-    display: flex;
-    gap: 10px;
-    overflow-x: auto;
-    margin-bottom: 10px;
+    display: flex;                           /* Flexbox para imágenes */
+    gap: 10px;                               /* Espaciado entre imágenes */
+    overflow-x: auto;                        /* Scroll horizontal si hay muchas imágenes */
+    margin-bottom: 10px;                     /* Espaciado inferior */
 }
-
 .modal-images img {
-    max-height: 200px;
-    border-radius: 4px;
+    max-height: 200px;                       /* Altura máxima */
+    border-radius: 4px;                      /* Bordes redondeados */
 }
-
 #addToCartBtn {
-    background: #28a745;
-    color: white;
-    padding: 10px;
-    border: none;
-    margin-top: 10px;
-    cursor: pointer;
-    border-radius: 4px;
+    background: #28a745;                     /* Verde */
+    color: white;                            /* Texto blanco */
+    padding: 10px;                           /* Espaciado interno */
+    border: none;                            /* Sin borde */
+    margin-top: 10px;                        /* Espaciado superior */
+    cursor: pointer;                         /* Cursor de mano */
+    border-radius: 4px;                      /* Bordes redondeados */
 }
-
 #addToCartBtn:hover {
-    background: #218838;
+    background: #218838;                     /* Verde más oscuro al pasar el mouse */
 }
 
 /* 6. TESTIMONIOS */
-.testimonials__grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: var(--spacing-lg);
-}
-
-.testimonial {
-    background-color: var(--color-bg);
-    border-radius: var(--radius);
-    padding: var(--spacing-lg);
-    text-align: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeInUp 0.6s var(--transition) forwards;
-}
-
-.testimonial:nth-child(1) {
-    animation-delay: 0.2s;
-}
-
-.testimonial:nth-child(2) {
-    animation-delay: 0.4s;
-}
-
-.testimonial:nth-child(3) {
-    animation-delay: 0.6s;
-}
-
-.testimonial__photo {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: var(--spacing);
-}
-
-.testimonial__quote {
-    font-style: italic;
-    color: var(--color-muted);
-    margin-bottom: var(--spacing);
-}
-
-.testimonial__rating .star {
-    font-size: 1.2rem;
-    color: var(--color-accent);
-    margin: 0 2px;
-}
-
-.testimonial__author {
-    display: block;
-    font-weight: 700;
-    color: var(--color-primary);
-    margin-top: var(--spacing-xs);
-    font-size: 0.95rem;
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+/* (Sección documentada más abajo) */
 
 /* 7. BANNER PROMOCIONAL */
+/* Banner promocional superior */
 .promo-banner {
-    position: relative;
-    background-color: var(--color-primary);
-    color: var(--color-bg);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: var(--banner-padding);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    font-size: var(--banner-font-sm);
-    border-radius: var(--radius) var(--radius) 0 0;
-    margin-bottom: var(--spacing-lg);
+    position: relative;                      /* Permite posicionar hijos relativos */
+    background-color: var(--color-primary);  /* Fondo color principal */
+    color: var(--color-bg);                  /* Texto color de fondo */
+    display: flex;                           /* Flexbox para alinear contenido */
+    justify-content: space-between;          /* Espacia los elementos */
+    align-items: center;                     /* Centra verticalmente */
+    padding: var(--banner-padding);          /* Espaciado interno */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Línea inferior sutil */
+    font-size: var(--banner-font-sm);        /* Tamaño de fuente pequeño */
+    border-radius: var(--radius) var(--radius) 0 0; /* Bordes superiores redondeados */
+    margin-bottom: var(--spacing-lg);        /* Espaciado inferior */
 }
 
+/* Texto del banner */
 .promo-banner__text {
-    font-weight: 600;
+    font-weight: 600;                        /* Negrita */
 }
 
+/* Botón del banner */
 .promo-banner__btn {
-    background-color: var(--color-bg);
-    color: var(--color-primary);
-    border: none;
-    padding: var(--spacing-xs) var(--spacing-lg);
-    border-radius: var(--radius);
-    cursor: pointer;
-    transition: background var(--transition), transform var(--transition);
+    background-color: var(--color-bg);       /* Fondo igual al fondo general */
+    color: var(--color-primary);             /* Texto color principal */
+    border: none;                            /* Sin borde */
+    padding: var(--spacing-xs) var(--spacing-lg); /* Espaciado interno */
+    border-radius: var(--radius);            /* Bordes redondeados */
+    cursor: pointer;                         /* Cursor de mano */
+    transition: background var(--transition), transform var(--transition); /* Transiciones suaves */
 }
-
 .promo-banner__btn:hover,
 .promo-banner__btn:focus {
-    background-color: rgba(229, 211, 195, 0.8);
-    transform: translateY(-2px);
+    background-color: rgba(229, 211, 195, 0.8); /* Fondo beige translúcido */
+    transform: translateY(-2px);                /* Efecto de elevación */
 }
 
 /* 8. MEDIA QUERIES – RESPONSIVIDAD */
+/* Ajustes para diferentes tamaños de pantalla */
 
 /* Large desktops (≤1200px) */
 @media (max-width: 1200px) {
     .hero__container {
-        gap: var(--spacing);
+        gap: var(--spacing);                   /* Reduce el espacio entre elementos */
     }
-
     .testimonials__grid {
-        gap: var(--spacing);
+        gap: var(--spacing);                   /* Reduce el espacio entre testimonios */
     }
 }
 
 /* Tablets (≤1024px) */
 @media (max-width: 1024px) {
     .carousel__slide {
-        min-width: 240px;
+        min-width: 240px;                      /* Slides más pequeños */
     }
-
     section {
-        padding: var(--spacing-lg) var(--spacing);
+        padding: var(--spacing-lg) var(--spacing); /* Menos padding lateral */
     }
 }
 
 /* Small tablets/large phones (≤768px) */
 @media (max-width: 768px) {
-
     /* Hero: centrado */
     .hero__title,
     .hero__subtitle {
-        text-align: center;
+        text-align: center;                    /* Centra los textos */
     }
-
     /* Carousel slides */
     .carousel__slide {
-        min-width: 200px;
+        min-width: 200px;                      /* Slides más pequeños */
     }
-
     /* Banner: vertical */
     .promo-banner {
-        flex-direction: column;
-        text-align: center;
+        flex-direction: column;                /* Apila verticalmente */
+        text-align: center;                    /* Centra el texto */
     }
-
     .promo-banner__btn {
-        margin-top: var(--spacing-xs);
-        width: 100%;
+        margin-top: var(--spacing-xs);         /* Espaciado superior */
+        width: 100%;                           /* Botón ocupa todo el ancho */
     }
-
     /* Secciones: reducir padding lateral */
     section {
         padding: var(--spacing-lg) var(--spacing);
@@ -553,131 +490,197 @@ section>h2 {
 /* Mobile (≤480px) */
 @media (max-width: 480px) {
     :root {
-        --title-lg: 1.75rem;
-        --banner-font-sm: 0.8rem;
+        --title-lg: 1.75rem;                   /* Títulos más pequeños */
+        --banner-font-sm: 0.8rem;              /* Fuente de banner más pequeña */
     }
-
     .hero__title {
-        font-size: var(--title-lg);
+        font-size: var(--title-lg);            /* Título más pequeño */
     }
-
     .hero__subtitle {
-        font-size: 1rem;
+        font-size: 1rem;                       /* Subtítulo más pequeño */
     }
-
     .carousel__slide {
-        min-width: 160px;
-        margin-right: var(--spacing-xs);
+        min-width: 160px;                      /* Slides más pequeños */
+        margin-right: var(--spacing-xs);       /* Menos espacio entre slides */
     }
-
     .product-card__name {
-        font-size: 1rem;
+        font-size: 1rem;                       /* Nombre de producto más pequeño */
     }
-
     .product-card__price {
-        font-size: 0.9rem;
+        font-size: 0.9rem;                     /* Precio más pequeño */
     }
-
     .product-card__btn {
-        padding: var(--spacing-xxs) var(--spacing);
+        padding: var(--spacing-xxs) var(--spacing); /* Botón más pequeño */
     }
-
     .testimonial__quote p {
-        font-size: 0.9rem;
+        font-size: 0.9rem;                     /* Texto de testimonio más pequeño */
     }
-
     .testimonial__author {
-        font-size: 0.85rem;
+        font-size: 0.85rem;                    /* Autor más pequeño */
     }
-
     section {
-        padding: var(--spacing-lg) var(--spacing-xs);
+        padding: var(--spacing-lg) var(--spacing-xs); /* Menos padding lateral */
     }
 }
 
 /* Extra small phones (≤360px) */
 @media (max-width: 360px) {
     .hero__container {
-        grid-template-columns: 1fr;
-        gap: var(--spacing);
+        grid-template-columns: 1fr;            /* Una sola columna */
+        gap: var(--spacing);                   /* Espaciado reducido */
     }
-
     .carousel__slide {
-        min-width: 140px;
+        min-width: 140px;                      /* Slides aún más pequeños */
     }
-
     .testimonial__photo {
-        width: 60px;
+        width: 60px;                           /* Foto de testimonio más pequeña */
         height: 60px;
     }
 }
 
-/*carrusel de marcas*/
+/* Carrusel de marcas */
+/* Contenedor principal del carrusel de marcas */
 .brands-carousel {
-    width: 100%;
-    overflow: hidden;
-    margin: 2rem 0;
+    width: 100%;                              /* Ancho completo */
+    overflow: hidden;                         /* Oculta desbordes */
+    margin: 2rem 0;                           /* Espaciado vertical */
 }
-
 .brands-carousel-track-container {
-    overflow: hidden;
-    width: 100%;
+    overflow: hidden;                         /* Oculta desbordes */
+    width: 100%;                              /* Ancho completo */
 }
-
 .brands-carousel-track {
-    display: flex;
-    transition: transform 0.5s ease-in-out;
-    will-change: transform;
+    display: flex;                            /* Flexbox para alinear marcas */
+    transition: transform 0.5s ease-in-out;   /* Transición suave al mover */
+    will-change: transform;                   /* Optimización de rendimiento */
 }
-
 .brands-carousel-slide {
-    min-width: 120px;
-    /* ajusta según desees tamaño de iconos */
-    margin: 0 1rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    min-width: 120px;                         /* Tamaño de iconos de marca */
+    margin: 0 1rem;                           /* Espaciado lateral */
+    display: flex;                            /* Flexbox para centrar */
+    justify-content: center;                  /* Centra horizontalmente */
+    align-items: center;                      /* Centra verticalmente */
 }
-
 .brands-carousel-slide img {
-    max-width: 100%;
-    height: auto;
-    display: block;
+    max-width: 100%;                          /* Imagen no sobrepasa el contenedor */
+    height: auto;                             /* Altura automática */
+    display: block;                           /* Elimina espacio extra */
 }
-
 .brands-carousel-title {
-    text-align: center;
-    font-weight: 700;
-    margin-bottom: var(--spacing-lg);
-    color: var(--color-primary);
+    text-align: center;                       /* Centra el texto */
+    font-weight: 700;                         /* Negrita */
+    margin-bottom: var(--spacing-lg);         /* Espaciado inferior */
+    color: var(--color-primary);              /* Color principal */
 }
 
-/* POP UP*/
+/* POP UP */
+/* Fondo del popup */
 .popup-Diseño {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 100;
+    position: fixed;                          /* Fijo en la pantalla */
+    top: 0;                                   /* Desde arriba */
+    left: 0;                                  /* Desde la izquierda */
+    width: 100%;                              /* Ancho completo */
+    height: 100%;                             /* Alto completo */
+    background-color: rgba(0, 0, 0, 0.5);     /* Fondo negro translúcido */
+    display: flex;                            /* Flexbox para centrar contenido */
+    justify-content: center;                  /* Centra horizontalmente */
+    align-items: center;                      /* Centra verticalmente */
+    z-index: 100;                             /* Encima de todo */
 }
-
+/* Contenido del popup */
 .popup-Diseño-Contenido {
-    background: #F5EFE7;
-    color: #274A7D;
-    border-radius: 20px;
-    padding: 30px;
-    text-align: center;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+    background: #F5EFE7;                      /* Fondo beige */
+    color: #274A7D;                           /* Texto azul */
+    border-radius: 20px;                      /* Bordes redondeados */
+    padding: 30px;                            /* Espaciado interno */
+    text-align: center;                       /* Centra el texto */
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);/* Sombra */
+}
+.popup-Diseño-Contenido button {
+    border-radius: 0.5rem;                    /* Bordes redondeados */
+    background-color: #F5EFE7;                /* Fondo igual al popup */
+    padding: 8px 18px;                        /* Espaciado interno */
+    margin-top: 13px;                         /* Espaciado superior */
 }
 
-.popup-Diseño-Contenido button {
-    border-radius: 0.5rem;
-    background-color: #F5EFE7;
-    padding: 8px 18px;
-    margin-top: 13px;
+/* 9. SECCIÓN TESTIMONIOS */
+/* Sección general de testimonios */
+.testimonials-section {
+    padding: 40px 20px;                       /* Espaciado interno */
+    background: linear-gradient(135deg, #f9f9f9, #eef1f6); /* Fondo degradado */
+    text-align: center;                       /* Centra el texto */
+}
+.testimonials-section h2 {
+    font-size: 2em;                           /* Título grande */
+    color: #333;                              /* Gris oscuro */
+    margin-bottom: 25px;                      /* Espaciado inferior */
+}
+/* Contenedor de tarjetas de testimonios */
+.testimonials-container {
+    display: grid;                            /* Grid para apilar tarjetas */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsivo */
+    gap: 20px;                                /* Espaciado entre tarjetas */
+}
+
+/* Tarjeta individual de testimonio */
+.testimonial-card {
+    background: white;                        /* Fondo blanco */
+    border-radius: 10px;                      /* Bordes redondeados */
+    padding: 20px;                            /* Espaciado interno */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);/* Sombra ligera */
+    display: flex;                            /* Flexbox para apilar contenido */
+    flex-direction: column;                   /* Apila verticalmente */
+    align-items: center;                      /* Centra horizontalmente */
+    opacity: 0;                               /* Inicio oculto para animación */
+    transform: translateY(20px);              /* Desplazado hacia abajo */
+    animation: fadeInUp 0.6s forwards;        /* Animación de entrada */
+}
+.testimonial-card img {
+    width: 80px;                              /* Tamaño de la foto */
+    height: 80px;
+    object-fit: cover;                        /* Cubre el área sin deformarse */
+    border-radius: 50%;                       /* Foto circular */
+    margin-bottom: 15px;                      /* Espaciado inferior */
+}
+.testimonial-card h3 {
+    font-size: 1.1em;                         /* Tamaño de nombre */
+    color: #007BFF;                           /* Azul */
+    margin-bottom: 8px;                       /* Espaciado inferior */
+}
+.testimonial-card p {
+    font-size: 0.95em;                        /* Texto de testimonio */
+    color: #555;                              /* Gris */
+    margin-bottom: 10px;                      /* Espaciado inferior */
+}
+/* Estrellas de calificación */
+.stars {
+    color: #fbc02d;                           /* Amarillo */
+    font-size: 1.2em;                         /* Tamaño grande */
+}
+
+/* Animación de entrada (fadeIn + subida) */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;                           /* Comienza invisible */
+        transform: translateY(20px);          /* Desplazado hacia abajo */
+    }
+    to {
+        opacity: 1;                           /* Termina visible */
+        transform: translateY(0);             /* En su lugar */
+    }
+}
+
+/* Animación de salida (fadeOut) */
+.fade-out {
+    animation: fadeOutDown 0.5s forwards;     /* Aplica animación de salida */
+}
+@keyframes fadeOutDown {
+    from {
+        opacity: 1;                           /* Comienza visible */
+        transform: translateY(0);             /* En su lugar */
+    }
+    to {
+        opacity: 0;                           /* Termina invisible */
+        transform: translateY(20px);          /* Desplazado hacia abajo */
+    }
 }
