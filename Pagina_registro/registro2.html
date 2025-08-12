@@ -2,133 +2,129 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!--Seccion de links-->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Registro</title>
 
-    <link rel="stylesheet" href="/Pagina_registro/registro2.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
-        rel="stylesheet">
+    <!-- CSS y recursos -->
+    <link rel="stylesheet" href="/Pagina_registro/registro2.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="/header-footer/header-footer.css" />
 
-    <!-- Header & Footer -->
-    <link rel="stylesheet" href="/header-footer/header-footer.css">
     <script defer src="/header-footer/header-footer.js"></script>
 
-    <!--Termina Seccion de links-->
-    <title>Registro</title>
+    <style>
+        /* Puedes agregar estilos adicionales aquí si quieres */
+    </style>
 </head>
 
 <body style="font-family: 'Montserrat', sans-serif;">
-    <!-- Header -->
+    <!-- Header externo -->
     <div id="header-container"></div>
-    <!--Termina Seccion de header-->
 
-    <!--Inicia el contenedor que contendra los campos de registro y la imagen-->
     <div class="contenedor-principal-registro">
-        <!--Cotenedor de la imagen de registro-->
         <div class="Imagen-registro">
             <img src="https://i.pinimg.com/564x/b3/ca/67/b3ca6754727fe02c2bca73db538820ad.jpg" alt="Imagen decorativa"
-                class="registro-imagen">>
+                class="registro-imagen" />
         </div>
 
-        <!--Inicio Contenedor de los campos para el registro-->
         <div class="contenido-registro">
             <h2 class="login-title">CREAR CUENTA</h2>
 
-            <!--Inicio del forms con los campos-->
             <form id="enviar-registro" autocomplete="off">
-                <label class="form-label registro-label">Nombres</label>
+                <label for="nombre-registro" class="form-label registro-label">Nombres:</label>
                 <input type="text" id="nombre-registro" class="form-control entradas-registro"
-                    placeholder="Ingrese su nombre: " required>
+                    placeholder="Ingrese su nombre" required />
 
-                <label class="form-label registro-label">Apellidos:</label>
-                <input type="text" id="apellidos-registro" class="form-control entradas-registro"
-                    placeholder="Ingrese sus apellidos: " required>
+                <label for="apellidoP-registro" class="form-label registro-label">Apellido paterno:</label>
+                <input type="text" id="apellidoP-registro" class="form-control entradas-registro"
+                    placeholder="Ingrese su apellido paterno" required />
 
-                <label class="form-label registro-label">Correo:</label>
+                <label for="apellidoM-registro" class="form-label registro-label">Apellido materno:</label>
+                <input type="text" id="apellidoM-registro" class="form-control entradas-registro"
+                    placeholder="Ingrese su apellido materno" required />
+
+                <label for="correo-registro" class="form-label registro-label">Correo:</label>
                 <input type="email" id="correo-registro" class="form-control entradas-registro"
-                    placeholder="Ingrese su correo: " required>
+                    placeholder="Ingrese su correo" required />
 
-                <label class="form-label registro-label">Genero:</label>
-                <div class="col">
-                    <select id="genero-registro" class="form-control entradas-registro">
-                        <option value="">-</option>
-                        <option>Hombre</option>
-                        <option>Mujer</option>
-                        <option>No binario</option>
-                    </select>
-                </div>
+                <label for="telefono-fijo-registro" class="form-label registro-label">Teléfono fijo:</label>
+                <input type="tel" id="telefono-fijo-registro" class="form-control entradas-registro"
+                    placeholder="Ingrese su teléfono fijo" maxlength="12" />
 
-                <label class="form-label registro-label">Contraseña:</label>
+                <label for="telefono-movil-registro" class="form-label registro-label">Teléfono móvil:</label>
+                <input type="tel" id="telefono-movil-registro" class="form-control entradas-registro"
+                    placeholder="Ingrese su teléfono móvil" maxlength="12" />
+
+                <label for="genero-registro" class="form-label registro-label">Género:</label>
+                <select id="genero-registro" class="form-control entradas-registro" required>
+                    <option value="">-Seleccione-</option>
+                    <option>Hombre</option>
+                    <option>Mujer</option>
+                    <option>No binario</option>
+                </select>
+
+                <label for="contrasena-registro" class="form-label registro-label">Contraseña:</label>
                 <input type="password" id="contrasena-registro" class="form-control entradas-registro"
-                    placeholder="Ingrese su contraseña: " required>
+                    placeholder="Ingrese su contraseña" required />
 
-                <label class="form-label registro-label">Confirmacion contraseña:</label>
+                <label for="contrasenaConf-registro" class="form-label registro-label">Confirmación contraseña:</label>
                 <input type="password" id="contrasenaConf-registro" class="form-control entradas-registro"
-                    placeholder="Confirme contraseña: " required>
+                    placeholder="Confirme su contraseña" required />
 
-                <p><a href="/Login/login.html" class="cuenta_existente_registro"> ¿Ya tienes una cuenta? </a></p>
+                <p><a href="/Login/login.html" class="cuenta_existente_registro">¿Ya tienes una cuenta?</a></p>
 
-                <button class="btn-registro">Registrar</button>
+                <button type="submit" class="btn-registro">Registrar</button>
             </form>
 
-            <!--Fin del forms con los campos-->
-
-            <!--Popup de registro exitoso-->
-            <div class="popup-registro" id="popup-registro">
+            <!-- Popup registro exitoso -->
+            <div class="popup-registro" id="popup-registro" style="display:none;">
                 <div class="popup-content-registro">
-                    <p> Registro exitoso</p>
-                    <div><img src="/Pagina_registro/correcto.png"></div>
+                    <p>Registro exitoso</p>
+                    <div><img src="/Pagina_registro/correcto.png" alt="Correcto"></div>
                     <button onclick="cerrarPopupRegistro()">Aceptar</button>
                 </div>
             </div>
 
-            <!--Popup si las contraseñas no coinciden-->
-            <div class="popup-registro-Con-Inc" id="popup-registro-Con-Inc">
+            <!-- Popup contraseñas no coinciden -->
+            <div class="popup-registro-Con-Inc" id="popup-registro-Con-Inc" style="display:none;">
                 <div class="popup-content-registro-Con-in">
-                    <p> Contraseñas no coinciden </p>
-                    <div><img src="/Pagina_registro/incorrecto.png"></div>
+                    <p>Contraseñas no coinciden</p>
+                    <div><img src="/Pagina_registro/incorrecto.png" alt="Incorrecto"></div>
                     <button onclick="cerrarPopupRegistroConInc()">Aceptar</button>
                 </div>
             </div>
-
         </div>
-        <!--Fin Contenedor de los campos para el registro-->
-
-
     </div>
-    <!--Fin del contenedor que contiene los campos de registro y la imagen-->
 
-    <!-- Footer -->
+    <!-- Footer externo -->
     <div id="footer-container"></div>
 
-
-    <!-- Scripts header-footer-->
     <!-- Scripts -->
     <script src="/header-footer/header-footer.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+        crossorigin="anonymous"></script>
+
+    <script src="/Pagina_registro/registro2.js"></script>
+
     <script>
+        // Carga header y footer
         cargarHeader().then(() => {
             const script = document.createElement('script');
             script.src = "/Login/session.js";
             script.onload = () => {
-                manejarSesion(); // llama solo después de estar cargado
+                manejarSesion();
             };
             document.body.appendChild(script);
         });
-
         cargarFooter();
     </script>
-
-    <script src="/Pagina_registro/registro2.js"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
-        crossorigin="anonymous"></script>
 </body>
 
 </html>
