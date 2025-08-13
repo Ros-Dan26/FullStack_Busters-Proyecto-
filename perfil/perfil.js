@@ -290,16 +290,14 @@ document.addEventListener('DOMContentLoaded', () => {
               </button>
             </div>
           </div>
-
         </div>
 
-        <div class="mt-4 d-flex justify-content-end">
+        <div class="mt-4 d-flex justify-content-between">
+          <button type="button" class="btn btn-danger" id="btn-eliminar-cuenta">Eliminar cuenta</button>
           <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar cambios</button>
         </div>
       </form>
     `;
-
-    const formEditar = document.getElementById('form-editar');
 
     // Mostrar / ocultar contraseña
     const togglePassword = document.getElementById('togglePassword');
@@ -321,6 +319,8 @@ document.addEventListener('DOMContentLoaded', () => {
       toggleConfirmPassword.querySelector('i').classList.toggle('bi-eye-slash');
     });
 
+    // Enviar formulario para actualizar usuario
+    const formEditar = document.getElementById('form-editar');
     formEditar.addEventListener('submit', async e => {
       e.preventDefault();
 
@@ -370,6 +370,41 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error(error);
         alertify.error('Error al guardar datos, intenta nuevamente');
       }
+    });
+
+    // Funcionalidad botón "Eliminar cuenta"
+    const btnEliminarCuenta = document.getElementById('btn-eliminar-cuenta');
+    btnEliminarCuenta.addEventListener('click', () => {
+      const confirmado = confirm('¿Seguro que quieres eliminar tu cuenta? Esta acción no se puede deshacer.');
+      if (!confirmado) return;
+
+      const datosUsuario = JSON.parse(localStorage.getItem(USUARIO_DATOS_KEY));
+      if (!datosUsuario || !datosUsuario.id) {
+        alert('No se encontró usuario activo para eliminar.');
+        return;
+      }
+
+      const idUsuario = datosUsuario.id;
+
+      fetch(`http://jft314.ddns.net:8080/nso/api/v1/nso/user/hdelete/id/${idUsuario}`, {
+        method: 'DELETE',
+        redirect: 'follow'
+      })
+        .then(response => {
+          if (!response.ok) throw new Error('Error al eliminar la cuenta');
+          return response.text();
+        })
+        .then(resultado => {
+          alert('Cuenta eliminada correctamente. Se cerrará la sesión.');
+          localStorage.removeItem(USUARIO_ACTIVO_KEY);
+          localStorage.removeItem(USUARIO_DATOS_KEY);
+          sessionStorage.clear();
+          window.location.href = '/Login/login.html';
+        })
+        .catch(error => {
+          console.error(error);
+          alert('Error al eliminar la cuenta, por favor intenta nuevamente.');
+        });
     });
   }
 
