@@ -5,30 +5,41 @@ if (curFiles.length === 0) {
   preview.appendChild(para);
 }
 
-let boton = document.getElementById("btnRegistrar");
+let boton = document.getElementById("btn-publicar");
 
 
 boton.addEventListener("click", function (e) {
+  console.log("registrar producto")
   e.preventDefault();
   let form = document.getElementById("formularioRegistro");
   let formData = new FormData(form);
-  
-  fetch("http://localhost:8081/api/v1/nso/save", {
-    method: "POST",
+
+  fetch('http://jft314.ddns.net:8080/nso/api/v1/nso/product/save', {
+    method: 'POST',
     body: formData
   })
-  .then(response => response.json())
-  .then(data => {
-    if (data.success) {
-      alert("Producto registrado exitosamente");
-      form.reset();
-      preview.innerHTML = ""; // Limpiar la vista previa
-    } else {
-      alert("Error al registrar el producto: " + data.message);
-    }
-  })
-  .catch(error => {
-    console.error("Error:", error);
-    alert("Ocurrió un error al registrar el producto");
-  });
+    .then(res => res.json())
+    .then(data => {
+        const contenedor = document.getElementById('producto');
+        const producto = data.products;
+        const imagenes = data.images || [];
+
+        contenedor.innerHTML = `
+            <h2>${producto.name} (${producto.model})</h2>
+            <p><b>Marca:</b> ${producto.brand}</p>
+            <p><b>Precio:</b> $${producto.price}</p>
+            <p><b>Color:</b> ${producto.colorProduct}</p>
+            <p><b>Status:</b> ${producto.status}</p>
+            <p><b>Talla:</b> ${producto.size}</p>
+            <p><b>Descripción:</b> ${producto.description}</p>
+            <p><b>Detalles:</b> ${producto.details}</p>
+            <img src="${producto.urlBrand}" alt="${producto.brand}" width="100">
+            <div>
+                ${imagenes.map(img => `<img src="${img.url}" width="150">`).join('')}
+            </div>
+        `;
+    })
+    .catch(err => console.error('Error al traer el producto:', err));
 });
+
+

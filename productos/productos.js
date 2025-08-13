@@ -28,7 +28,7 @@ fetch("http://jft314.ddns.net:8080/nso/api/v1/nso/product/all", requestOptions)
                     </div>
                   `).join('')
                   : `<div class="carousel-item active">
-                      <img src="https://via.placeholder.com/300x200?text=Producto" class="d-block w-100" alt="${producto.name}">
+                      <img class="d-block w-100" alt="${producto.name}">
                     </div>`
                 }
               </div>
@@ -68,6 +68,8 @@ fetch("http://jft314.ddns.net:8080/nso/api/v1/nso/product/all", requestOptions)
 function addCart(index) {
     const item = window.productos[index];
     const producto = item.products;
+    const imagenes = item.images; // Asegúrate de tener esto antes
+    console.log(producto);
 
     // Obtiene la talla y cantidad seleccionadas por el usuario
     const tallaSelect = document.getElementById(`talla-select-${index}`);
@@ -88,21 +90,22 @@ function addCart(index) {
 
     // Crea el objeto del producto para el carrito
     const productoCarrito = {
-        id: producto.id,
-        brand: producto.brand,
-        name: producto.name,
-        model: producto.model,
-        price: producto.price,
-        talla: talla,
+      id: producto.id, // <-- Aquí se guarda el id del producto
+      nombre: producto.name,
+      marca: producto.brand,
+      modelo: producto.model,
+      precio: Number(producto.price),
+      talla: talla,
         cantidad: cantidad,
-        total: producto.price * cantidad
+        imagen: (imagenes && imagenes.length > 0) ? imagenes[0].url : '', // <-- Aquí se guarda la primer imagen
+        total: Number(producto.price) * cantidad
     };
 
     // Obtiene el carrito actual del localStorage
     let cart = JSON.parse(localStorage.getItem("carrito")) || [];
 
-    // Si el producto ya está en el carrito con la misma talla, suma la cantidad
-    const existingIndex = cart.findIndex(item => item.name === productoCarrito.name && item.talla === talla);
+    // Si el producto ya está en el carrito con el mismo id, suma la cantidad
+    const existingIndex = cart.findIndex(item => item.id === producto.id);
 
     if (existingIndex !== -1) {
       cart[existingIndex].cantidad += cantidad;
@@ -140,7 +143,6 @@ function verDetalles(index) {
 // -- POP UP -- \\
 function crearPopUpUniversal(cantidad, producto, talla){
   const contenedor = document.getElementById('PopUp-Universal');
-  let palabra = cantidad > 1 ? "Unidades": "Unidad";
 
     contenedor.innerHTML = `
         <div class="popup-Diseño" id="popup-registro">
