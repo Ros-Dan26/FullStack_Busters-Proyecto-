@@ -273,7 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
 
           <div class="col-md-6 position-relative">
-            <label for="input-password" class="form-label">Nueva contraseña (opcional)</label>
+            <label for="input-password" class="form-label">Nueva contraseña (Obligatorio, puede ser la misma)</label>
             <div class="input-group">
               <input type="password" class="form-control" id="input-password" placeholder="Cambiar la contraseña" aria-describedby="togglePassword">
               <button type="button" class="btn btn-outline-secondary" id="togglePassword" aria-label="Mostrar contraseña">
