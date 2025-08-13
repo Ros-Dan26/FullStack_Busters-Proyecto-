@@ -15,15 +15,32 @@ fetch("http://jft314.ddns.net:8080/nso/api/v1/nso/product/all", requestOptions)
     productos.forEach((item, index) => {
       const producto = item.products;
       const imagenes = item.images;
-      // Usar la primera imagen si existe, si no, imagen genérica
-      const imagenPrincipal = imagenes && imagenes.length > 0
-        ? imagenes[0].url
-        : 'https://via.placeholder.com/300x200?text=Producto';
 
       contenedor.innerHTML += `
         <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex align-items-stretch">
           <div class="card w-100">
-            <img src="${imagenPrincipal}" class="card-img-top" alt="${producto.name}">
+            <div id="carousel-${index}" class="carousel slide" data-bs-ride="carousel">
+              <div class="carousel-inner">
+                ${imagenes && imagenes.length > 0
+                  ? imagenes.map((img, i) => `
+                    <div class="carousel-item${i === 0 ? ' active' : ''}">
+                      <img src="${img.url}" class="d-block w-100" alt="${producto.name}">
+                    </div>
+                  `).join('')
+                  : `<div class="carousel-item active">
+                      <img src="https://via.placeholder.com/300x200?text=Producto" class="d-block w-100" alt="${producto.name}">
+                    </div>`
+                }
+              </div>
+              ${imagenes && imagenes.length > 1 ? `
+                <button class="carousel-control-prev" type="button" data-bs-target="#carousel-${index}" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carousel-${index}" data-bs-slide="next">
+                  <span class="carousel-control-next-icon"></span>
+                </button>
+              ` : ''}
+            </div>
             <div class="card-body d-flex flex-column">
               <h5 class="card-title">${producto.brand} - ${producto.name}</h5>
               <p class="card-text"><strong>Modelo:</strong> ${producto.model}</p>
