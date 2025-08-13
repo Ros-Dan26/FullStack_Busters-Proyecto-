@@ -162,6 +162,12 @@ body {
 .popup-cerrar-sesion.center-text .popup-text {
   text-align: center;
 }
+/* Popup Cambios realizados - reutiliza estilos de .popup-cerrar-sesion */
+#popupCambios .popup-text {
+  font-weight: 600;
+  font-size: 1.25rem;
+  margin: 0;
+}
 
 /* =========================
    Responsive

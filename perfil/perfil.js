@@ -11,25 +11,30 @@ document.addEventListener('DOMContentLoaded', () => {
   const fotoPerfil = document.getElementById('foto-perfil');
   const inputFoto = document.getElementById('cargar-foto');
 
-  /* Elementos Navbar */
-  const dropdown = document.getElementById('userDropdown');
-  const username = document.getElementById('usernameDisplay');
-  const iniciarSesion = document.getElementById('user-name');
-  const perfilLink = document.getElementById('perfilLink');
-  const registroProducto = document.getElementById('registroProducto');
-
   /* === FUNCIONES DE SESIÓN === */
   function manejarSesion() {
     const usuarioJSON = localStorage.getItem(USUARIO_ACTIVO_KEY);
     const usuario = usuarioJSON ? JSON.parse(usuarioJSON) : null;
 
     if (usuario) {
+      const dropdown = document.getElementById('userDropdown');
+      const username = document.getElementById('usernameDisplay');
+      const iniciarSesion = document.getElementById('user-name');
+      const perfilLink = document.getElementById('perfilLink');
+      const registroProducto = document.getElementById('registroProducto');
+
       if (dropdown) dropdown.style.display = 'block';
       if (username) username.textContent = usuario.email.split('@')[0];
       if (iniciarSesion) iniciarSesion.style.display = 'none';
       if (perfilLink) perfilLink.style.display = 'inline-block';
       if (registroProducto) registroProducto.style.display = 'block';
     } else {
+      const dropdown = document.getElementById('userDropdown');
+      const username = document.getElementById('usernameDisplay');
+      const iniciarSesion = document.getElementById('user-name');
+      const perfilLink = document.getElementById('perfilLink');
+      const registroProducto = document.getElementById('registroProducto');
+
       if (dropdown) dropdown.style.display = 'none';
       if (username) username.textContent = '';
       if (iniciarSesion) iniciarSesion.style.display = 'inline-block';
@@ -56,7 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
       btnConfirmarCerrarSesion.removeEventListener('click', confirmarCerrarSesion);
       btnCancelarCerrarSesion.removeEventListener('click', cancelarCerrarSesion);
       popupCerrarSesion.removeEventListener('cancel', onCancel);
-      // Regresa foco al enlace logout para accesibilidad
       const enlaceLogout = document.querySelector('.perfil-user .nav-link[data-section="logout"]');
       if (enlaceLogout) enlaceLogout.focus();
     }
@@ -71,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function onCancel(e) {
-      e.preventDefault(); // evita cerrar sin controlar
+      e.preventDefault();
       cancelarCerrarSesion();
     }
 
@@ -82,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
     popupCerrarSesion.showModal();
   }
 
-  /* === FUNCIONES PARA MAPEAR gendersId Y género === */
+  /* === MAPEO gendersId ↔ género === */
   function mapGendersIdToGenero(gendersId) {
     switch (gendersId) {
       case 1: return 'Masculino';
@@ -98,19 +102,6 @@ document.addEventListener('DOMContentLoaded', () => {
       case 'Otro': return 3;
       default: return null;
     }
-  }
-
-  /* === FUNCIONES PARA SEPARAR APELLIDOS === */
-  function extraerApellidoPaterno(apellidos) {
-    if (!apellidos) return '';
-    const partes = apellidos.trim().split(' ');
-    return partes[0] || '';
-  }
-
-  function extraerApellidoMaterno(apellidos) {
-    if (!apellidos) return '';
-    const partes = apellidos.trim().split(' ');
-    return partes.length > 1 ? partes.slice(1).join(' ') : '';
   }
 
   /* === FUNCIONES PARA DATOS DEL USUARIO CON BACKEND === */
@@ -138,39 +129,51 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       if (!usuario) {
         return {
+          id: null,
+          created: null,
           nickname: '',
           genero: '',
           nombre: '',
-          apellidos: '',
+          apellidoPaterno: '',
+          apellidoMaterno: '',
           telefono_fijo: '',
           telefono_movil: '',
           email: emailSesion || '',
-          foto: 'img/user.webp'
+          foto: 'img/user.webp',
+          preferences: ''
         };
       }
 
       return {
+        id: usuario.id || null,
+        created: usuario.created || null,
         nickname: usuario.nickname || '',
         genero: mapGendersIdToGenero(usuario.gendersId),
         nombre: usuario.firstName || '',
-        apellidos: usuario.lastName || '',
+        apellidoPaterno: usuario.lastName || '',
+        apellidoMaterno: usuario.middleName || '',
         telefono_fijo: usuario.phone || '',
         telefono_movil: usuario.mobile || '',
         email: usuario.email || '',
-        foto: 'img/user.webp' // adapta si tienes foto en backend
+        foto: 'img/user.webp',
+        preferences: usuario.preferences || ''
       };
 
     } catch (error) {
       console.error(error);
       return {
+        id: null,
+        created: null,
         nickname: '',
         genero: '',
         nombre: '',
-        apellidos: '',
+        apellidoPaterno: '',
+        apellidoMaterno: '',
         telefono_fijo: '',
         telefono_movil: '',
         email: '',
-        foto: 'img/user.webp'
+        foto: 'img/user.webp',
+        preferences: ''
       };
     }
   }
@@ -183,18 +186,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
-    const raw = JSON.stringify({
+    const password = (datos.password && datos.password.trim() !== '') ? datos.password.trim() : "";
+
+    // Prepara objeto a enviar, omitiendo password si está vacío
+    const payload = {
+      id: datos.id,
       gendersId: mapGeneroToGendersId(datos.genero),
       firstName: datos.nombre,
-      lastName: datos.apellidos,
-      middleName: "", // Si lo manejas, agrega aquí
-      preferences: "", // Si tienes preferencias, adapata aquí
+      lastName: datos.apellidoPaterno,
+      middleName: datos.apellidoMaterno,
+      preferences: datos.preferences || "",
       email: datos.email,
       phone: datos.telefono_fijo,
       mobile: datos.telefono_movil,
       nickname: datos.nickname,
-      password: ""  // Maneja la contraseña si es necesario
-    });
+      created: datos.created
+    };
+    if (password !== "") {
+      payload.password = password;
+    }
+
+    const raw = JSON.stringify(payload);
 
     const requestOptions = {
       method: "PUT",
@@ -246,13 +258,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
           <div class="col-md-6">
             <label for="input-apellido-paterno" class="form-label">Apellido paterno</label>
-            <input type="text" class="form-control" id="input-apellido-paterno" value="${extraerApellidoPaterno(data.apellidos)}" placeholder="Apellido paterno" required>
+            <input type="text" class="form-control" id="input-apellido-paterno" value="${data.apellidoPaterno}" placeholder="Apellido paterno" required>
             <div class="invalid-feedback">Por favor ingresa tu apellido paterno.</div>
           </div>
 
           <div class="col-md-6">
             <label for="input-apellido-materno" class="form-label">Apellido materno</label>
-            <input type="text" class="form-control" id="input-apellido-materno" value="${extraerApellidoMaterno(data.apellidos)}" placeholder="Apellido materno" required>
+            <input type="text" class="form-control" id="input-apellido-materno" value="${data.apellidoMaterno}" placeholder="Apellido materno" required>
             <div class="invalid-feedback">Por favor ingresa tu apellido materno.</div>
           </div>
 
@@ -271,6 +283,31 @@ document.addEventListener('DOMContentLoaded', () => {
             <input type="email" class="form-control" id="input-email" value="${data.email}" placeholder="ejemplo@correo.com" required>
             <div class="invalid-feedback">Por favor ingresa un correo válido.</div>
           </div>
+
+          <div class="col-12">
+            <label for="input-preferences" class="form-label">Preferencias</label>
+            <textarea id="input-preferences" class="form-control" placeholder="Tus preferencias...">${data.preferences || ''}</textarea>
+          </div>
+
+          <div class="col-md-6 position-relative">
+            <label for="input-password" class="form-label">Nueva contraseña (opcional)</label>
+            <div class="input-group">
+              <input type="password" class="form-control" id="input-password" placeholder="Si quieres cambiar la contraseña" aria-describedby="togglePassword">
+              <button type="button" class="btn btn-outline-secondary" id="togglePassword" aria-label="Mostrar contraseña">
+                <i class="bi bi-eye"></i>
+              </button>
+            </div>
+          </div>
+          <div class="col-md-6 position-relative">
+            <label for="input-confirm-password" class="form-label">Confirmar nueva contraseña</label>
+            <div class="input-group">
+              <input type="password" class="form-control" id="input-confirm-password" placeholder="Confirma tu nueva contraseña" aria-describedby="toggleConfirmPassword">
+              <button type="button" class="btn btn-outline-secondary" id="toggleConfirmPassword" aria-label="Mostrar confirmación de contraseña">
+                <i class="bi bi-eye"></i>
+              </button>
+            </div>
+          </div>
+
         </div>
 
         <div class="mt-4 d-flex justify-content-end">
@@ -279,33 +316,75 @@ document.addEventListener('DOMContentLoaded', () => {
       </form>
     `;
 
-    document.getElementById('form-editar').addEventListener('submit', async e => {
+    const formEditar = document.getElementById('form-editar');
+
+    // Mostrar / ocultar contraseña
+    const togglePassword = document.getElementById('togglePassword');
+    const inputPassword = document.getElementById('input-password');
+    const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+    const inputConfirmPassword = document.getElementById('input-confirm-password');
+
+    togglePassword.addEventListener('click', () => {
+      const type = inputPassword.type === 'password' ? 'text' : 'password';
+      inputPassword.type = type;
+      togglePassword.querySelector('i').classList.toggle('bi-eye');
+      togglePassword.querySelector('i').classList.toggle('bi-eye-slash');
+    });
+
+    toggleConfirmPassword.addEventListener('click', () => {
+      const type = inputConfirmPassword.type === 'password' ? 'text' : 'password';
+      inputConfirmPassword.type = type;
+      toggleConfirmPassword.querySelector('i').classList.toggle('bi-eye');
+      toggleConfirmPassword.querySelector('i').classList.toggle('bi-eye-slash');
+    });
+
+    formEditar.addEventListener('submit', async e => {
       e.preventDefault();
-      const form = e.target;
-      if (!form.checkValidity()) {
-        form.classList.add('was-validated');
+
+      if (!formEditar.checkValidity()) {
+        formEditar.classList.add('was-validated');
         alertify.error('Por favor, corrige los campos requeridos.');
         return;
       }
 
-      const apellidosPaterno = form.querySelector('#input-apellido-paterno').value.trim();
-      const apellidosMaterno = form.querySelector('#input-apellido-materno').value.trim();
+      const password = inputPassword.value.trim();
+      const confirmPassword = inputConfirmPassword.value.trim();
+
+      if (password !== '' && password !== confirmPassword) {
+        alertify.error('Las contraseñas no coinciden.');
+        inputConfirmPassword.focus();
+        return;
+      }
+
+      const datosGuardados = JSON.parse(localStorage.getItem(USUARIO_DATOS_KEY)) || {};
 
       const datosActualizados = {
-        nickname: form.querySelector('#input-nickname').value.trim(),
-        genero: form.querySelector('#input-genero').value,
-        nombre: form.querySelector('#input-nombre').value.trim(),
-        apellidos: `${apellidosPaterno} ${apellidosMaterno}`.trim(),
-        telefono_fijo: form.querySelector('#input-telefono').value.trim(),
-        telefono_movil: form.querySelector('#input-movil').value.trim(),
-        email: form.querySelector('#input-email').value.trim(),
+        id: datosGuardados.id || null,
+        created: datosGuardados.created || null,
+        nickname: formEditar.querySelector('#input-nickname').value.trim(),
+        genero: formEditar.querySelector('#input-genero').value,
+        nombre: formEditar.querySelector('#input-nombre').value.trim(),
+        apellidoPaterno: formEditar.querySelector('#input-apellido-paterno').value.trim(),
+        apellidoMaterno: formEditar.querySelector('#input-apellido-materno').value.trim(),
+        telefono_fijo: formEditar.querySelector('#input-telefono').value.trim(),
+        telefono_movil: formEditar.querySelector('#input-movil').value.trim(),
+        email: formEditar.querySelector('#input-email').value.trim(),
+        preferences: formEditar.querySelector('#input-preferences').value.trim(),
+        ...(password !== '' && { password }),
         foto: fotoPerfil.src
       };
 
       try {
         await actualizarUsuario(datosActualizados);
-        guardarDatosUsuarioLocalStorage(datosActualizados);
-        alertify.success('Datos guardados correctamente');
+
+        const toSave = { ...datosActualizados };
+        delete toSave.password;
+        guardarDatosUsuarioLocalStorage(toSave);
+
+        // Mostrar popup Cambios realizados
+        const popupCambios = document.getElementById('popupCambios');
+        popupCambios.showModal();
+
       } catch (error) {
         console.error(error);
         alertify.error('Error al guardar datos, intenta nuevamente');
@@ -313,34 +392,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* === CARGAR Y GUARDAR FOTO DE PERFIL === */
-  inputFoto.addEventListener('change', () => {
-    const file = inputFoto.files[0];
-    if (file) {
-      if (!file.type.startsWith('image/')) {
-        alertify.error('Por favor, selecciona una imagen válida.');
-        inputFoto.value = '';
-        return;
-      }
-      if (file.size > 2097152) {
-        alertify.error('La imagen debe ser menor a 2MB.');
-        inputFoto.value = '';
-        return;
-      }
-      const reader = new FileReader();
-      reader.onload = e => {
-        fotoPerfil.src = e.target.result;
-        const datos = JSON.parse(localStorage.getItem(USUARIO_DATOS_KEY)) || {};
-        datos.foto = e.target.result;
-        guardarDatosUsuarioLocalStorage(datos);
-        alertify.success('Foto actualizada');
-      };
-      reader.readAsDataURL(file);
-    }
-  });
-
   /* === SECCIÓN 'MIS PEDIDOS' === */
   function cargarMisPedidos() {
+    // Tu código para cargar pedidos (igual al anterior)
     let carrito = JSON.parse(localStorage.getItem(CARRITO_KEY)) || [];
     if (carrito.length === 0) {
       contenedorPerfil.innerHTML = `<p class='text-muted'>No tienes pedidos recientes.</p>`;
@@ -411,6 +465,7 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     `;
 
+    // Funciones para actualizar carrito y eventos botones
     function guardarYCargar() {
       localStorage.setItem(CARRITO_KEY, JSON.stringify(carrito));
       cargarMisPedidos();
@@ -486,14 +541,14 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="invalid-feedback">Por favor ingresa la colonia.</div>
         </div>
         <div class="mb-3">
-          <label for="input-estado" class="form-label">Estado</label>
-          <input type="text" class="form-control" id="input-estado" value="${data.estado}" required>
-          <div class="invalid-feedback">Por favor ingresa el estado.</div>
-        </div>
-        <div class="mb-3">
           <label for="input-ciudad" class="form-label">Ciudad/Municipio</label>
           <input type="text" class="form-control" id="input-ciudad" value="${data.ciudad}" required>
           <div class="invalid-feedback">Por favor ingresa la ciudad o municipio.</div>
+        </div>
+        <div class="mb-3">
+          <label for="input-estado" class="form-label">Estado</label>
+          <input type="text" class="form-control" id="input-estado" value="${data.estado}" required>
+          <div class="invalid-feedback">Por favor ingresa el estado.</div>
         </div>
         <button type="submit" class="btn btn-primary" id="btn-guardar-direccion">Guardar Dirección</button>
       </form>
@@ -512,8 +567,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const datosDireccion = {
         calle: formDireccion.querySelector('#input-calle').value.trim(),
         colonia: formDireccion.querySelector('#input-colonia').value.trim(),
-        estado: formDireccion.querySelector('#input-estado').value.trim(),
-        ciudad: formDireccion.querySelector('#input-ciudad').value.trim()
+        ciudad: formDireccion.querySelector('#input-ciudad').value.trim(),
+        estado: formDireccion.querySelector('#input-estado').value.trim()
       };
 
       guardarDatosDireccion(datosDireccion);
@@ -533,7 +588,6 @@ document.addEventListener('DOMContentLoaded', () => {
   enlacesMenu.forEach(enlace => {
     enlace.addEventListener('click', e => {
       e.preventDefault();
-
       enlacesMenu.forEach(link => {
         link.classList.remove('active');
         link.removeAttribute('aria-current');
@@ -552,4 +606,41 @@ document.addEventListener('DOMContentLoaded', () => {
   /* === CARGA INICIAL === */
   manejarSesion();
   cargarMiCuenta();
+
+  /* === CARGAR Y GUARDAR FOTO DE PERFIL === */
+  inputFoto.addEventListener('change', () => {
+    const file = inputFoto.files[0];
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        alertify.error('Por favor, selecciona una imagen válida.');
+        inputFoto.value = '';
+        return;
+      }
+      if (file.size > 2097152) {
+        alertify.error('La imagen debe ser menor a 2MB.');
+        inputFoto.value = '';
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = e => {
+        fotoPerfil.src = e.target.result;
+        const datos = JSON.parse(localStorage.getItem(USUARIO_DATOS_KEY)) || {};
+        datos.foto = e.target.result;
+        guardarDatosUsuarioLocalStorage(datos);
+        alertify.success('Foto actualizada');
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  /* === CONTROL POPUP "CAMBIOS REALIZADOS" === */
+  const popupCambios = document.getElementById('popupCambios');
+  const btnCerrarPopupCambios = document.getElementById('btnCerrarPopupCambios');
+  if (btnCerrarPopupCambios) {
+    btnCerrarPopupCambios.addEventListener('click', () => {
+      popupCambios.close();
+      const btnGuardar = document.getElementById('btn-guardar');
+      if (btnGuardar) btnGuardar.focus();
+    });
+  }
 });
