@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
           telefono_fijo: '',
           telefono_movil: '',
           email: emailSesion || '',
-          foto: 'img/user1.png'
+          foto: 'img/user.webp'
         };
       }
 
@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
         telefono_fijo: usuario.phone || '',
         telefono_movil: usuario.mobile || '',
         email: usuario.email || '',
-        foto: 'img/user1.png' // adapta si tienes foto en backend
+        foto: 'img/user.webp' // adapta si tienes foto en backend
       };
 
     } catch (error) {
@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
         telefono_fijo: '',
         telefono_movil: '',
         email: '',
-        foto: 'img/user1.png'
+        foto: 'img/user.webp'
       };
     }
   }
