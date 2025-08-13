@@ -82,52 +82,142 @@ document.addEventListener('DOMContentLoaded', () => {
     popupCerrarSesion.showModal();
   }
 
-  /* === FUNCIONES PARA DATOS DE USUARIO === */
-  function obtenerDatosUsuario() {
-    let datos = localStorage.getItem(USUARIO_DATOS_KEY);
-    let perfil = datos ? JSON.parse(datos) : null;
+  /* === FUNCIONES PARA MAPEAR gendersId Y género === */
+  function mapGendersIdToGenero(gendersId) {
+    switch (gendersId) {
+      case 1: return 'Masculino';
+      case 2: return 'Femenino';
+      case 3: return 'Otro';
+      default: return '';
+    }
+  }
+  function mapGeneroToGendersId(genero) {
+    switch (genero) {
+      case 'Masculino': return 1;
+      case 'Femenino': return 2;
+      case 'Otro': return 3;
+      default: return null;
+    }
+  }
 
-    const usuarioActivoJSON = localStorage.getItem(USUARIO_ACTIVO_KEY);
-    const usuarioActivo = usuarioActivoJSON ? JSON.parse(usuarioActivoJSON) : null;
-    const correoSesion = usuarioActivo ? usuarioActivo.email : '';
+  /* === FUNCIONES PARA SEPARAR APELLIDOS === */
+  function extraerApellidoPaterno(apellidos) {
+    if (!apellidos) return '';
+    const partes = apellidos.trim().split(' ');
+    return partes[0] || '';
+  }
 
-    if (!perfil) {
-      perfil = {
+  function extraerApellidoMaterno(apellidos) {
+    if (!apellidos) return '';
+    const partes = apellidos.trim().split(' ');
+    return partes.length > 1 ? partes.slice(1).join(' ') : '';
+  }
+
+  /* === FUNCIONES PARA DATOS DEL USUARIO CON BACKEND === */
+  async function obtenerDatosUsuario() {
+    const requestOptions = {
+      method: "GET",
+      redirect: "follow"
+    };
+
+    try {
+      const response = await fetch("http://jft314.ddns.net:8080/nso/api/v1/nso/user/all", requestOptions);
+      if (!response.ok) throw new Error('Error al obtener datos de usuario');
+      const data = await response.json();
+
+      const usuarioActivoJSON = localStorage.getItem(USUARIO_ACTIVO_KEY);
+      const usuarioActivo = usuarioActivoJSON ? JSON.parse(usuarioActivoJSON) : null;
+      const emailSesion = usuarioActivo ? usuarioActivo.email : null;
+
+      let usuario;
+      if (emailSesion) {
+        usuario = data.find(u => u.email.toLowerCase() === emailSesion.toLowerCase());
+      }
+      if (!usuario) {
+        usuario = data[0] || null;
+      }
+      if (!usuario) {
+        return {
+          nickname: '',
+          genero: '',
+          nombre: '',
+          apellidos: '',
+          telefono_fijo: '',
+          telefono_movil: '',
+          email: emailSesion || '',
+          foto: 'img/user1.png'
+        };
+      }
+
+      return {
+        nickname: usuario.nickname || '',
+        genero: mapGendersIdToGenero(usuario.gendersId),
+        nombre: usuario.firstName || '',
+        apellidos: usuario.lastName || '',
+        telefono_fijo: usuario.phone || '',
+        telefono_movil: usuario.mobile || '',
+        email: usuario.email || '',
+        foto: 'img/user1.png' // adapta si tienes foto en backend
+      };
+
+    } catch (error) {
+      console.error(error);
+      return {
         nickname: '',
         genero: '',
         nombre: '',
         apellidos: '',
         telefono_fijo: '',
         telefono_movil: '',
-        email: correoSesion,
+        email: '',
         foto: 'img/user1.png'
       };
-    } else {
-      perfil.email = correoSesion;
     }
-
-    localStorage.setItem(USUARIO_DATOS_KEY, JSON.stringify(perfil));
-
-    return perfil;
   }
 
-  function guardarDatosUsuario(datos) {
+  function guardarDatosUsuarioLocalStorage(datos) {
     localStorage.setItem(USUARIO_DATOS_KEY, JSON.stringify(datos));
   }
 
-  /* === FUNCIONES PARA DIRECCIÓN === */
-  function obtenerDatosDireccion() {
-    const datos = localStorage.getItem(DIRECCION_KEY);
-    return datos ? JSON.parse(datos) : { calle: '', colonia: '', estado: '', ciudad: '' };
-  }
-  function guardarDatosDireccion(datos) {
-    localStorage.setItem(DIRECCION_KEY, JSON.stringify(datos));
+  async function actualizarUsuario(datos) {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const raw = JSON.stringify({
+      gendersId: mapGeneroToGendersId(datos.genero),
+      firstName: datos.nombre,
+      lastName: datos.apellidos,
+      middleName: "", // Si lo manejas, agrega aquí
+      preferences: "", // Si tienes preferencias, adapata aquí
+      email: datos.email,
+      phone: datos.telefono_fijo,
+      mobile: datos.telefono_movil,
+      nickname: datos.nickname,
+      password: ""  // Maneja la contraseña si es necesario
+    });
+
+    const requestOptions = {
+      method: "PUT",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow"
+    };
+
+    const response = await fetch("http://jft314.ddns.net:8080/nso/api/v1/nso/user/update", requestOptions);
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error('Error al actualizar usuario: ' + errorText);
+    }
+    return response.text();
   }
 
   /* === SECCIÓN 'MI CUENTA' === */
-  function cargarMiCuenta() {
-    const data = obtenerDatosUsuario();
-    fotoPerfil.src = data.foto || 'img/user1.png';
+  async function cargarMiCuenta() {
+    const data = await obtenerDatosUsuario();
+
+    guardarDatosUsuarioLocalStorage(data);
+
+    fotoPerfil.src = data.foto || 'img/user.webp';
 
     contenedorPerfil.innerHTML = `
       <h4 class="mb-4">EDITAR PERFIL</h4>
@@ -153,10 +243,17 @@ document.addEventListener('DOMContentLoaded', () => {
             <input type="text" class="form-control" id="input-nombre" value="${data.nombre}" placeholder="Tu nombre completo" required>
             <div class="invalid-feedback">Por favor ingresa tu nombre.</div>
           </div>
+
           <div class="col-md-6">
-            <label for="input-apellidos" class="form-label">Apellidos</label>
-            <input type="text" class="form-control" id="input-apellidos" value="${data.apellidos}" placeholder="Tus apellidos" required>
-            <div class="invalid-feedback">Por favor ingresa tus apellidos.</div>
+            <label for="input-apellido-paterno" class="form-label">Apellido paterno</label>
+            <input type="text" class="form-control" id="input-apellido-paterno" value="${extraerApellidoPaterno(data.apellidos)}" placeholder="Apellido paterno" required>
+            <div class="invalid-feedback">Por favor ingresa tu apellido paterno.</div>
+          </div>
+
+          <div class="col-md-6">
+            <label for="input-apellido-materno" class="form-label">Apellido materno</label>
+            <input type="text" class="form-control" id="input-apellido-materno" value="${extraerApellidoMaterno(data.apellidos)}" placeholder="Apellido materno" required>
+            <div class="invalid-feedback">Por favor ingresa tu apellido materno.</div>
           </div>
 
           <div class="col-md-6">
@@ -182,7 +279,7 @@ document.addEventListener('DOMContentLoaded', () => {
       </form>
     `;
 
-    document.getElementById('form-editar').addEventListener('submit', e => {
+    document.getElementById('form-editar').addEventListener('submit', async e => {
       e.preventDefault();
       const form = e.target;
       if (!form.checkValidity()) {
@@ -191,19 +288,28 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      const datos = {
+      const apellidosPaterno = form.querySelector('#input-apellido-paterno').value.trim();
+      const apellidosMaterno = form.querySelector('#input-apellido-materno').value.trim();
+
+      const datosActualizados = {
         nickname: form.querySelector('#input-nickname').value.trim(),
         genero: form.querySelector('#input-genero').value,
         nombre: form.querySelector('#input-nombre').value.trim(),
-        apellidos: form.querySelector('#input-apellidos').value.trim(),
+        apellidos: `${apellidosPaterno} ${apellidosMaterno}`.trim(),
         telefono_fijo: form.querySelector('#input-telefono').value.trim(),
         telefono_movil: form.querySelector('#input-movil').value.trim(),
         email: form.querySelector('#input-email').value.trim(),
         foto: fotoPerfil.src
       };
 
-      guardarDatosUsuario(datos);
-      alertify.success('Datos guardados correctamente');
+      try {
+        await actualizarUsuario(datosActualizados);
+        guardarDatosUsuarioLocalStorage(datosActualizados);
+        alertify.success('Datos guardados correctamente');
+      } catch (error) {
+        console.error(error);
+        alertify.error('Error al guardar datos, intenta nuevamente');
+      }
     });
   }
 
@@ -224,9 +330,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const reader = new FileReader();
       reader.onload = e => {
         fotoPerfil.src = e.target.result;
-        const datos = obtenerDatosUsuario();
+        const datos = JSON.parse(localStorage.getItem(USUARIO_DATOS_KEY)) || {};
         datos.foto = e.target.result;
-        guardarDatosUsuario(datos);
+        guardarDatosUsuarioLocalStorage(datos);
         alertify.success('Foto actualizada');
       };
       reader.readAsDataURL(file);
@@ -355,6 +461,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* === SECCIÓN 'DIRECCIÓN' === */
+  function obtenerDatosDireccion() {
+    const datos = localStorage.getItem(DIRECCION_KEY);
+    return datos ? JSON.parse(datos) : { calle: '', colonia: '', estado: '', ciudad: '' };
+  }
+  function guardarDatosDireccion(datos) {
+    localStorage.setItem(DIRECCION_KEY, JSON.stringify(datos));
+  }
+
   function cargarDireccion() {
     const data = obtenerDatosDireccion();
 
