@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', () => {
   /* === CONSTANTES - LLAVES LOCALSTORAGE === */
   const USUARIO_ACTIVO_KEY = 'usuarioActivo';
   const USUARIO_DATOS_KEY = 'perfil_usuario';
-  const DIRECCION_KEY = 'perfil_direccion';
   const CARRITO_KEY = 'carrito';
 
   /* === ELEMENTOS DEL DOM === */
@@ -128,23 +127,11 @@ document.addEventListener('DOMContentLoaded', () => {
         usuario = data[0] || null;
       }
       if (!usuario) {
-        return {
-          id: null,
-          created: null,
-          nickname: '',
-          genero: '',
-          nombre: '',
-          apellidoPaterno: '',
-          apellidoMaterno: '',
-          telefono_fijo: '',
-          telefono_movil: '',
-          email: emailSesion || '',
-          foto: 'img/user.webp',
-          preferences: ''
-        };
+        return null; // No hay usuario encontrado
       }
 
-      return {
+      // Guardar datos en localStorage
+      const datosUsuario = {
         id: usuario.id || null,
         created: usuario.created || null,
         nickname: usuario.nickname || '',
@@ -158,23 +145,13 @@ document.addEventListener('DOMContentLoaded', () => {
         foto: 'img/user.webp',
         preferences: usuario.preferences || ''
       };
+      guardarDatosUsuarioLocalStorage(datosUsuario);
+
+      return datosUsuario;
 
     } catch (error) {
       console.error(error);
-      return {
-        id: null,
-        created: null,
-        nickname: '',
-        genero: '',
-        nombre: '',
-        apellidoPaterno: '',
-        apellidoMaterno: '',
-        telefono_fijo: '',
-        telefono_movil: '',
-        email: '',
-        foto: 'img/user.webp',
-        preferences: ''
-      };
+      return null;
     }
   }
 
@@ -182,13 +159,16 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem(USUARIO_DATOS_KEY, JSON.stringify(datos));
   }
 
+  /**
+   * Actualiza usuario enviando contraseña nueva si existe,
+   * si la contraseña nueva está vacía, se omite el campo para mantener la actual en backend.
+   */
   async function actualizarUsuario(datos) {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
-    const password = (datos.password && datos.password.trim() !== '') ? datos.password.trim() : "";
+    const passwordNueva = (datos.password && datos.password.trim() !== '') ? datos.password.trim() : null;
 
-    // Prepara objeto a enviar, omitiendo password si está vacío
     const payload = {
       id: datos.id,
       gendersId: mapGeneroToGendersId(datos.genero),
@@ -202,8 +182,8 @@ document.addEventListener('DOMContentLoaded', () => {
       nickname: datos.nickname,
       created: datos.created
     };
-    if (password !== "") {
-      payload.password = password;
+    if (passwordNueva) {
+      payload.password = passwordNueva;
     }
 
     const raw = JSON.stringify(payload);
@@ -227,7 +207,10 @@ document.addEventListener('DOMContentLoaded', () => {
   async function cargarMiCuenta() {
     const data = await obtenerDatosUsuario();
 
-    guardarDatosUsuarioLocalStorage(data);
+    if (!data) {
+      contenedorPerfil.innerHTML = `<p class="text-danger">No se pudo obtener información del usuario.</p>`;
+      return;
+    }
 
     fotoPerfil.src = data.foto || 'img/user.webp';
 
@@ -292,7 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="col-md-6 position-relative">
             <label for="input-password" class="form-label">Nueva contraseña (opcional)</label>
             <div class="input-group">
-              <input type="password" class="form-control" id="input-password" placeholder="Si quieres cambiar la contraseña" aria-describedby="togglePassword">
+              <input type="password" class="form-control" id="input-password" placeholder="Cambiar la contraseña" aria-describedby="togglePassword">
               <button type="button" class="btn btn-outline-secondary" id="togglePassword" aria-label="Mostrar contraseña">
                 <i class="bi bi-eye"></i>
               </button>
@@ -347,10 +330,10 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      const password = inputPassword.value.trim();
+      const passwordNueva = inputPassword.value.trim();
       const confirmPassword = inputConfirmPassword.value.trim();
 
-      if (password !== '' && password !== confirmPassword) {
+      if (passwordNueva !== '' && passwordNueva !== confirmPassword) {
         alertify.error('Las contraseñas no coinciden.');
         inputConfirmPassword.focus();
         return;
@@ -370,8 +353,7 @@ document.addEventListener('DOMContentLoaded', () => {
         telefono_movil: formEditar.querySelector('#input-movil').value.trim(),
         email: formEditar.querySelector('#input-email').value.trim(),
         preferences: formEditar.querySelector('#input-preferences').value.trim(),
-        ...(password !== '' && { password }),
-        foto: fotoPerfil.src
+        password: passwordNueva
       };
 
       try {
@@ -381,7 +363,6 @@ document.addEventListener('DOMContentLoaded', () => {
         delete toSave.password;
         guardarDatosUsuarioLocalStorage(toSave);
 
-        // Mostrar popup Cambios realizados
         const popupCambios = document.getElementById('popupCambios');
         popupCambios.showModal();
 
@@ -394,7 +375,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* === SECCIÓN 'MIS PEDIDOS' === */
   function cargarMisPedidos() {
-    // Tu código para cargar pedidos (igual al anterior)
     let carrito = JSON.parse(localStorage.getItem(CARRITO_KEY)) || [];
     if (carrito.length === 0) {
       contenedorPerfil.innerHTML = `<p class='text-muted'>No tienes pedidos recientes.</p>`;
@@ -465,7 +445,6 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     `;
 
-    // Funciones para actualizar carrito y eventos botones
     function guardarYCargar() {
       localStorage.setItem(CARRITO_KEY, JSON.stringify(carrito));
       cargarMisPedidos();
@@ -515,65 +494,56 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  /* === SECCIÓN 'DIRECCIÓN' === */
-  function obtenerDatosDireccion() {
-    const datos = localStorage.getItem(DIRECCION_KEY);
-    return datos ? JSON.parse(datos) : { calle: '', colonia: '', estado: '', ciudad: '' };
-  }
-  function guardarDatosDireccion(datos) {
-    localStorage.setItem(DIRECCION_KEY, JSON.stringify(datos));
+  /* === FUNCIONES PARA MOSTRAR DIRECCIÓN SOLO LECTURA DESDE BACKEND === */
+  async function obtenerDireccionUsuarioPorIdUser(idUser) {
+    const requestOptions = {
+      method: "GET",
+      redirect: "follow"
+    };
+
+    try {
+      const response = await fetch("http://jft314.ddns.net:8080/nso/api/v1/nso/address/all", requestOptions);
+      if (!response.ok) throw new Error('Error al obtener direcciones');
+      const resultText = await response.text();
+      const direcciones = JSON.parse(resultText);
+
+      // Filtrar para la dirección asociada al usuario activo
+      const direccion = direcciones.find(dir => dir.idUser === idUser);
+
+      return direccion || null;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
   }
 
-  function cargarDireccion() {
-    const data = obtenerDatosDireccion();
+  async function cargarDireccion() {
+    const datosUsuario = await obtenerDatosUsuario();
+
+    if (!datosUsuario || !datosUsuario.id) {
+      contenedorPerfil.innerHTML = `<p class="text-danger">No se encontró usuario activo.</p>`;
+      return;
+    }
+
+    const direccion = await obtenerDireccionUsuarioPorIdUser(datosUsuario.id);
+
+    if (!direccion) {
+      contenedorPerfil.innerHTML = `<p class="text-muted">No se encontró información de dirección para este usuario.</p>`;
+      return;
+    }
 
     contenedorPerfil.innerHTML = `
-      <h4 class="mb-4">Editar Dirección</h4>
-      <form id="form-direccion" novalidate>
-        <div class="mb-3">
-          <label for="input-calle" class="form-label">Calle</label>
-          <input type="text" class="form-control" id="input-calle" value="${data.calle}" required>
-          <div class="invalid-feedback">Por favor ingresa la calle.</div>
-        </div>
-        <div class="mb-3">
-          <label for="input-colonia" class="form-label">Colonia</label>
-          <input type="text" class="form-control" id="input-colonia" value="${data.colonia}" required>
-          <div class="invalid-feedback">Por favor ingresa la colonia.</div>
-        </div>
-        <div class="mb-3">
-          <label for="input-ciudad" class="form-label">Ciudad/Municipio</label>
-          <input type="text" class="form-control" id="input-ciudad" value="${data.ciudad}" required>
-          <div class="invalid-feedback">Por favor ingresa la ciudad o municipio.</div>
-        </div>
-        <div class="mb-3">
-          <label for="input-estado" class="form-label">Estado</label>
-          <input type="text" class="form-control" id="input-estado" value="${data.estado}" required>
-          <div class="invalid-feedback">Por favor ingresa el estado.</div>
-        </div>
-        <button type="submit" class="btn btn-primary" id="btn-guardar-direccion">Guardar Dirección</button>
-      </form>
+      <h4 class="mb-4">Dirección Registrada</h4>
+      <div class="card p-3 bg-light">
+        <p><strong>Calle / Nombre:</strong> ${direccion.name || '-'}</p>
+        <p><strong>Número:</strong> ${direccion.number || '-'}</p>
+        <p><strong>Código Postal:</strong> ${direccion.cpCode || '-'}</p>
+        <p><strong>Ciudad:</strong> ${direccion.city || '-'}</p>
+        <p><strong>Estado:</strong> ${direccion.state || '-'}</p>
+        <p><strong>Tipo Dirección:</strong> ${direccion.type || direccion.typeId || '-'}</p>
+        <p><strong>Dirección Completa:</strong> ${direccion.fullAddress || '-'}</p>
+      </div>
     `;
-
-    const formDireccion = document.getElementById('form-direccion');
-    formDireccion.addEventListener('submit', e => {
-      e.preventDefault();
-
-      if (!formDireccion.checkValidity()) {
-        formDireccion.classList.add('was-validated');
-        alertify.error('Por favor, completa todos los campos correctamente.');
-        return;
-      }
-
-      const datosDireccion = {
-        calle: formDireccion.querySelector('#input-calle').value.trim(),
-        colonia: formDireccion.querySelector('#input-colonia').value.trim(),
-        ciudad: formDireccion.querySelector('#input-ciudad').value.trim(),
-        estado: formDireccion.querySelector('#input-estado').value.trim()
-      };
-
-      guardarDatosDireccion(datosDireccion);
-      alertify.success('Dirección guardada correctamente');
-    });
   }
 
   /* === MAPEO DE SECCIONES === */
