@@ -1,28 +1,44 @@
-function cargarHeader() {
-  return fetch('/header-footer/header.html')
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById('header-container').innerHTML = data;
+// /header-footer/header-footer.js
+(function () {
+  const HEADER_URL = "/header-footer/header.html";
+  const FOOTER_URL = "/header-footer/footer.html";
+  const SESSION_JS = "/Login/session.js";
 
-      // Cargar session.js y luego llamar manejarSesion
-      const script = document.createElement('script');
-      script.src = '/Login/session.js';
-      script.onload = () => {
-        manejarSesion();
-      };
-      document.body.appendChild(script);
-    });
-}
+  function ensureSessionLoaded(cb) {
+    if (typeof window.manejarSesion === "function") {
+      cb && cb();
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = SESSION_JS;
+    script.onload = () => cb && cb();
+    document.body.appendChild(script);
+  }
 
-function cargarFooter() {
-  return fetch('/header-footer/footer.html')
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById('footer-container').innerHTML = data;
-    });
-}
+  window.cargarHeader = function () {
+    return fetch(HEADER_URL)
+      .then(r => r.text())
+      .then(html => {
+        const el = document.getElementById("header-container");
+        if (el) el.innerHTML = html;
+        ensureSessionLoaded(() => {
+          if (typeof window.manejarSesion === "function") window.manejarSesion();
+        });
+      });
+  };
 
-document.addEventListener('DOMContentLoaded', () => {
-  cargarHeader();
-  cargarFooter();
-});
+  window.cargarFooter = function () {
+    return fetch(FOOTER_URL)
+      .then(r => r.text())
+      .then(html => {
+        const el = document.getElementById("footer-container");
+        if (el) el.innerHTML = html;
+      });
+  };
+
+  document.addEventListener("DOMContentLoaded", () => {
+    // Llama a estas funciones en cada página que incluya este archivo
+    cargarHeader();
+    cargarFooter();
+  });
+})();

@@ -1,51 +1,30 @@
-// /registroproductos/registrar-productos.js
 (() => {
-  // =========================
-  // CONFIG: ENDPOINTS BACKEND
-  // =========================
   const API_BASE = "http://jft314.ddns.net:8080/nso/api/v1/nso";
 
-  // Catálogos (ProductsEndPoints.*)
   const EP_LOOKUP_BRANDS  = `${API_BASE}/product/lookup/brands`;
   const EP_LOOKUP_COLORS  = `${API_BASE}/product/lookup/colors_products`;
   const EP_LOOKUP_SIZES   = `${API_BASE}/product/lookup/sizes`;
   const EP_LOOKUP_STATUS  = `${API_BASE}/product/lookup/status`;
 
-  // Usuarios (para resolver id_user)
-  const EP_USERS_ALL      = `${API_BASE}/nso/user/all`;
-
-  // Producto  ✅ sin doble /nso
   const EP_SAVE_PRODUCT   = `${API_BASE}/product/save`;
   const EP_ADD_IMAGE      = `${API_BASE}/product/add/image`;
 
-  // =========================
-  // CACHES PARA VALIDACIÓN
-  // =========================
-  const CATALOG_CACHE = {
-    brands: [],
-    colors: [],
-    sizes:  [],
-    status: [],
-    users:  []
-  };
+  // Si sospechas de unicidad en 'model', pon esto en true para añadir -timestamp
+  const USE_UNIQUE_MODEL_SUFFIX = true;
 
-  // =========================
-  // HELPERS GENERALES
-  // =========================
+  const CATALOG_CACHE = { brands: [], colors: [], sizes: [], status: [] };
 
-  // Fetch tolerante a 204/no-JSON y con diagnóstico
   async function safeJsonFetch(url, options = {}) {
     const res = await fetch(url, { ...options, mode: "cors" });
+    const text = await res.text().catch(() => "");
     if (!res.ok) {
-      const text = await res.text().catch(() => "");
+      // Incluye el cuerpo devuelto por el backend para que veas el motivo exacto
       throw new Error(`HTTP ${res.status} - ${url} - ${text}`);
     }
-    if (res.status === 204) return []; // No Content -> arreglo vacío
-    try { return await res.json(); }
-    catch { return await res.text(); }  // por si el backend devuelve texto
+    if (!text) return [];
+    try { return JSON.parse(text); } catch { return text; }
   }
 
-  // Limpia y agrega un placeholder
   function resetAndPlaceholder(selectEl, placeholder) {
     if (!selectEl) return;
     selectEl.innerHTML = "";
@@ -55,7 +34,6 @@
     selectEl.appendChild(opt);
   }
 
-  // Rellena un <select> con items[{valueKey,labelKey}]
   function populateSelect(selectEl, items, { valueKey = "id", labelKey = "name" } = {}) {
     if (!selectEl || !Array.isArray(items)) return;
     const frag = document.createDocumentFragment();
@@ -68,7 +46,6 @@
     selectEl.appendChild(frag);
   }
 
-  // Normaliza las respuestas de catálogos aunque el backend cambie la forma
   function normalizeArray(raw) {
     if (Array.isArray(raw)) return raw;
     if (raw && typeof raw === "object") {
@@ -81,17 +58,14 @@
     return [];
   }
 
-  // Intenta seleccionar una etiqueta “humana” si no existe `name`
   function guessLabel(obj) {
     if (!obj || typeof obj !== "object") return "";
-    const keysByPriority = ["name","nombre","label","value","brand","status","size","description","title"];
-    for (const k of keysByPriority) if (obj[k]) return obj[k];
-
+    const keys = ["name","nombre","label","value","brand","status","size","description","title"];
+    for (const k of keys) if (obj[k]) return obj[k];
     const hex = obj.hex || obj.hex_code || obj.hexCode || obj.hexadecimal || obj.hexColor;
     if (obj.colorName && hex) return `${obj.colorName} (${hex})`;
     if (obj.color && hex)     return `${obj.color} (${hex})`;
     if (hex)                  return hex;
-
     for (const k of Object.keys(obj)) {
       const v = obj[k];
       if (typeof v === "string" && v.trim()) return v;
@@ -99,7 +73,6 @@
     return String(obj.id ?? "");
   }
 
-  // Carga y normaliza catálogos
   async function precargarCatalogos() {
     const [brandsRaw, colorsRaw, sizesRaw, statusRaw] = await Promise.all([
       safeJsonFetch(EP_LOOKUP_BRANDS),
@@ -108,32 +81,11 @@
       safeJsonFetch(EP_LOOKUP_STATUS),
     ]);
 
-    const brands = normalizeArray(brandsRaw).map(o => ({
-      id:   o.id ?? o.id_brand ?? o.brandId ?? o.value,
-      name: guessLabel(o),
-      raw:  o
-    }));
+    const brands = normalizeArray(brandsRaw).map(o => ({ id: o.id ?? o.id_brand ?? o.brandId ?? o.value, name: guessLabel(o), raw: o }));
+    const colors = normalizeArray(colorsRaw).map(o => ({ id: o.id ?? o.id_color ?? o.colorId ?? o.value, name: guessLabel(o), hex: o.hex || o.hex_code || o.hexCode || o.hexadecimal || null, raw: o }));
+    const sizes  = normalizeArray(sizesRaw).map(o => ({ id: o.id ?? o.id_size  ?? o.sizeId  ?? o.value, name: guessLabel(o), raw: o }));
+    const status = normalizeArray(statusRaw).map(o => ({ id: o.id ?? o.id_status?? o.statusId?? o.value, name: guessLabel(o), raw: o }));
 
-    const colors = normalizeArray(colorsRaw).map(o => ({
-      id:   o.id ?? o.id_color ?? o.colorId ?? o.value,
-      name: guessLabel(o),
-      hex:  o.hex || o.hex_code || o.hexCode || o.hexadecimal || null,
-      raw:  o
-    }));
-
-    const sizes = normalizeArray(sizesRaw).map(o => ({
-      id:   o.id ?? o.id_size ?? o.sizeId ?? o.value,
-      name: guessLabel(o),
-      raw:  o
-    }));
-
-    const status = normalizeArray(statusRaw).map(o => ({
-      id:   o.id ?? o.id_status ?? o.statusId ?? o.value,
-      name: guessLabel(o),
-      raw:  o
-    }));
-
-    // Diagnóstico visible en consola
     console.group("[Catálogos registrar productos]");
     console.log("Brands:", brands);
     console.log("Colors:", colors);
@@ -144,35 +96,25 @@
     return { brands, colors, sizes, status };
   }
 
-  // Obtiene id_user de localStorage o del backend
-  async function getActiveUserId() {
+  function getActiveUserIdFromSessionOrRedirect() {
     try {
-      const u = JSON.parse(localStorage.getItem("usuarioActivo"));
-      if (u?.id) return u.id;
-
-      if (u?.email) {
-        const users = await safeJsonFetch(EP_USERS_ALL);
-        const found = (users || []).find(x => (x.email || "").toLowerCase() === u.email.toLowerCase());
-        if (found?.id) return found.id;
+      const raw = localStorage.getItem("usuarioActivo");
+      const u = raw ? JSON.parse(raw) : null;
+      if (u && Number.isInteger(Number(u.id)) && Number(u.id) > 0) {
+        return Number(u.id);
       }
     } catch {}
-    const users = await safeJsonFetch(EP_USERS_ALL);
-    if (Array.isArray(users) && users[0]?.id) return users[0].id;
-
-    throw new Error("No hay un usuario válido para asociar el producto (id_user).");
+    alert("Tu sesión expiró o no hay usuario activo. Por favor inicia sesión.");
+    window.location.href = "/Login/login.html";
+    throw new Error("Sin sesión: redirigiendo a login");
   }
 
-  // =========================
-  // VALIDACIONES PRE-POST
-  // =========================
   function existsId(arr, id) {
     id = Number(id);
     return Array.isArray(arr) && arr.some(x => Number(x.id) === id);
   }
-
-  function validateBeforePost({ id_user, id_brand, id_color, id_size, id_status }) {
+  function validateBeforePost({ id_brand, id_color, id_size, id_status }) {
     const missing = [];
-    if (!existsId(CATALOG_CACHE.users,  id_user))   missing.push("Usuario (id_user)");
     if (!existsId(CATALOG_CACHE.brands, id_brand))  missing.push("Marca (id_brand)");
     if (!existsId(CATALOG_CACHE.colors, id_color))  missing.push("Color (id_color)");
     if (!existsId(CATALOG_CACHE.sizes,  id_size))   missing.push("Talla (id_size)");
@@ -180,11 +122,7 @@
     return missing;
   }
 
-  // =========================
-  // ARRANQUE DE LA PANTALLA
-  // =========================
   document.addEventListener("DOMContentLoaded", async () => {
-    // Referencias al DOM
     const form          = document.getElementById("formularioRegistro");
     const btnPublicar   = document.getElementById("btn-publicar");
     const nombre        = document.getElementById("nombre");
@@ -197,37 +135,23 @@
     const selEstado     = document.getElementById("estado");
     const inputImagen   = document.getElementById("imagen");
 
-    // Asegura que los selects estén habilitados
-    [selMarca, selColor, selTalla, selEstado].forEach(s => {
-      if (!s) return;
-      s.disabled = false;
-      s.style.pointerEvents = "auto";
-    });
+    [selMarca, selColor, selTalla, selEstado].forEach(s => { if (s) { s.disabled = false; s.style.pointerEvents = "auto"; } });
 
-    // Desactiva botón mientras se cargan catálogos
     const originalBtnText = btnPublicar?.textContent || "PUBLICAR";
-    if (btnPublicar) {
-      btnPublicar.disabled = true;
-      btnPublicar.textContent = "Cargando catálogos...";
-    }
+    if (btnPublicar) { btnPublicar.disabled = true; btnPublicar.textContent = "Cargando catálogos..."; }
 
     try {
-      // 1) Cargar catálogos
       const { brands, colors, sizes, status } = await precargarCatalogos();
-
-      // Guarda en caché para validaciones
       CATALOG_CACHE.brands = brands;
       CATALOG_CACHE.colors = colors;
       CATALOG_CACHE.sizes  = sizes;
       CATALOG_CACHE.status = status;
 
-      // 2) Placeholders
       resetAndPlaceholder(selMarca,  "Marca");
       resetAndPlaceholder(selColor,  "Color");
       resetAndPlaceholder(selTalla,  "Talla");
       resetAndPlaceholder(selEstado, "Estado");
 
-      // 3) Popular selects
       populateSelect(selMarca,  brands, { valueKey: "id", labelKey: "name" });
       populateSelect(selTalla,  sizes,  { valueKey: "id", labelKey: "name" });
       populateSelect(selEstado, status, { valueKey: "id", labelKey: "name" });
@@ -243,45 +167,13 @@
         selColor.appendChild(frag);
       }
 
-      // 4) Aviso si algo llegó vacío (ayuda a detectar rápido)
-      const vacios = [];
-      if (!brands.length) vacios.push("Marcas");
-      if (!colors.length) vacios.push("Colores");
-      if (!sizes.length)  vacios.push("Tallas");
-      if (!status.length) vacios.push("Estados");
-      if (vacios.length) {
-        console.warn("Catálogos vacíos:", vacios.join(", "));
-        const alert = document.createElement("div");
-        alert.className = "alert alert-warning mt-2";
-        alert.textContent = `Atención: no se recibieron datos para ${vacios.join(", ")}. Revisa los endpoints y la consola.`;
-        document.querySelector(".form-container")?.prepend(alert);
-      }
-
-      // 5) Carga usuarios para validar id_user
-      try {
-        const users = await safeJsonFetch(EP_USERS_ALL);
-        CATALOG_CACHE.users = Array.isArray(users) ? users.map(u => ({
-          id: u.id ?? u.userId ?? u.value,
-          email: u.email ?? u.mail ?? null
-        })) : [];
-      } catch (e) {
-        console.warn("No se pudieron cargar usuarios para validación de id_user:", e);
-      }
-
-      // 6) Rehabilita botón
-      if (btnPublicar) {
-        btnPublicar.disabled = false;
-        btnPublicar.textContent = originalBtnText;
-      }
+      if (btnPublicar) { btnPublicar.disabled = false; btnPublicar.textContent = originalBtnText; }
     } catch (err) {
       console.error(err);
       alert("No se pudieron cargar los catálogos. Revisa consola/Network y vuelve a intentar.");
       return;
     }
 
-    // =========================
-    // SUBMIT: REGISTRAR PRODUCTO
-    // =========================
     form?.addEventListener("submit", async (e) => {
       e.preventDefault();
 
@@ -290,57 +182,68 @@
       const descripcionVal = (descripcion?.value || "").trim();
       const precioVal = Number(precio?.value);
 
-      if (!nombreVal || !modeloVal) {
-        alert("Nombre y modelo son obligatorios.");
-        return;
-      }
-      if (!precioVal || isNaN(precioVal) || precioVal <= 0) {
-        alert("Precio inválido.");
-        return;
+      if (!nombreVal || !modeloVal) { alert("Nombre y modelo son obligatorios."); return; }
+      if (!precioVal || isNaN(precioVal) || precioVal <= 0 || precioVal > 999999.99) {
+        alert("Precio inválido. Debe ser > 0 y ≤ 999,999.99."); return;
       }
       if (!selMarca?.value || !selColor?.value || !selTalla?.value || !selEstado?.value) {
-        alert("Selecciona marca, color, talla y estado.");
-        return;
+        alert("Selecciona marca, color, talla y estado."); return;
       }
 
-      if (btnPublicar) {
-        btnPublicar.disabled = true;
-        btnPublicar.textContent = "PUBLICANDO...";
-      }
+      if (btnPublicar) { btnPublicar.disabled = true; btnPublicar.textContent = "PUBLICANDO..."; }
 
+      let payload; // visible en catch
       try {
-        // id_user real (localStorage o backend)
-        const id_user = await getActiveUserId();
+        const id_user = getActiveUserIdFromSessionOrRedirect();
 
-        // Payload con IDs que espera tu BD
-        const payload = {
-          id_user,
+        // IDs FK en snake_case
+        const fkSnake = {
+          id_user:  id_user,
           id_status: Number(selEstado.value),
           id_size:   Number(selTalla.value),
           id_brand:  Number(selMarca.value),
           id_color:  Number(selColor.value),
+        };
+        // Mismo contenido en camelCase (por si la entidad Java usa idUser, etc.)
+        const fkCamel = {
+          idUser:   fkSnake.id_user,
+          idStatus: fkSnake.id_status,
+          idSize:   fkSnake.id_size,
+          idBrand:  fkSnake.id_brand,
+          idColor:  fkSnake.id_color,
+        };
+
+        payload = {
+          ...fkSnake,
+          ...fkCamel,
           name: nombreVal,
-          model: modeloVal,
+          model: USE_UNIQUE_MODEL_SUFFIX ? `${modeloVal}-${Date.now()}` : modeloVal,
           description: descripcionVal || "Sin descripción",
           details: "-",
           price: precioVal
         };
 
-        // DEBUG: mira exactamente lo que envías
         console.table(payload);
 
-        // Validación previa a POST: existen los IDs referenciados?
-        const missing = validateBeforePost(payload);
+        const missing = validateBeforePost(fkSnake);
         if (missing.length) {
-          alert(
-            "No se puede registrar porque faltan/son inválidas las referencias:\n- " +
-            missing.join("\n- ") +
-            "\n\nVerifica que los catálogos y usuarios contengan esos IDs."
-          );
+          alert("No se puede registrar porque faltan/son inválidas las referencias:\n- " + missing.join("\n- "));
           return;
         }
 
-        // 1) Guardar producto
+        // Double-check de FK elegidas
+        const fkCheck = {
+          brand:  CATALOG_CACHE.brands.find(x => Number(x.id) === fkSnake.id_brand),
+          color:  CATALOG_CACHE.colors.find(x => Number(x.id) === fkSnake.id_color),
+          size:   CATALOG_CACHE.sizes.find(x => Number(x.id) === fkSnake.id_size),
+          status: CATALOG_CACHE.status.find(x => Number(x.id) === fkSnake.id_status),
+        };
+        console.log("FK elegidas:", { id_user, ...fkCheck });
+        if (!fkCheck.brand || !fkCheck.color || !fkCheck.size || !fkCheck.status) {
+          alert("Alguna FK seleccionada ya no existe en los catálogos. Actualiza la página y vuelve a intentar.");
+          return;
+        }
+
         const productSaved = await safeJsonFetch(EP_SAVE_PRODUCT, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -353,43 +256,36 @@
           return;
         }
 
-        // 2) (Opcional) Subir imagen
+        // Subir imagen si corresponde
         if (inputImagen?.files?.length) {
           const fd = new FormData();
           fd.append("file", inputImagen.files[0]);
           fd.append("id", productSaved.id);
-
-          await safeJsonFetch(EP_ADD_IMAGE, {
-            method: "POST",
-            body: fd
-          });
+          await safeJsonFetch(EP_ADD_IMAGE, { method: "POST", body: fd });
         }
 
         alert("Producto publicado correctamente.");
         form.reset();
       } catch (err) {
         console.error(err);
-
-        // Mapea el 409 a mensajes útiles
+        // Aquí verás el motivo exacto si tu backend lo envía en el body del 409
         if (String(err.message).startsWith("HTTP 409")) {
           alert(
             "No se pudo guardar (409 - Conflicto).\n\n" +
-            "Posibles causas:\n" +
-            "• Alguna clave foránea no existe (id_user, id_brand, id_color, id_size, id_status).\n" +
-            "• El campo 'model' u otro tiene restricción de único y ya existe.\n\n" +
-            "Revisa:\n" +
-            "1) Que los selects se hayan llenado desde tus lookups.\n" +
-            "2) Que el usuario activo (id_user=" + (window?.payload?.id_user || '¿?') + ") exista en la BD.\n" +
-            "3) Prueba con un 'model' distinto por si hay restricción UNIQUE."
+            "Causas típicas:\n" +
+            "• Alguna FK no existe (users, brands, colors_products, sizes, status).\n" +
+            "• Algún campo llegó NULL/0 porque el nombre no coincidió con lo que espera la entidad Java.\n" +
+            "• (Menos probable) Unicidad en 'model'.\n\n" +
+            `Envié id_user=${payload?.id_user}, id_brand=${payload?.id_brand}, id_color=${payload?.id_color}, id_size=${payload?.id_size}, id_status=${payload?.id_status}.\n` +
+            "Revisa la pestaña Network → Response del 409 para ver el detalle que devolvió el backend."
           );
+        } else if (err.message.includes("Sin sesión")) {
+          // ya redirigimos
         } else {
           alert(`Error al registrar producto: ${err.message}`);
         }
       } finally {
-        if (btnPublicar) {
-          btnPublicar.disabled = false;
-          btnPublicar.textContent = originalBtnText;
-        }
+        if (btnPublicar) { btnPublicar.disabled = false; btnPublicar.textContent = originalBtnText; }
       }
     });
   });
