@@ -43,11 +43,11 @@ function crearTarjetaProducto(item, index) {
   const imagenesHtml = (imagenes && imagenes.length > 0)
     ? imagenes.map((img, i) => `
         <div class="carousel-item${i === 0 ? ' active' : ''}">
-          <img src="${img.url}" class="d-block w-100" alt="${producto.name}">
+          <img src="${img.url}" class="d-block w-100 card-img-fixed" alt="${producto.name}">
         </div>
       `).join('')
     : `<div class="carousel-item active">
-         <img class="d-block w-100" alt="${producto.name}">
+         <img class="d-block w-100 card-img-fixed" alt="${producto.name}">
        </div>`;
   return `
     <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex align-items-stretch">
@@ -232,19 +232,34 @@ function verDetalles(index) {
 }
 
 // -- POP UP -- \\
-function crearPopUpUniversal(cantidad, producto, talla){
+function crearPopUpUniversal(cantidad, producto, talla = null, mensaje = null) {
   const contenedor = document.getElementById('PopUp-Universal');
+  // Elimina cualquier popup anterior
+  contenedor.innerHTML = '';
+  // Mensaje por defecto
+  const texto = mensaje || '¡Su producto ha sido añadido al carrito!';
+  // Info extra
+  let detalles = `<p class='mb-1'><b>${producto}</b></p>`;
+  if (talla) detalles += `<p class='mb-1'>Talla: <b>${talla}</b></p>`;
+  if (cantidad) detalles += `<p class='mb-2'>Cantidad: <b>${cantidad}</b></p>`;
 
-    contenedor.innerHTML = `
-        <div class="popup-Diseño" id="popup-registro">
-                <div class="popup-Diseño-Contenido">
-                    <p><b> Su Producto ha sido añadido al carrito </b> </p>
-                    <p>${producto}</p>
-                    <button onclick="cerrarPopupUniversal()">Seguir Comprando</button>
-                    <button onclick=window.location.href='/carrito/carrito.html'>Ir a carrito </button>
-                </div>
+  contenedor.innerHTML = `
+    <div class="popup-Diseño" id="popup-registro" role="dialog" aria-modal="true" tabindex="-1">
+      <div class="popup-Diseño-Contenido text-center">
+        <p class="fw-bold fs-5">${texto}</p>
+        ${detalles}
+        <div class="d-flex gap-2 justify-content-center mt-2">
+          <button class="btn-azul-custom" onclick="cerrarPopupUniversal()" autofocus>Seguir comprando</button>
+          <button class="btn-azul-custom" onclick="window.location.href='/carrito/carrito.html'">Ir a carrito</button>
         </div>
-      `;
+      </div>
+    </div>
+  `;
+  // Enfoca el popup para accesibilidad
+  setTimeout(() => {
+    const popup = document.getElementById('popup-registro');
+    if (popup) popup.focus();
+  }, 100);
 }
 
 function cerrarPopupUniversal() {
