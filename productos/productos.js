@@ -87,24 +87,9 @@ function cargarMarcasDesdeProductos() {
     select.innerHTML += `<option value="${marca}">${marca}</option>`;
   });
 }
-
-
-function cargarColoresDesdeProductos() {
-  const select = document.getElementById('filtroColor');
-  select.innerHTML = '<option value="">Todos</option>';
-  const coloresUnicos = [...new Set(productosGlobal.map(item => item.products && item.products.colorProduct).filter(Boolean))];
-  coloresUnicos.forEach(color => {
-    select.innerHTML += `<option value="${color}">${color}</option>`;
-  });
-}
-
-
-
-
-
 // --- NUEVA LÓGICA DE FILTRADO ÚNICO ---
 function limpiarSelectsMenos(idActivo) {
-  const ids = ['filtroEstado', 'filtroTalla', 'filtroMarca', 'filtroColor'];
+  const ids = ['filtroEstado', 'filtroTalla', 'filtroMarca'];
   ids.forEach(id => {
     if (id !== idActivo) {
       document.getElementById(id).selectedIndex = 0;
@@ -113,9 +98,18 @@ function limpiarSelectsMenos(idActivo) {
 }
 
 
+
 function filtroUnicoHandler(e) {
   const id = e.target.id;
-  limpiarSelectsMenos(id);
+  // Limpiar los otros selects
+  const ids = ['filtroEstado', 'filtroTalla', 'filtroMarca'];
+  ids.forEach(oid => {
+    if (oid !== id) {
+      document.getElementById(oid).selectedIndex = 0;
+    }
+  });
+  // Limpiar catálogo antes de mostrar nuevos productos
+  document.getElementById("catalogo-productos").innerHTML = "";
   let url = null;
   let valor = e.target.value;
   if (!valor) {
@@ -129,13 +123,11 @@ function filtroUnicoHandler(e) {
     return;
   }
   if (id === 'filtroEstado') {
-    url = `http://jft314.ddns.net:8080/api/v1/nso/product/filter/status/${encodeURIComponent(valor)}`;
+    url = `http://jft314.ddns.net:8080/nso/api/v1/nso/product/filter/status/${encodeURIComponent(valor)}`;
   } else if (id === 'filtroTalla') {
-    url = `http://jft314.ddns.net:8080/api/v1/nso/product/filter/size/${encodeURIComponent(valor)}`;
+    url = `http://jft314.ddns.net:8080/nso/api/v1/nso/product/filter/size/${encodeURIComponent(valor)}`;
   } else if (id === 'filtroMarca') {
-    url = `http://jft314.ddns.net:8080/api/v1/nso/product/filter/brand/${encodeURIComponent(valor)}`;
-  } else if (id === 'filtroColor') {
-    url = `http://jft314.ddns.net:8080/api/v1/nso/product/filter/color/${encodeURIComponent(valor)}`;
+    url = `http://jft314.ddns.net:8080/nso/api/v1/nso/product/filter/brand/${encodeURIComponent(valor)}`;
   }
   if (url) {
     fetch(url, requestOptions)
@@ -256,7 +248,8 @@ function cargarEstadosDesdeAPI() {
 document.getElementById('filtroEstado').addEventListener('change', filtroUnicoHandler);
 document.getElementById('filtroTalla').addEventListener('change', filtroUnicoHandler);
 document.getElementById('filtroMarca').addEventListener('change', filtroUnicoHandler);
-document.getElementById('filtroColor').addEventListener('change', filtroUnicoHandler);
+document.getElementById('filtroTalla').addEventListener('change', filtroUnicoHandler);
+document.getElementById('filtroMarca').addEventListener('change', filtroUnicoHandler);
 
 
 
@@ -270,5 +263,4 @@ fetch("http://jft314.ddns.net:8080/nso/api/v1/nso/product/all", requestOptions)
     cargarEstadosDesdeAPI();
     cargarTallasDesdeProductos();
     cargarMarcasDesdeProductos();
-    cargarColoresDesdeProductos();
   });
