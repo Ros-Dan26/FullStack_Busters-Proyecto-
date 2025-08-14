@@ -1,3 +1,6 @@
+
+-- Ultima version 13/08/25
+
 INSERT INTO genders(name) VALUES
 ('Hombre'),
 ('Mujer'),
@@ -141,23 +144,11 @@ INSERT INTO brands(name, url) VALUES
 ('Asics','https://images.seeklogo.com/logo-png/1/2/asics-logo-png_seeklogo-11906.png'),
 ('Converse','https://i.pinimg.com/736x/10/10/89/101089354f025274301e1d481cb0e5bb.jpg'),
 ('Vans','https://i.pinimg.com/originals/72/66/f4/7266f469571378b33575ea90da2c6b7d.jpg'),
-('Pirma','https://logodix.com/logo/268682.png');
+('Pirma','https://logodix.com/logo/268682.png'),
+('K-Swiss','https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/K-Swiss_logo_%282015%29.svg/1200px-K-Swiss_logo_%282015%29.svg.png'),
+('PANAM','https://adgoat-strapi-images-prod.s3.amazonaws.com/panam_2x_2_1_253e882b3a.png'),
+('Charly','https://logosandtypes.com/wp-content/uploads/2022/04/Charly.png');
 
-
-
-
-
-INSERT INTO variants_types(name, description) VALUES
-('Tenis de corte bajo (Low-top)','Diseño que se sitúa por debajo del tobillo, ofreciendo mayor libertad de movimiento y ligereza'),
-('Tenis de corte medio (Mid-top)','Diseño que cubre el tobillo parcialmente, proporcionando un equilibrio entre soporte y movilidad'),
-('Tenis de corte alto (High-top)','Diseño que cubre el tobillo completamente, ofreciendo mayor soporte y estabilidad, ideal para deportes que requieren un buen soporte del tobillo'),
-('Tenis slip-on','Diseño sin cordones, que permite poner y quitar fácilmente, ofreciendo comodidad y un estilo casual.'),
-('Tenis con cordones','Diseño tradicional que utiliza cordones para ajustar el calzado, proporcionando un ajuste personalizado.'),
-('Tenis con cierre de velcro','Diseño que utiliza tiras de velcro en lugar de cordones, facilitando el ajuste y el uso, especialmente para niños o personas con movilidad reducida.'),
-('Tenis con plataforma','Diseño que incluye una suela más gruesa, proporcionando mayor altura y un estilo distintivo.'),
-('Tenis con diseño anatómico','Diseñados para seguir la forma natural del pie, ofreciendo un ajuste más cómodo y ergonómico.'),
-('Tenis de estilo retro','Diseño que evoca estilos de décadas pasadas, a menudo con detalles vintage.'),
-('Tenis de estilo minimalista','Diseño sencillo y limpio, a menudo con menos elementos decorativos y un enfoque en la funcionalidad.');
 
 INSERT INTO types(name) VALUES
 ('Avenida'),
@@ -2923,61 +2914,61 @@ INSERT INTO colors_products(hex_code, name) VALUES
 
 
 INSERT INTO sizes(name) VALUES
-('_06_0'),
-('_06_5'),
-('_07_0'),
-('_07_5'),
-('_08_0'),
-('_08_5'),
-('_09_0'),
-('_09_5'),
-('_10_0'),
-('_10_5'),
-('_11_0'),
-('_11_5'),
-('_12_0'),
-('_12_5'),
-('_13_0'),
-('_13_5'),
-('_14_0'),
-('_14_5'),
-('_15_0'),
-('_15_5'),
-('_16_0'),
-('_16_5'),
-('_17_0'),
-('_17_5'),
-('_18_0'),
-('_18_5'),
-('_19_0'),
-('_19_5'),
-('_20_0'),
-('_20_5'),
-('_21_0'),
-('_21_5'),
-('_22_0'),
-('_22_5'),
-('_23_0'),
-('_23_5'),
-('_24_0'),
-('_24_5'),
-('_25_0'),
-('_25_5'),
-('_26_0'),
-('_26_5'),
-('_27_0'),
-('_27_5'),
-('_28_0'),
-('_28_5'),
-('_29_0'),
-('_29_5'),
-('_30_0'),
-('_30_5'),
-('_31_0'),
-('_31_5'),
-('_32_0'),
-('_32_5'),
-('_33_0');
+('6'),
+('6.5'),
+('7'),
+('7.5'),
+('8'),
+('8.5'),
+('9'),
+('9.5'),
+('10'),
+('10.5'),
+('11'),
+('11.5'),
+('12'),
+('12.5'),
+('13'),
+('13.5'),
+('14'),
+('14.5'),
+('15'),
+('15.5'),
+('16'),
+('16.5'),
+('17'),
+('17.5'),
+('18'),
+('18.5'),
+('19'),
+('19.5'),
+('20'),
+('20.5'),
+('21'),
+('21.5'),
+('22'),
+('22.5'),
+('23'),
+('23.5'),
+('24'),
+('24.5'),
+('25'),
+('25.5'),
+('26'),
+('26.5'),
+('27'),
+('27.5'),
+('28'),
+('28.5'),
+('29'),
+('29.5'),
+('30'),
+('30.5'),
+('31'),
+('31.5'),
+('32'),
+('32.5'),
+('33');
 
 
 INSERT INTO status(name) VALUES
@@ -3157,6 +3148,64 @@ INSERT INTO bank_transfers(id_user, id_bank, identification_number) VALUES
 ('99', '16','134893432972417331'),
 ('100', '20','141378117477256617');
 
+/*  INSERTAR IMAGENES A USUARIOS */
+-- Imagenes de perfil avatars
+INSERT INTO avatars(id_user, url) VALUES
+(2,"https://i.pinimg.com/236x/d1/e3/d2/d1e3d2a12bc3d0221898c4391dffcfff.jpg"),
+(3,"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBwr_zZjgvmu4BccwDNIHic8K5dyehw7cSYA&s"),
+(4,"https://us.123rf.com/450wm/suziria/suziria1912/suziria191200200/139542286-hermosa-mujer-viajando-en-bosque-tropical-con-flores.jpg?ver=6"),
+(5,"https://www.telemundo.com/sites/nbcutelemundo/files/styles/fit-560w/public/images/article/cover/2019/02/06/pareja-feliz.jpg?ramen_itok=iqwQftIcTf"),
+(6,"https://us.123rf.com/450wm/andersonrise/andersonrise2306/andersonrise230600421/207296985-close-up-portrait-of-a-young-tenager-girl-summer-park-outdoors.jpg?ver=6"),
+(7,"https://media.istockphoto.com/id/638756792/es/foto/hermosa-mujer-posando-sobre-fondo-oscuro.jpg?s=612x612&w=0&k=20&c=VDQGuUfLRZBvUDL6NSrRA1ApmpbD_faL_u5ahGZ85jU="),
+(8,"https://i.pinimg.com/564x/d4/a6/22/d4a6226ed95247a9b063ea3b322a0d65.jpg"),
+(9,"https://marketplace.canva.com/EAGaiz0UGo0/1/0/1600w/canva-foto-de-perfil-de-linkedin-hombre-elegante-3IOAEhUAWKI.jpg"),
+(10,"https://cdn.pixabay.com/photo/2016/12/07/21/01/cartoon-1890438_1280.jpg"),
+(11,"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJbMBtleQ0FxP8CHkmDkp2Gqi3XBe-w2YYgQ&s"),
+(12,"https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cGVyZmlsfGVufDB8fDB8fHww"),
+(13,"https://us.123rf.com/450wm/deagreez/deagreez2103/deagreez210303793/166188880-retrato-de-una-joven-persona-satisfecha-de-piel-oscura-con-una-sonrisa-dentuda-que-mira-la-c%C3%A1mara.jpg?ver=6"),
+(14,"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2dP51xkzLagfbSB6jrkhr6NE_ekYaZlB1ENAGoAvX9eNW2FXdYiA48VFj3VKikoTcSUg&usqp=CAU"),
+(15,"https://media.istockphoto.com/id/635954304/es/foto/hermosa-elegante-mujer.jpg?s=612x612&w=0&k=20&c=mJ8JJA6CBorlvwz6GJygCBOAmwbdupxwYpmUfjhksV0="),
+(16,"https://images.pexels.com/photos/32280629/pexels-photo-32280629.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"),
+(17,"https://images.ctfassets.net/h6goo9gw1hh6/2sNZtFAWOdP1lmQ33VwRN3/e40b6ea6361a1abe28f32e7910f63b66/1-intro-photo-final.jpg?w=1200&h=992&fl=progressive&q=70&fm=jpg"),
+(18,"https://w7.pngwing.com/pngs/48/259/png-transparent-profile-man-male-photo-face-portrait-illustration-vector-people-blue.png"),
+(19,"https://images.squarespace-cdn.com/content/v1/5d77a7f8ad30356d21445262/97973e92-51e0-4d33-8a88-738d15f19d8b/fotos-de-perfil-hombre.jpg"),
+(20,"https://media.istockphoto.com/id/1171169127/es/foto/disparo-de-cabeza-de-hombre-guapo-alegre-con-corte-de-pelo-de-moda-y-gafas-aisladas-en-el.jpg?s=612x612&w=0&k=20&c=5l5tRTmRQHFFHAZZjgpIiOUY-6HHbzwuV74mcW4z_Mw="),
+(21,"https://images.unsplash.com/photo-1633332755192-727a05c4013d?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D"),
+(22,"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjr6P_GmM_AAlq418wDooE7tOsJE0J39XNgzgXxnY6OOz-774Bg7B_faAW1BA8zJbnkA4&usqp=CAU"),
+(23,"https://static.vecteezy.com/system/resources/previews/036/594/092/non_2x/man-empty-avatar-photo-placeholder-for-social-networks-resumes-forums-and-dating-sites-male-and-female-no-photo-images-for-unfilled-user-profile-free-vector.jpg"),
+(24,"https://torange.biz/photo/40/IMAGE/halloween-backgrounds-moon-40476.jpg"),
+(25,"https://thumbs.dreamstime.com/b/mirada-intensa-13823575.jpg"),
+(26,"https://pm1.aminoapps.com/6890/337ac9a4fecf4d0a4f119540357d667ca91a2034r1-630-630v2_hq.jpg"),
+(27,"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaO4ATdeU1bKZZPg6OjfWoB0v2QPwfzvoW8dvslwnOPKfdDkrZDiaPVFJIX90CxAn7zb0&usqp=CAU"),
+(28,"https://upload.wikimedia.org/wikipedia/commons/b/bf/Foto_Perfil_.jpg"),
+(29,"https://images.unsplash.com/photo-1722322426803-101270837197?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cGVyZmlsJTIwZGUlMjBob21icmV8ZW58MHx8MHx8fDA%3D"),
+(30,"https://i.pinimg.com/236x/74/cc/81/74cc81fd8fe9c0043eccf2e6532201ed.jpg"),
+(31,"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvl-pS3M7QUtNUBYlrkB6QKUQzxN1pElXNaA&s"),
+(32,"https://i.pinimg.com/originals/cf/ca/49/cfca49463570c0233f80e6a47ebbe39e.jpg"),
+(33,"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-VNI1fjJD50WwIsstZzg0Zw_cB1m3_-rTaA&s"),
+(34,"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvdgYrtAB6gc_Il589krvtLmvVtwUSdybebw&s"),
+(35,"https://media.gq.com.mx/photos/609c0fdeee4372271f0b9056/16:9/w_2560%2Cc_limit/salir%2520guapo%2520en%2520fotos-605380757.jpg"),
+(36,"https://media.istockphoto.com/id/502068878/es/foto/sano-joven-hombre-australiano.jpg?s=170667a&w=0&k=20&c=mPtR-iBEb5UQoZ0f5Cih4ACXjvDi0cDDhSUuO-cm8Tw="),
+(37,"https://www.pica-ai.com/_next/image/?url=https%3A%2F%2Fstatic.staticspic.com%2F_next%2Fstatic%2Fmedia%2FRectangle-2.1a85f280.jpg&w=640&q=75"),
+(38,"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBVa8JChX58KKfxR7yx8hnsVVPuo07PFGnRA&s"),
+(39,"https://images.squarespace-cdn.com/content/v1/5d77a7f8ad30356d21445262/ca00fc6f-6940-420c-8b3b-f59618c58666/foto-pareja-feliz.jpg"),
+(40,"https://airbrush.com/_next/static/media/img-0-before.c3561456.jpg"),
+(41,"https://pymstatic.com/3654/conversions/frases-para-fotos-wide_webp.webp"),
+(42,"https://serxophoto.com/wp-content/uploads/fotos-instagram-vigo-020.jpg"),
+(43,"https://hips.hearstapps.com/hmg-prod/images/gettyimages-592302268-64c0e13249769.jpg?crop=0.6673397274103988xw:1xh;center,top&resize=1120:*"),
+(44,"https://i.pinimg.com/736x/90/47/da/9047daf842a48d686b3c510c828c410f.jpg"),
+(45,"https://i.pinimg.com/736x/ea/03/ed/ea03ed68d03e377e42a9096b1ecf1ece.jpg"),
+(46,"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTff_67gNe7eigZRA3H01MXAgbLBy9L_IYBJQ&s"),
+(47,"https://i.pinimg.com/1200x/27/03/08/270308955b4bd291362df4353f3629c2.jpg"),
+(48,"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwAGQCKuBtzsOfx1YkrZVmzA-1lFvVOtukRuCOYERIZHJEZ8Kp_bcTLbgyAkS39pJADxQ&usqp=CAU"),
+(49,"https://labsaenzrenauld.com/wp-content/uploads/2020/10/Perfil-hombre-ba%CC%81sico_738242395.jpg"),
+(50,"https://i.pinimg.com/originals/50/da/2f/50da2f8b2229b0abb9de5cbbedfe2e2e.jpg");
+
+
+
+
+/*
+TABLAS DESCARTADAS
 INSERT INTO paypals(id_user, email) VALUES
 ('2', (select email from users where id=13)),
 ('4', (select email from users where id=14)),
@@ -3194,4 +3243,18 @@ INSERT INTO paypals(id_user, email) VALUES
 ('97', (select email from users where id=2)),
 ('99', (select email from users where id=10)),
 ('100', (select email from users where id=16));
+
+INSERT INTO variants_types(name, description) VALUES
+('Tenis de corte bajo (Low-top)','Diseño que se sitúa por debajo del tobillo, ofreciendo mayor libertad de movimiento y ligereza'),
+('Tenis de corte medio (Mid-top)','Diseño que cubre el tobillo parcialmente, proporcionando un equilibrio entre soporte y movilidad'),
+('Tenis de corte alto (High-top)','Diseño que cubre el tobillo completamente, ofreciendo mayor soporte y estabilidad, ideal para deportes que requieren un buen soporte del tobillo'),
+('Tenis slip-on','Diseño sin cordones, que permite poner y quitar fácilmente, ofreciendo comodidad y un estilo casual.'),
+('Tenis con cordones','Diseño tradicional que utiliza cordones para ajustar el calzado, proporcionando un ajuste personalizado.'),
+('Tenis con cierre de velcro','Diseño que utiliza tiras de velcro en lugar de cordones, facilitando el ajuste y el uso, especialmente para niños o personas con movilidad reducida.'),
+('Tenis con plataforma','Diseño que incluye una suela más gruesa, proporcionando mayor altura y un estilo distintivo.'),
+('Tenis con diseño anatómico','Diseñados para seguir la forma natural del pie, ofreciendo un ajuste más cómodo y ergonómico.'),
+('Tenis de estilo retro','Diseño que evoca estilos de décadas pasadas, a menudo con detalles vintage.'),
+('Tenis de estilo minimalista','Diseño sencillo y limpio, a menudo con menos elementos decorativos y un enfoque en la funcionalidad.');
+*/
+
 
