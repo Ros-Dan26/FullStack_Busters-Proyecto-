@@ -1,0 +1,188 @@
+/* =========================
+   Estilos generales
+========================= */
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(100deg, #244faa 0%, #6e8ecb 100%);
+  font-family: 'Segoe UI', Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+/* =========================
+   Contenedor principal del perfil
+========================= */
+.perfil-user {
+  background-color: #E5D5C3;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.perfil-user > div {
+  display: flex;
+  flex-direction: column;
+}
+
+/* =========================
+   Menú lateral
+========================= */
+.col-md-3 {
+  align-items: center;
+}
+
+.perfil-user .nav-link {
+  color: #050505 !important;
+  padding: 10px 10px;
+  min-height: 30px;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.perfil-user .nav-link:hover,
+.perfil-user .nav-link.active {
+  background-color: #007BFF;
+  color: #fff !important;
+  text-decoration: none;
+}
+
+/* =========================
+   Foto de perfil
+========================= */
+#foto-perfil,
+.foto-perfil {
+  display: block;
+  margin: 0 auto 0.5rem auto;
+  width: 100%;
+  max-width: 150px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* =========================
+   Columna derecha
+========================= */
+.perfil-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #3c5a99 0%, #6e8ecb 100%);
+  color: #fff;
+  padding: 0;
+}
+
+/* =========================
+   Imagen + botones lateral
+========================= */
+.text-center.mb-4 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* =========================
+   Popup cerrar sesión
+========================= */
+.popup-cerrar-sesion {
+  border: none;
+  background: transparent;
+  padding: 0;
+  max-width: 100%;
+}
+
+.popup-cerrar-sesion::backdrop {
+  background: rgba(10, 25, 60, 0.55);
+  backdrop-filter: blur(2px);
+}
+
+/* Centrado del popup */
+.popup-cerrar-sesion[open] {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+}
+
+.popup-cerrar-sesion .popup-inner {
+  width: 100%;
+  max-width: 420px;
+  margin: 0;
+  background: linear-gradient(180deg, #1f4ea8 0%, #3e79c6 100%);
+  color: #ffffff;
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 8px 24px rgba(31, 78, 168, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.popup-cerrar-sesion .popup-text {
+  margin: 0;
+  font-size: 1.05rem;
+  text-align: center;
+}
+
+.popup-cerrar-sesion .btn {
+  min-width: 90px;
+}
+
+.popup-cerrar-sesion .btn-light {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.popup-cerrar-sesion .btn-light:hover {
+  background: rgba(255, 255, 255, 0.20);
+}
+
+.popup-cerrar-sesion .btn-confirm {
+  background: #ff6b6b;
+  border-color: #ff6b6b;
+  color: #fff;
+}
+
+/* =========================
+   Utilidades
+========================= */
+.popup-cerrar-sesion.center-text .popup-text {
+  text-align: center;
+}
+/* Popup Cambios realizados - reutiliza estilos de .popup-cerrar-sesion */
+#popupCambios .popup-text {
+  font-weight: 600;
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+/* =========================
+   Responsive
+========================= */
+@media (max-width: 768px) {
+  #foto-perfil,
+  .foto-perfil {
+    max-width: 120px;
+  }
+  .perfil-user .nav-link {
+    font-size: 1rem;
+  }
+  .col-md-3 {
+    border-end: none;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 1rem;
+  }
+}

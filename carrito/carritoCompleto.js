@@ -1,7 +1,7 @@
 // Espera a que todo el DOM esté cargado antes de ejecutar el script
 document.addEventListener("DOMContentLoaded", () => {
     const container = document.getElementById('carrito-productos');
-    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
     // Mostrar mensaje si el carrito está vacío
     if (carrito.length === 0) {
@@ -29,14 +29,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
             col.innerHTML = `
                 <div class="card h-100" style="width: 18rem;">
-                    <img src="${producto.imagen}" class="card-img-top img-fluid" alt="${producto.producto}" style="height: 200px; object-fit: contain;">
+                    <img src="${producto.imagen}" class="card-img-top img-fluid" alt="${producto.nombre}" style="height: 200px; object-fit: contain;">
                     <div class="card-body d-flex flex-column justify-content-between">
                         <div>
-                            <h5 class="card-title">${producto.producto}</h5>
+                            <h5 class="card-title">${producto.nombre}</h5>
                             <p class="card-text"><strong>Talla:</strong> ${producto.talla || "No especificada"}</p>
-                            <p class="card-text"><strong>Precio:</strong> $${producto.precio.toFixed(2)}</p>
+                            <p class="card-text"><strong>Precio:</strong> $${producto.precio ? producto.precio.toFixed(2) : '0.00'}</p>
                             <p class="card-text"><strong>Cantidad:</strong> ${producto.cantidad}</p>
-                            <p class="card-text"><strong>Subtotal:</strong> $${subtotal.toFixed(2)}</p>
                         </div>
                         <button class="btn btn-outline-danger w-100 mt-3 eliminar-item" data-index="${index}">
                             <i class="bi bi-trash-fill"></i> Eliminar
@@ -51,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const resumen = document.createElement('div');
         resumen.className = 'text-center w-100 mt-5';
         resumen.innerHTML = `
-            <h4 class="mb-3">Total a pagar: <span class="text-success">$${total.toFixed(2)}</span></h4>
+            <h4 class="mb-3">Total a pagar: <span class="text-success">$${carrito.reduce((acc, producto) => acc + (Number(producto.total) || 0), 0).toFixed(2)}</span></h4>
             <button class="btn btn-success btn-lg" id="finalizar-compra">
                 <i class="bi bi-cart-check-fill"></i> Finalizar compra
             </button>
@@ -81,4 +80,42 @@ document.addEventListener("DOMContentLoaded", () => {
             window.location.href = "/finalizar-compra/finalizar-compra.html";
         }
     });
+
+    // Crea el objeto del producto para el carrito con los nombres esperados
+    const productoCarrito = {
+        producto: producto.name, // nombre del producto
+        marca: producto.brand,   // marca
+        modelo: producto.model,  // modelo
+        precio: producto.price,  // precio
+        talla: talla,            // talla seleccionada
+        cantidad: cantidad,      // cantidad seleccionada
+        imagen: (imagenes && imagenes.length > 0) ? imagenes[0].url : '', // primera imagen
+        total: producto.precio && cantidad ? producto.precio * cantidad : 0
+    };
+
+    // Obtiene el carrito actual del localStorage
+    let cart = JSON.parse(localStorage.getItem("carrito")) || [];
+
+    // Si el producto ya está en el carrito con la misma talla, suma la cantidad
+    const existingIndex = cart.findIndex(item => item.producto === productoCarrito.producto && item.talla === talla);
+
+    if (existingIndex !== -1) {
+      cart[existingIndex].cantidad += cantidad;
+      cart[existingIndex].total += producto.price * cantidad;
+    } else {
+      cart.push(productoCarrito);
+    }
+
+    // Guarda el carrito actualizado en localStorage
+    localStorage.setItem("carrito", JSON.stringify(cart));
+    crearPopUpUniversal(cantidad, producto.name, talla); // POP UP
+
+    // Elimina el carrito del localStorage
+    localStorage.removeItem("carrito");
+
+    let totalPagar = 0;
+    carrito.forEach(producto => {
+      totalPagar += Number(producto.total) || 0;
+    });
+    document.getElementById("total-pagar").textContent = totalPagar.toFixed(2);
 });

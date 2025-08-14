@@ -1,63 +1,156 @@
-// 1. Obtiene el contenedor donde se mostrarán los productos
-const contenedor = document.getElementById('catalogo-productos');
 
-// 2. Limpia el contenido previo del contenedor
-contenedor.innerHTML = '';
 
-// 3. Carga los productos desde el archivo JSON
-fetch('/productos/catalogo_productos.json')
-  .then(response => response.json())
-  .then(productos => {
-    // 4. Recorre el arreglo de productos y genera una tarjeta para cada uno
-    productos.forEach((producto, index) => {
-      contenedor.innerHTML += `
-      <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex align-items-stretch">
-        <div class="card w-100">
-          <img src="${producto.imagen}" class="card-img-top" alt="${producto.producto}">
-          <div class="card-body d-flex flex-column">
-            <h5 class="card-title">${producto.producto}</h5>
-            <p class="card-text flex-grow-1">${producto.descripcion}</p>
-            <p class="card-text precio">$${producto.precio.toFixed(2)}</p>
-            <label for="talla-select-${index}" class="form-label">Selecciona talla:</label>
-            <select class="form-select mb-3" id="talla-select-${index}">
-              ${producto.tallas.map(talla => `<option value="${talla}">${talla}</option>`).join('')}
-            </select>
-            <label for="cantidad-input-${index}" class="form-label">Cantidad:</label>
-            <input type="number" min="1" value="1" class="form-control mb-3" id="cantidad-input-${index}" />
-            <button class="product-card__btn" onclick="verDetalles(${index})">Ver detalles</button>
-            <button class="aniadir-carrito_btn" onclick="addCart(${index})">
-              <span>Añadir al carrito</span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                  class="bi bi-cart-check-fill" viewBox="0 0 16 16">
-                  <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m-1.646-7.646-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L8 8.293l2.646-2.647a.5.5 0 0 1 .708.708" />
-              </svg>
-            </button>
+const requestOptions = {
+  method: "GET",
+  redirect: "follow"
+};
+
+// Genera el HTML de una tarjeta de producto
+function crearTarjetaProducto(item, index) {
+  const producto = item.products;
+  const imagenes = item.images;
+  const imagenesHtml = (imagenes && imagenes.length > 0)
+    ? imagenes.map((img, i) => `
+        <div class="carousel-item${i === 0 ? ' active' : ''}">
+          <img src="${img.url}" class="d-block w-100" alt="${producto.name}">
+        </div>
+      `).join('')
+    : `<div class="carousel-item active">
+         <img class="d-block w-100" alt="${producto.name}">
+       </div>`;
+  return `
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex align-items-stretch">
+      <div class="card w-100">
+        <div id="carousel-${index}" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            ${imagenesHtml}
           </div>
+          ${(imagenes && imagenes.length > 1) ? `
+            <button class="carousel-control-prev" type="button" data-bs-target="#carousel-${index}" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carousel-${index}" data-bs-slide="next">
+              <span class="carousel-control-next-icon"></span>
+            </button>
+          ` : ''}
+        </div>
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">${producto.brand || ''} - ${producto.name || ''}</h5>
+          <p class="card-text"><strong>Modelo:</strong> ${producto.model || ''}</p>
+          <p class="card-text flex-grow-1"><strong>Descripción:</strong> ${producto.description || ''}</p>
+          <p class="card-text"><strong>Detalles:</strong> ${producto.details || ''}</p>
+          <p class="card-text"><strong>Status:</strong> ${producto.status || ''}</p>
+          <p class="card-text precio"><strong>Precio:</strong> $${producto.price ? producto.price.toFixed(2) : 'N/A'}</p>
+          <label for="talla-select-${index}" class="form-label">Selecciona talla:</label>
+          <select class="form-select mb-3" id="talla-select-${index}">
+            <option value="${producto.size || ''}">${producto.size || ''}</option>
+          </select>
+          <label for="cantidad-input-${index}" class="form-label">Cantidad:</label>
+          <input type="number" min="1" value="1" class="form-control mb-3" id="cantidad-input-${index}" />
+          <button class="product-card__btn" onclick="verDetalles(${index})">Ver detalles</button>
+          <button class="aniadir-carrito_btn" onclick="addCart(${index})"> Añadir al carrito </button>
         </div>
       </div>
-      `;
-    });
+    </div>
+  `;
+}
 
-    // Aquí puedes guardar los productos en una variable global si lo necesitas para otras funciones
-    window.productos = productos;
-  })
-  .catch(error => {
-    contenedor.innerHTML = '<p>Error al cargar los productos.</p>';
-    console.error(error);
+// Renderiza la lista de productos en el catálogo
+function renderizarProductos(lista) {
+  const contenedor = document.getElementById("catalogo-productos");
+  contenedor.innerHTML = "";
+  productosGlobal = lista;
+  lista.forEach((item, index) => {
+    contenedor.innerHTML += crearTarjetaProducto(item, index);
   });
+}
 
-// 5. Función para añadir productos al carrito
+
+// Llenar los selects de filtros desde la API
+
+// Llenar los selects de filtros desde los productos cargados (frontend-only)
+function cargarTallasDesdeProductos() {
+  const select = document.getElementById('filtroTalla');
+  select.innerHTML = '<option value="">Todas</option>';
+  const tallasUnicas = [...new Set(productosGlobal.map(item => item.products && item.products.size).filter(Boolean))];
+  tallasUnicas.forEach(talla => {
+    select.innerHTML += `<option value="${talla}">${talla}</option>`;
+  });
+}
+
+
+function cargarMarcasDesdeProductos() {
+  const select = document.getElementById('filtroMarca');
+  select.innerHTML = '<option value="">Todas</option>';
+  const marcasUnicas = [...new Set(productosGlobal.map(item => item.products && item.products.brand).filter(Boolean))];
+  marcasUnicas.forEach(marca => {
+    select.innerHTML += `<option value="${marca}">${marca}</option>`;
+  });
+}
+// --- NUEVA LÓGICA DE FILTRADO ÚNICO ---
+function limpiarSelectsMenos(idActivo) {
+  const ids = ['filtroEstado', 'filtroTalla', 'filtroMarca'];
+  ids.forEach(id => {
+    if (id !== idActivo) {
+      document.getElementById(id).selectedIndex = 0;
+    }
+  });
+}
+
+
+
+function filtroUnicoHandler(e) {
+  const id = e.target.id;
+  // Limpiar los otros selects
+  const ids = ['filtroEstado', 'filtroTalla', 'filtroMarca'];
+  ids.forEach(oid => {
+    if (oid !== id) {
+      document.getElementById(oid).selectedIndex = 0;
+    }
+  });
+  // Limpiar catálogo antes de mostrar nuevos productos
+  document.getElementById("catalogo-productos").innerHTML = "";
+  let url = null;
+  let valor = e.target.value;
+  if (!valor) {
+    // Si es 'Todos/Todas', mostrar todos los productos
+    fetch("http://jft314.ddns.net:8080/nso/api/v1/nso/product/all", requestOptions)
+      .then(response => response.json())
+      .then(productos => {
+        productosGlobal = Array.isArray(productos) ? productos : [];
+        renderizarProductos(productosGlobal);
+      });
+    return;
+  }
+  if (id === 'filtroEstado') {
+    url = `http://jft314.ddns.net:8080/nso/api/v1/nso/product/filter/status/${encodeURIComponent(valor)}`;
+  } else if (id === 'filtroTalla') {
+    url = `http://jft314.ddns.net:8080/nso/api/v1/nso/product/filter/size/${encodeURIComponent(valor)}`;
+  } else if (id === 'filtroMarca') {
+    url = `http://jft314.ddns.net:8080/nso/api/v1/nso/product/filter/brand/${encodeURIComponent(valor)}`;
+  }
+  if (url) {
+    fetch(url, requestOptions)
+      .then(response => response.json())
+      .then(productos => {
+        productosGlobal = Array.isArray(productos) ? productos : [];
+        renderizarProductos(productosGlobal);
+      })
+      .catch(() => {
+        renderizarProductos([]);
+      });
+  }
+}
+
+
 function addCart(index) {
-    const producto = productos[index];
-
-    // Obtiene la talla y cantidad seleccionadas por el usuario
+    const item = productosGlobal[index];
+    const producto = item.products;
+    const imagenes = item.images;
     const tallaSelect = document.getElementById(`talla-select-${index}`);
     const cantidadInput = document.getElementById(`cantidad-input-${index}`);
-
-    const talla = tallaSelect.value;
-    let cantidad = parseInt(cantidadInput.value);
-
-    // Validación de talla y cantidad
+    const talla = tallaSelect ? tallaSelect.value : '';
+    let cantidad = cantidadInput ? parseInt(cantidadInput.value) : 1;
     if (!talla) {
       alert("Por favor selecciona una talla.");
       return;
@@ -66,60 +159,50 @@ function addCart(index) {
       alert("Por favor ingresa una cantidad válida.");
       return;
     }
-
-    // Crea el objeto del producto para el carrito
-    const productoParaCarrito = {
-        producto: producto.producto,
-        categoria: producto.categoria || "Hombres",
-        descripcion: producto.descripcion,
-        talla: talla,
-        imagen: producto.imagen,
-        precio: producto.precio,
-        precioOferta: producto.precioOferta,
-        descuento: producto.descuento || 0,
-        cantidad: cantidad
+    const productoCarrito = {
+      id: producto.id,
+      nombre: producto.name || '',
+      marca: producto.brand || '',
+      modelo: producto.model || '',
+      precio: producto.price ? Number(producto.price) : 0,
+      talla: talla || '',
+      cantidad: cantidad,
+      imagen: (imagenes && imagenes.length > 0 && imagenes[0].url) ? imagenes[0].url : 'https://via.placeholder.com/300x200?text=Producto',
+      total: producto.price ? Number(producto.price) * cantidad : 0
     };
-
-    // Obtiene el carrito actual del localStorage
     let cart = JSON.parse(localStorage.getItem("carrito")) || [];
-
-    // Si el producto ya está en el carrito con la misma talla, suma la cantidad
-    const existingIndex = cart.findIndex(item => item.producto === productoParaCarrito.producto && item.talla === talla);
-
+    const existingIndex = cart.findIndex(item => item.id === producto.id);
     if (existingIndex !== -1) {
       cart[existingIndex].cantidad += cantidad;
+      cart[existingIndex].total += producto.price * cantidad;
     } else {
-      cart.push(productoParaCarrito);
+      cart.push(productoCarrito);
     }
-
-    // Guarda el carrito actualizado en localStorage
     localStorage.setItem("carrito", JSON.stringify(cart));
-    //alert(`${cantidad} unidad(es) de ${producto.producto} (Talla: ${talla}) agregada(s) al carrito.`);
-    crearPopUpUniversal(cantidad, producto.producto, talla); // POP UP 
+    crearPopUpUniversal(cantidad, producto.name, talla);
 }
 
-// 6. Función para mostrar los detalles del producto en un modal
+
+
 function verDetalles(index) {
-    const producto = productos[index];
-
-    // Asigna los datos del producto al modal
-    document.getElementById('modalProductoImagen').src = producto.imagen;
-    document.getElementById('modalProductoImagen').alt = producto.producto;
-    document.getElementById('modalProductoTitulo').textContent = producto.producto;
-    document.getElementById('modalProductoDescripcion').textContent = producto.descripcion;
-    document.getElementById('modalProductoPrecio').textContent = `$${producto.precio.toFixed(2)}`;
-
-    // Muestra el modal usando Bootstrap 5
+    const item = productosGlobal[index];
+    const producto = item.products;
+    const imagenes = item.images;
+    const imagenPrincipal = (imagenes && imagenes.length > 0 && imagenes[0].url)
+      ? imagenes[0].url
+      : 'https://via.placeholder.com/300x200?text=Producto';
+    document.getElementById('modalProductoImagen').src = imagenPrincipal;
+    document.getElementById('modalProductoImagen').alt = producto.name || '';
+    document.getElementById('modalProductoTitulo').textContent = `${producto.brand || ''} - ${producto.name || ''}`;
+    document.getElementById('modalProductoDescripcion').textContent = producto.details || '';
+    document.getElementById('modalProductoPrecio').textContent = producto.price ? `$${producto.price.toFixed(2)}` : '';
     const modal = new bootstrap.Modal(document.getElementById('productoModal'));
     modal.show();
 }
 
-
-
 // -- POP UP -- \\
 function crearPopUpUniversal(cantidad, producto, talla){
   const contenedor = document.getElementById('PopUp-Universal');
-  let palabra = cantidad > 1 ? "Unidades": "Unidad";
 
     contenedor.innerHTML = `
         <div class="popup-Diseño" id="popup-registro">
@@ -137,3 +220,47 @@ function cerrarPopupUniversal() {
     const contenedor = document.getElementById("PopUp-Universal");
     contenedor.innerHTML = '';
 }
+
+// Guardar los productos globalmente
+let productosGlobal = [];
+
+
+
+function cargarEstadosDesdeAPI() {
+  fetch("http://jft314.ddns.net:8080/nso/api/v1/nso/product/lookup/status", requestOptions)
+    .then(response => response.json())
+    .then(estados => {
+      const select = document.getElementById('filtroEstado');
+      select.innerHTML = '<option value="">Todos</option>';
+      estados.forEach(estado => {
+        select.innerHTML += `<option value="${estado.name}">${estado.name}</option>`;
+      });
+    });
+}
+
+// 2. Filtrar productos por estado seleccionado
+
+
+
+
+// Listeners para filtros independientes
+
+document.getElementById('filtroEstado').addEventListener('change', filtroUnicoHandler);
+document.getElementById('filtroTalla').addEventListener('change', filtroUnicoHandler);
+document.getElementById('filtroMarca').addEventListener('change', filtroUnicoHandler);
+document.getElementById('filtroTalla').addEventListener('change', filtroUnicoHandler);
+document.getElementById('filtroMarca').addEventListener('change', filtroUnicoHandler);
+
+
+
+
+
+fetch("http://jft314.ddns.net:8080/nso/api/v1/nso/product/all", requestOptions)
+  .then(response => response.json())
+  .then(productos => {
+    productosGlobal = Array.isArray(productos) ? productos : [];
+    renderizarProductos(productosGlobal);
+    cargarEstadosDesdeAPI();
+    cargarTallasDesdeProductos();
+    cargarMarcasDesdeProductos();
+  });
