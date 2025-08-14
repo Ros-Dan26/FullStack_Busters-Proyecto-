@@ -1,3 +1,4 @@
+/* Fondo general y fuente */
 html, body {
   height: 100%;
   margin: 0;
@@ -17,7 +18,7 @@ html, body {
   margin: 0;
 }
 
-/* Imagen decorativa - ahora ocupa mitad del ancho */
+/* Imagen decorativa - ocupa mitad del ancho */
 .Imagen-registro {
   flex: 0 0 50%; /* ocupa exactamente 50% del ancho */
   background: #ececec;
@@ -32,17 +33,17 @@ html, body {
   object-fit: cover;
 }
 
-/* Contenedor del formulario - ocupa la otra mitad */
+/* Contenedor del formulario - ocupa mitad y centra contenido */
 .contenido-registro {
   flex: 0 0 50%; /* ocupa exactamente 50% del ancho */
-  max-width: 40; /* quitar límite si tenías */
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: center;   /* centra verticalmente */
+  align-items: center;       /* centra horizontalmente */
   background: linear-gradient(135deg, #3c5a99 0%, #6e8ecb 100%);
   color: #fff;
   padding: 1rem;
+  box-sizing: border-box;
 }
 
 /* Etiquetas */
@@ -65,14 +66,14 @@ html, body {
 
 /* Campos de entrada */
 .entradas-registro {
-  width: 100%;
-  max-width: 650px; /* Aumentado para campos más largos */
+  width: 50vw;             /* 50% del ancho de la pantalla */
+  max-width: 600px;        /* para evitar que se agrande demasiado */
   min-height: 50px;
   padding: 1rem;
   border: none;
   border-radius: 6px;
   font-size: 1rem;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.5rem;
   box-sizing: border-box;
   background: #fff;
   color: #333;
@@ -110,9 +111,10 @@ html, body {
   font-size: 1.1rem;
   font-weight: bold;
   margin-top: 1.5rem;
-  width: 90%;
-  max-width: 500px;
+  width: 50vw;          /* igual que inputs para armonía */
+  max-width: 600px;
   transition: background 0.2s;
+  cursor: pointer;
 }
 
 .btn-registro:hover {
@@ -147,6 +149,7 @@ html, body {
   background-color: #9AB8DF;
   padding: 10px 20px;
   margin-top: 15px;
+  cursor: pointer;
 }
 
 /* POPUP CONTRASEÑA NO COINCIDE */
@@ -177,21 +180,22 @@ html, body {
   background-color: #9AB8DF;
   padding: 10px 20px;
   margin-top: 15px;
+  cursor: pointer;
 }
 
 /* -------------------------- */
 /*         RESPONSIVE         */
 /* -------------------------- */
 
-@media (max-width: 840px) {
+@media (max-width: 850px) {
   /* Imagen desaparece en móvil */
   .Imagen-registro {
     display: none;
   }
   /* Contenedor formulario toma 100% */
   .contenido-registro {
-    flex: 1 1 100%;
-    max-width: 100%;
+    flex:  100%;
+    max-width: 90%;
     padding: 1rem;
   }
   /* Inputs y botón ocupan todo el ancho */
