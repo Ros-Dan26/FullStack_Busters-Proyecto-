@@ -1,3 +1,34 @@
+// --- Búsqueda por palabra clave ---
+document.addEventListener('DOMContentLoaded', function() {
+  const btnBuscar = document.getElementById('btnBuscarPalabra');
+  if (btnBuscar) {
+    btnBuscar.addEventListener('click', function() {
+      let palabra = document.getElementById('inputBusqueda').value.trim();
+      if (!palabra) {
+        // Si está vacío, mostrar todos los productos
+        fetch("http://jft314.ddns.net:8080/nso/api/v1/nso/product/all", requestOptions)
+          .then(response => response.json())
+          .then(productos => {
+            productosGlobal = Array.isArray(productos) ? productos : [];
+            renderizarProductos(productosGlobal);
+          });
+        return;
+      }
+  // Reemplaza espacios por guiones bajos
+  palabra = palabra.replace(/\s+/g, '_');
+  // Llama a la API de búsqueda por palabra (nuevo endpoint)
+  fetch(`http://jft314.ddns.net:8080/nso/api/v1/nso/product/word?word=${encodeURIComponent(palabra)}`, requestOptions)
+        .then(response => response.json())
+        .then(productos => {
+          productosGlobal = Array.isArray(productos) ? productos : [];
+          renderizarProductos(productosGlobal);
+        })
+        .catch(() => {
+          renderizarProductos([]);
+        });
+    });
+  }
+});
 
 
 const requestOptions = {

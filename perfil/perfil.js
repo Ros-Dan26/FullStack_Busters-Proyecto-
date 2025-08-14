@@ -354,7 +354,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="text-end">
           <button id="btn-pagar" class="btn btn-success">Pagar</button>
         </div>
-        <p class="text-muted small text-center mb-0 mt-3">Los precios incluyen IVA. Envío gratis en pedidos mayores a $999.</p>
+        <p class="text-muted small text-center mb-0 mt-3"></p>
       </div>
     `;
 
