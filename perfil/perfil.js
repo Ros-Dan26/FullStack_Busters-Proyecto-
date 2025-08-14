@@ -1,173 +1,158 @@
+// ===============================
+// Perfil - Código optimizado
+// ===============================
 document.addEventListener('DOMContentLoaded', () => {
-  /* === CONSTANTES - LLAVES LOCALSTORAGE === */
-  const USUARIO_ACTIVO_KEY = 'usuarioActivo';
-  const USUARIO_DATOS_KEY = 'perfil_usuario';
-  const CARRITO_KEY = 'carrito';
+  // ====== Constantes / Config ======
+  const API_BASE = 'http://jft314.ddns.net:8080/nso/api/v1/nso';
+  const KEYS = {
+    USUARIO_ACTIVO: 'usuarioActivo',
+    USUARIO_DATOS: 'perfil_usuario',
+    CARRITO: 'carrito',
+  };
 
-  /* === ELEMENTOS DEL DOM === */
-  const contenedorPerfil = document.getElementById('perfil-contenido');
-  const enlacesMenu = document.querySelectorAll('.perfil-user .nav-link');
-  const fotoPerfil = document.getElementById('foto-perfil');
-  const inputFoto = document.getElementById('cargar-foto');
+  // ====== Atajos DOM ======
+  const qs = (sel, root = document) => root.querySelector(sel);
+  const qsa = (sel, root = document) => [...root.querySelectorAll(sel)];
 
-  /* === FUNCIONES DE SESIÓN === */
+  // ====== Elementos ======
+  const contenedorPerfil = qs('#perfil-contenido');
+  const enlacesMenu = qsa('.perfil-user .nav-link');
+  const fotoPerfil = qs('#foto-perfil');
+  const inputFoto = qs('#cargar-foto');
+
+  // ===============================
+  // Utilidades
+  // ===============================
+  const safeJSON = (str, fallback = null) => {
+    try { return JSON.parse(str); } catch { return fallback; }
+  };
+
+  const fromLS = (key, def = null) => safeJSON(localStorage.getItem(key), def);
+  const toLS = (key, val) => localStorage.setItem(key, JSON.stringify(val));
+
+  const setDisplay = (el, show) => { if (el) el.style.display = show ? 'block' : 'none'; };
+
+  const fetchJSON = async (url, opts = {}) => {
+    const res = await fetch(url, opts);
+    // Si backend devuelve texto en algunos endpoints, intenta parsearlo
+    const text = await res.text();
+    const data = safeJSON(text, text);
+    if (!res.ok) {
+      const msg = typeof data === 'string' ? data : JSON.stringify(data);
+      throw new Error(`HTTP ${res.status}: ${msg}`);
+    }
+    return data;
+  };
+
+  // ===============================
+  // Sesión / Navbar
+  // ===============================
   function manejarSesion() {
-    const usuarioJSON = localStorage.getItem(USUARIO_ACTIVO_KEY);
-    const usuario = usuarioJSON ? JSON.parse(usuarioJSON) : null;
+    const usuario = fromLS(KEYS.USUARIO_ACTIVO);
+    const dropdown = qs('#userDropdown');
+    const username = qs('#usernameDisplay');
+    const iniciarSesion = qs('#user-name');
+    const perfilLink = qs('#perfilLink');
+    const registroProducto = qs('#registroProducto');
 
     if (usuario) {
-      const dropdown = document.getElementById('userDropdown');
-      const username = document.getElementById('usernameDisplay');
-      const iniciarSesion = document.getElementById('user-name');
-      const perfilLink = document.getElementById('perfilLink');
-      const registroProducto = document.getElementById('registroProducto');
-
-      if (dropdown) dropdown.style.display = 'block';
-      if (username) username.textContent = usuario.email.split('@')[0];
+      setDisplay(dropdown, true);
+      if (username) username.textContent = usuario.email?.split('@')[0] ?? '';
       if (iniciarSesion) iniciarSesion.style.display = 'none';
       if (perfilLink) perfilLink.style.display = 'inline-block';
-      if (registroProducto) registroProducto.style.display = 'block';
+      setDisplay(registroProducto, true);
     } else {
-      const dropdown = document.getElementById('userDropdown');
-      const username = document.getElementById('usernameDisplay');
-      const iniciarSesion = document.getElementById('user-name');
-      const perfilLink = document.getElementById('perfilLink');
-      const registroProducto = document.getElementById('registroProducto');
-
-      if (dropdown) dropdown.style.display = 'none';
+      setDisplay(dropdown, false);
       if (username) username.textContent = '';
       if (iniciarSesion) iniciarSesion.style.display = 'inline-block';
       if (perfilLink) perfilLink.style.display = 'none';
-      if (registroProducto) registroProducto.style.display = 'none';
+      setDisplay(registroProducto, false);
     }
   }
 
-  /* === FUNCIONES DE CERRAR SESIÓN === */
-  function logout() {
-    localStorage.removeItem(USUARIO_ACTIVO_KEY);
+  const logout = () => {
+    localStorage.removeItem(KEYS.USUARIO_ACTIVO);
     sessionStorage.clear();
     window.location.href = '/Login/login.html';
-  }
+  };
 
-  /* === POPUP DE CIERRE DE SESIÓN CON DIALOG === */
+  // ===============================
+  // Pop-up cerrar sesión (Dialog)
+  // ===============================
   function cerrarSesion() {
-    const popupCerrarSesion = document.getElementById('popupCerrarSesion');
-    const btnConfirmarCerrarSesion = document.getElementById('btnConfirmarCerrarSesion');
-    const btnCancelarCerrarSesion = document.getElementById('btnCancelarCerrarSesion');
+    const dlg = qs('#popupCerrarSesion');
+    const btnOk = qs('#btnConfirmarCerrarSesion');
+    const btnCancel = qs('#btnCancelarCerrarSesion');
 
-    function cerrarPopup() {
-      popupCerrarSesion.close();
-      btnConfirmarCerrarSesion.removeEventListener('click', confirmarCerrarSesion);
-      btnCancelarCerrarSesion.removeEventListener('click', cancelarCerrarSesion);
-      popupCerrarSesion.removeEventListener('cancel', onCancel);
-      const enlaceLogout = document.querySelector('.perfil-user .nav-link[data-section="logout"]');
-      if (enlaceLogout) enlaceLogout.focus();
-    }
-
-    function confirmarCerrarSesion() {
-      cerrarPopup();
-      logout();
-    }
-
-    function cancelarCerrarSesion() {
-      cerrarPopup();
-    }
-
-    function onCancel(e) {
-      e.preventDefault();
-      cancelarCerrarSesion();
-    }
-
-    btnConfirmarCerrarSesion.addEventListener('click', confirmarCerrarSesion);
-    btnCancelarCerrarSesion.addEventListener('click', cancelarCerrarSesion);
-    popupCerrarSesion.addEventListener('cancel', onCancel);
-
-    popupCerrarSesion.showModal();
-  }
-
-  /* === MAPEO gendersId ↔ género === */
-  function mapGendersIdToGenero(gendersId) {
-    switch (gendersId) {
-      case 1: return 'Masculino';
-      case 2: return 'Femenino';
-      case 3: return 'Otro';
-      default: return '';
-    }
-  }
-  function mapGeneroToGendersId(genero) {
-    switch (genero) {
-      case 'Masculino': return 1;
-      case 'Femenino': return 2;
-      case 'Otro': return 3;
-      default: return null;
-    }
-  }
-
-  /* === FUNCIONES PARA DATOS DEL USUARIO CON BACKEND === */
-  async function obtenerDatosUsuario() {
-    const requestOptions = {
-      method: "GET",
-      redirect: "follow"
+    const close = () => {
+      dlg.close();
+      btnOk.removeEventListener('click', onOk);
+      btnCancel.removeEventListener('click', onCancelClick);
+      dlg.removeEventListener('cancel', onCancelEvt);
+      const link = qs('.perfil-user .nav-link[data-section="logout"]');
+      if (link) link.focus();
     };
+    const onOk = () => { close(); logout(); };
+    const onCancelClick = () => close();
+    const onCancelEvt = (e) => { e.preventDefault(); close(); };
 
+    btnOk.addEventListener('click', onOk);
+    btnCancel.addEventListener('click', onCancelClick);
+    dlg.addEventListener('cancel', onCancelEvt);
+
+    dlg.showModal();
+  }
+
+  // ===============================
+  // Mapeo género ↔ id
+  // ===============================
+  const GENDER_BY_ID = { 1: 'Masculino', 2: 'Femenino', 3: 'Otro' };
+  const ID_BY_GENDER = { Masculino: 1, Femenino: 2, Otro: 3 };
+
+  const mapGendersIdToGenero = (id) => GENDER_BY_ID[id] ?? '';
+  const mapGeneroToGendersId = (g) => ID_BY_GENDER[g] ?? null;
+
+  // ===============================
+  // Usuario (API) / Datos
+  // ===============================
+  async function obtenerDatosUsuario() {
     try {
-      const response = await fetch("http://jft314.ddns.net:8080/nso/api/v1/nso/user/all", requestOptions);
-      if (!response.ok) throw new Error('Error al obtener datos de usuario');
-      const data = await response.json();
+      const lista = await fetchJSON(`${API_BASE}/user/all`, { method: 'GET' });
 
-      const usuarioActivoJSON = localStorage.getItem(USUARIO_ACTIVO_KEY);
-      const usuarioActivo = usuarioActivoJSON ? JSON.parse(usuarioActivoJSON) : null;
-      const emailSesion = usuarioActivo ? usuarioActivo.email : null;
+      const activo = fromLS(KEYS.USUARIO_ACTIVO);
+      const email = activo?.email?.toLowerCase();
 
-      let usuario;
-      if (emailSesion) {
-        usuario = data.find(u => u.email.toLowerCase() === emailSesion.toLowerCase());
-      }
-      if (!usuario) {
-        usuario = data[0] || null;
-      }
-      if (!usuario) {
-        return null; // No hay usuario encontrado
-      }
+      const usuario = email
+        ? lista.find((u) => u.email?.toLowerCase() === email)
+        : lista[0];
 
-      // Guardar datos en localStorage
-      const datosUsuario = {
-        id: usuario.id || null,
-        created: usuario.created || null,
-        nickname: usuario.nickname || '',
+      if (!usuario) return null;
+
+      const datos = {
+        id: usuario.id ?? null,
+        created: usuario.created ?? null,
+        nickname: usuario.nickname ?? '',
         genero: mapGendersIdToGenero(usuario.gendersId),
-        nombre: usuario.firstName || '',
-        apellidoPaterno: usuario.lastName || '',
-        apellidoMaterno: usuario.middleName || '',
-        telefono_fijo: usuario.phone || '',
-        telefono_movil: usuario.mobile || '',
-        email: usuario.email || '',
+        nombre: usuario.firstName ?? '',
+        apellidoPaterno: usuario.lastName ?? '',
+        apellidoMaterno: usuario.middleName ?? '',
+        telefono_fijo: usuario.phone ?? '',
+        telefono_movil: usuario.mobile ?? '',
+        email: usuario.email ?? '',
         foto: 'img/user.webp',
-        preferences: usuario.preferences || ''
+        preferences: usuario.preferences ?? '',
       };
-      guardarDatosUsuarioLocalStorage(datosUsuario);
 
-      return datosUsuario;
-
-    } catch (error) {
-      console.error(error);
+      toLS(KEYS.USUARIO_DATOS, datos);
+      return datos;
+    } catch (err) {
+      console.error('obtenerDatosUsuario:', err);
       return null;
     }
   }
 
-  function guardarDatosUsuarioLocalStorage(datos) {
-    localStorage.setItem(USUARIO_DATOS_KEY, JSON.stringify(datos));
-  }
-
-  /**
-   * Actualiza usuario enviando contraseña nueva si existe,
-   * si la contraseña nueva está vacía, se omite el campo para mantener la actual en backend.
-   */
   async function actualizarUsuario(datos) {
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-
-    const passwordNueva = (datos.password && datos.password.trim() !== '') ? datos.password.trim() : null;
+    const passwordNueva = datos.password?.trim() || null;
 
     const payload = {
       id: datos.id,
@@ -175,38 +160,27 @@ document.addEventListener('DOMContentLoaded', () => {
       firstName: datos.nombre,
       lastName: datos.apellidoPaterno,
       middleName: datos.apellidoMaterno,
-      preferences: datos.preferences || "",
+      preferences: datos.preferences || '',
       email: datos.email,
       phone: datos.telefono_fijo,
       mobile: datos.telefono_movil,
       nickname: datos.nickname,
-      created: datos.created
-    };
-    if (passwordNueva) {
-      payload.password = passwordNueva;
-    }
-
-    const raw = JSON.stringify(payload);
-
-    const requestOptions = {
-      method: "PUT",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow"
+      created: datos.created,
+      ...(passwordNueva ? { password: passwordNueva } : {}),
     };
 
-    const response = await fetch("http://jft314.ddns.net:8080/nso/api/v1/nso/user/update", requestOptions);
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error('Error al actualizar usuario: ' + errorText);
-    }
-    return response.text();
+    return fetchJSON(`${API_BASE}/user/update`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
   }
 
-  /* === SECCIÓN 'MI CUENTA' === */
+  // ===============================
+  // Sección "Mi cuenta"
+  // ===============================
   async function cargarMiCuenta() {
     const data = await obtenerDatosUsuario();
-
     if (!data) {
       contenedorPerfil.innerHTML = `<p class="text-danger">No se pudo obtener información del usuario.</p>`;
       return;
@@ -222,6 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <label for="input-nickname" class="form-label">Nickname</label>
             <input type="text" class="form-control" id="input-nickname" value="${data.nickname}" placeholder="Tu nickname">
           </div>
+
           <div class="col-md-6">
             <label for="input-genero" class="form-label">Género</label>
             <select id="input-genero" class="form-select" required>
@@ -255,6 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <label for="input-telefono" class="form-label">Teléfono fijo</label>
             <input type="text" class="form-control" id="input-telefono" value="${data.telefono_fijo}" placeholder="Número de teléfono fijo">
           </div>
+
           <div class="col-md-6">
             <label for="input-movil" class="form-label">Teléfono móvil</label>
             <input type="text" class="form-control" id="input-movil" value="${data.telefono_movil}" placeholder="Número de teléfono móvil" required>
@@ -281,6 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
               </button>
             </div>
           </div>
+
           <div class="col-md-6 position-relative">
             <label for="input-confirm-password" class="form-label">Confirmar nueva contraseña</label>
             <div class="input-group">
@@ -299,178 +276,160 @@ document.addEventListener('DOMContentLoaded', () => {
       </form>
     `;
 
-    // Mostrar / ocultar contraseña
-    const togglePassword = document.getElementById('togglePassword');
-    const inputPassword = document.getElementById('input-password');
-    const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
-    const inputConfirmPassword = document.getElementById('input-confirm-password');
+    // Mostrar / ocultar contraseñas
+    const toggle = (btnId, inputId) => {
+      const btn = qs(btnId);
+      const input = qs(inputId);
+      btn.addEventListener('click', () => {
+        const show = input.type === 'password';
+        input.type = show ? 'text' : 'password';
+        const icon = btn.querySelector('i');
+        icon.classList.toggle('bi-eye', !show);
+        icon.classList.toggle('bi-eye-slash', show);
+      });
+    };
+    toggle('#togglePassword', '#input-password');
+    toggle('#toggleConfirmPassword', '#input-confirm-password');
 
-    togglePassword.addEventListener('click', () => {
-      const type = inputPassword.type === 'password' ? 'text' : 'password';
-      inputPassword.type = type;
-      togglePassword.querySelector('i').classList.toggle('bi-eye');
-      togglePassword.querySelector('i').classList.toggle('bi-eye-slash');
-    });
-
-    toggleConfirmPassword.addEventListener('click', () => {
-      const type = inputConfirmPassword.type === 'password' ? 'text' : 'password';
-      inputConfirmPassword.type = type;
-      toggleConfirmPassword.querySelector('i').classList.toggle('bi-eye');
-      toggleConfirmPassword.querySelector('i').classList.toggle('bi-eye-slash');
-    });
-
-    // Enviar formulario para actualizar usuario
-    const formEditar = document.getElementById('form-editar');
-    formEditar.addEventListener('submit', async e => {
+    // Submit
+    const form = qs('#form-editar');
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      if (!formEditar.checkValidity()) {
-        formEditar.classList.add('was-validated');
-        alertify.error('Por favor, corrige los campos requeridos.');
+      if (!form.checkValidity()) {
+        form.classList.add('was-validated');
+        alertify?.error?.('Por favor, corrige los campos requeridos.');
         return;
       }
 
-      const passwordNueva = inputPassword.value.trim();
-      const confirmPassword = inputConfirmPassword.value.trim();
-
-      if (passwordNueva !== '' && passwordNueva !== confirmPassword) {
-        alertify.error('Las contraseñas no coinciden.');
-        inputConfirmPassword.focus();
+      const pass = qs('#input-password').value.trim();
+      const pass2 = qs('#input-confirm-password').value.trim();
+      if (pass && pass !== pass2) {
+        alertify?.error?.('Las contraseñas no coinciden.');
+        qs('#input-confirm-password').focus();
         return;
       }
 
-      const datosGuardados = JSON.parse(localStorage.getItem(USUARIO_DATOS_KEY)) || {};
-
+      const guardado = fromLS(KEYS.USUARIO_DATOS, {});
       const datosActualizados = {
-        id: datosGuardados.id || null,
-        created: datosGuardados.created || null,
-        nickname: formEditar.querySelector('#input-nickname').value.trim(),
-        genero: formEditar.querySelector('#input-genero').value,
-        nombre: formEditar.querySelector('#input-nombre').value.trim(),
-        apellidoPaterno: formEditar.querySelector('#input-apellido-paterno').value.trim(),
-        apellidoMaterno: formEditar.querySelector('#input-apellido-materno').value.trim(),
-        telefono_fijo: formEditar.querySelector('#input-telefono').value.trim(),
-        telefono_movil: formEditar.querySelector('#input-movil').value.trim(),
-        email: formEditar.querySelector('#input-email').value.trim(),
-        preferences: formEditar.querySelector('#input-preferences').value.trim(),
-        password: passwordNueva
+        id: guardado.id ?? null,
+        created: guardado.created ?? null,
+        nickname: qs('#input-nickname').value.trim(),
+        genero: qs('#input-genero').value,
+        nombre: qs('#input-nombre').value.trim(),
+        apellidoPaterno: qs('#input-apellido-paterno').value.trim(),
+        apellidoMaterno: qs('#input-apellido-materno').value.trim(),
+        telefono_fijo: qs('#input-telefono').value.trim(),
+        telefono_movil: qs('#input-movil').value.trim(),
+        email: qs('#input-email').value.trim(),
+        preferences: qs('#input-preferences').value.trim(),
+        password: pass,
       };
 
       try {
         await actualizarUsuario(datosActualizados);
-
         const toSave = { ...datosActualizados };
         delete toSave.password;
-        guardarDatosUsuarioLocalStorage(toSave);
+        toLS(KEYS.USUARIO_DATOS, toSave);
 
-        const popupCambios = document.getElementById('popupCambios');
-        popupCambios.showModal();
-
-      } catch (error) {
-        console.error(error);
-        alertify.error('Error al guardar datos, intenta nuevamente');
+        qs('#popupCambios')?.showModal();
+      } catch (err) {
+        console.error(err);
+        alertify?.error?.('Error al guardar datos, intenta nuevamente');
       }
     });
 
-    // Funcionalidad botón "Eliminar cuenta"
-    const btnEliminarCuenta = document.getElementById('btn-eliminar-cuenta');
-    btnEliminarCuenta.addEventListener('click', () => {
-      const confirmado = confirm('¿Seguro que quieres eliminar tu cuenta? Esta acción no se puede deshacer.');
-      if (!confirmado) return;
+    // Eliminar cuenta
+    qs('#btn-eliminar-cuenta').addEventListener('click', async () => {
+      if (!confirm('¿Seguro que quieres eliminar tu cuenta? Esta acción no se puede deshacer.')) return;
 
-      const datosUsuario = JSON.parse(localStorage.getItem(USUARIO_DATOS_KEY));
-      if (!datosUsuario || !datosUsuario.id) {
+      const datos = fromLS(KEYS.USUARIO_DATOS);
+      if (!datos?.id) {
         alert('No se encontró usuario activo para eliminar.');
         return;
       }
 
-      const idUsuario = datosUsuario.id;
-
-      fetch(`http://jft314.ddns.net:8080/nso/api/v1/nso/user/hdelete/id/${idUsuario}`, {
-        method: 'DELETE',
-        redirect: 'follow'
-      })
-        .then(response => {
-          if (!response.ok) throw new Error('Error al eliminar la cuenta');
-          return response.text();
-        })
-        .then(resultado => {
-          alert('Cuenta eliminada correctamente. Se cerrará la sesión.');
-          localStorage.removeItem(USUARIO_ACTIVO_KEY);
-          localStorage.removeItem(USUARIO_DATOS_KEY);
-          sessionStorage.clear();
-          window.location.href = '/Login/login.html';
-        })
-        .catch(error => {
-          console.error(error);
-          alert('Error al eliminar la cuenta, por favor intenta nuevamente.');
-        });
+      try {
+        await fetchJSON(`${API_BASE}/user/hdelete/id/${datos.id}`, { method: 'DELETE' });
+        alert('Cuenta eliminada correctamente. Se cerrará la sesión.');
+        localStorage.removeItem(KEYS.USUARIO_ACTIVO);
+        localStorage.removeItem(KEYS.USUARIO_DATOS);
+        sessionStorage.clear();
+        window.location.href = '/Login/login.html';
+      } catch (err) {
+        console.error(err);
+        alert('Error al eliminar la cuenta, por favor intenta nuevamente.');
+      }
     });
   }
 
-  /* === SECCIÓN 'MIS PEDIDOS' === */
+  // ===============================
+  // Sección "Mis pedidos"
+  // ===============================
   function cargarMisPedidos() {
-    let carrito = JSON.parse(localStorage.getItem(CARRITO_KEY)) || [];
+    let carrito = fromLS(KEYS.CARRITO, []);
     if (carrito.length === 0) {
       contenedorPerfil.innerHTML = `<p class='text-muted'>No tienes pedidos recientes.</p>`;
       return;
     }
 
     let total = 0;
-    const listaItems = carrito.map((item, index) => {
-      const precioUnitario = (item.precioOferta && item.precioOferta > 0 && item.precioOferta < item.precio)
-        ? item.precioOferta
-        : item.precio;
-      const subtotal = precioUnitario * item.cantidad;
+    const moneda = (n) => n.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+
+    const fila = (item, i) => {
+      const unit = item.precioOferta && item.precioOferta > 0 && item.precioOferta < item.precio
+        ? item.precioOferta : item.precio;
+      const subtotal = unit * item.cantidad;
       total += subtotal;
 
-      let selectorTallas = '';
-      if (item.tallasDisponibles && item.tallasDisponibles.length > 0) {
-        selectorTallas = `
-          <label for="talla-${index}" class="form-label me-2">Talla:</label>
-          <select id="talla-${index}" class="form-select form-select-sm d-inline-block" style="width: auto;">
-            ${item.tallasDisponibles.map(t => `
-              <option value="${t}" ${t === item.talla ? 'selected' : ''}>${t}</option>
-            `).join('')}
-          </select>
-        `;
-      }
+      const tallas = (item.tallasDisponibles ?? [])
+        .map(t => `<option value="${t}" ${t === item.talla ? 'selected' : ''}>${t}</option>`)
+        .join('');
 
       return `
         <li class="list-group-item d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
           <div class="flex-grow-1">
             <h6 class="my-0">${item.producto}</h6>
             <small class="text-muted">
-              Precio unitario: ${precioUnitario.toLocaleString('es-MX', {style: 'currency', currency: 'MXN'})}
+              Precio unitario: ${moneda(unit)}
               ${item.precioOferta && item.precioOferta > 0 && item.precioOferta < item.precio
-                ? `<br><span class="text-decoration-line-through">Original: ${item.precio.toLocaleString('es-MX', {style: 'currency', currency: 'MXN'})}</span>`
+                ? `<br><span class="text-decoration-line-through">Original: ${moneda(item.precio)}</span>`
                 : ''}
             </small>
-            <div class="mt-2">${selectorTallas}</div>
+            ${tallas ? `
+              <div class="mt-2">
+                <label for="talla-${i}" class="form-label me-2">Talla:</label>
+                <select id="talla-${i}" class="form-select form-select-sm d-inline-block" style="width: auto;">
+                  ${tallas}
+                </select>
+              </div>` : ''
+            }
           </div>
 
           <div class="d-flex align-items-center gap-2 me-3">
-            <button class="btn btn-sm btn-outline-secondary btn-disminuir" data-index="${index}" aria-label="Disminuir cantidad">−</button>
-            <input type="text" readonly class="form-control form-control-sm text-center" style="width: 50px;" value="${item.cantidad}" id="cantidad-${index}">
-            <button class="btn btn-sm btn-outline-secondary btn-aumentar" data-index="${index}" aria-label="Aumentar cantidad">+</button>
+            <button class="btn btn-sm btn-outline-secondary" data-accion="menos" data-index="${i}" aria-label="Disminuir">−</button>
+            <input type="text" readonly class="form-control form-control-sm text-center" style="width: 50px;" value="${item.cantidad}">
+            <button class="btn btn-sm btn-outline-secondary" data-accion="mas" data-index="${i}" aria-label="Aumentar">+</button>
           </div>
 
           <div class="d-flex flex-column align-items-end">
-            <strong class="me-3">${subtotal.toLocaleString('es-MX', {style: 'currency', currency: 'MXN'})}</strong>
-            <button class="btn btn-sm btn-danger btn-eliminar mt-2" data-index="${index}" title="Eliminar producto">Eliminar</button>
+            <strong class="me-3">${moneda(subtotal)}</strong>
+            <button class="btn btn-sm btn-danger mt-2" data-accion="eliminar" data-index="${i}" title="Eliminar producto">Eliminar</button>
           </div>
         </li>
       `;
-    }).join('');
+    };
+
+    const items = carrito.map(fila).join('');
 
     contenedorPerfil.innerHTML = `
       <div class="card p-4 bg-white">
         <h4 class="mb-3">Mis pedidos (Resumen actual del carrito)</h4>
         <ul class="list-group mb-3">
-          ${listaItems}
+          ${items}
           <li class="list-group-item d-flex justify-content-between align-items-center">
             <strong>Total (MXN)</strong>
-            <strong>${total.toLocaleString('es-MX', {style: 'currency', currency: 'MXN'})}</strong>
+            <strong>${moneda(total)}</strong>
           </li>
         </ul>
         <div class="text-end">
@@ -480,89 +439,68 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     `;
 
-    function guardarYCargar() {
-      localStorage.setItem(CARRITO_KEY, JSON.stringify(carrito));
-      cargarMisPedidos();
-    }
+    const guardarYCargar = () => { toLS(KEYS.CARRITO, carrito); cargarMisPedidos(); };
 
-    contenedorPerfil.querySelectorAll('.btn-disminuir').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const idx = Number(btn.getAttribute('data-index'));
+    // Delegación de eventos sobre contenedorPerfil
+    contenedorPerfil.onclick = (ev) => {
+      const btn = ev.target.closest('button, select');
+      if (!btn) return;
+
+      const idx = Number(btn.dataset.index);
+      const action = btn.dataset.accion;
+
+      if (action === 'menos') {
         if (carrito[idx].cantidad > 1) {
           carrito[idx].cantidad--;
           guardarYCargar();
         }
-      });
-    });
-
-    contenedorPerfil.querySelectorAll('.btn-aumentar').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const idx = Number(btn.getAttribute('data-index'));
+      } else if (action === 'mas') {
         carrito[idx].cantidad++;
         guardarYCargar();
-      });
-    });
-
-    contenedorPerfil.querySelectorAll('.btn-eliminar').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const idx = Number(btn.getAttribute('data-index'));
+      } else if (action === 'eliminar') {
         carrito.splice(idx, 1);
         guardarYCargar();
-        alertify.success('Producto eliminado del carrito');
-      });
-    });
-
-    contenedorPerfil.querySelectorAll('select[id^="talla-"]').forEach(select => {
-      select.addEventListener('change', () => {
-        const idx = Number(select.id.split('-')[1]);
-        carrito[idx].talla = select.value;
-        guardarYCargar();
-        alertify.success('Talla actualizada');
-      });
-    });
-
-    const btnPagar = document.getElementById('btn-pagar');
-    if (btnPagar) {
-      btnPagar.addEventListener('click', () => {
-        window.location.href = '/finalizar-compra/finalizar-compra.html';
-      });
-    }
-  }
-
-  /* === FUNCIONES PARA MOSTRAR DIRECCIÓN SOLO LECTURA DESDE BACKEND === */
-  async function obtenerDireccionUsuarioPorIdUser(idUser) {
-    const requestOptions = {
-      method: "GET",
-      redirect: "follow"
+        alertify?.success?.('Producto eliminado del carrito');
+      }
     };
 
+    // Cambio de talla
+    qsa('select[id^="talla-"]', contenedorPerfil).forEach((sel) => {
+      sel.addEventListener('change', () => {
+        const idx = Number(sel.id.split('-')[1]);
+        carrito[idx].talla = sel.value;
+        guardarYCargar();
+        alertify?.success?.('Talla actualizada');
+      });
+    });
+
+    qs('#btn-pagar')?.addEventListener('click', () => {
+      window.location.href = '/finalizar-compra/finalizar-compra.html';
+    });
+  }
+
+  // ===============================
+  // Dirección (solo lectura)
+  // ===============================
+  async function obtenerDireccionUsuarioPorIdUser(idUser) {
     try {
-      const response = await fetch("http://jft314.ddns.net:8080/nso/api/v1/nso/address/all", requestOptions);
-      if (!response.ok) throw new Error('Error al obtener direcciones');
-      const resultText = await response.text();
-      const direcciones = JSON.parse(resultText);
-
-      // Filtrar para la dirección asociada al usuario activo
-      const direccion = direcciones.find(dir => dir.idUser === idUser);
-
-      return direccion || null;
-    } catch (error) {
-      console.error(error);
+      const lista = await fetchJSON(`${API_BASE}/address/all`, { method: 'GET' });
+      return lista.find((d) => d.idUser === idUser) ?? null;
+    } catch (err) {
+      console.error('obtenerDireccionUsuarioPorIdUser:', err);
       return null;
     }
   }
 
   async function cargarDireccion() {
-    const datosUsuario = await obtenerDatosUsuario();
-
-    if (!datosUsuario || !datosUsuario.id) {
+    const datos = await obtenerDatosUsuario();
+    if (!datos?.id) {
       contenedorPerfil.innerHTML = `<p class="text-danger">No se encontró usuario activo.</p>`;
       return;
     }
 
-    const direccion = await obtenerDireccionUsuarioPorIdUser(datosUsuario.id);
-
-    if (!direccion) {
+    const dir = await obtenerDireccionUsuarioPorIdUser(datos.id);
+    if (!dir) {
       contenedorPerfil.innerHTML = `<p class="text-muted">No se encontró información de dirección para este usuario.</p>`;
       return;
     }
@@ -570,82 +508,79 @@ document.addEventListener('DOMContentLoaded', () => {
     contenedorPerfil.innerHTML = `
       <h4 class="mb-4">Dirección Registrada</h4>
       <div class="card p-3 bg-light">
-        <p><strong>Calle / Nombre:</strong> ${direccion.name || '-'}</p>
-        <p><strong>Número:</strong> ${direccion.number || '-'}</p>
-        <p><strong>Código Postal:</strong> ${direccion.cpCode || '-'}</p>
-        <p><strong>Ciudad:</strong> ${direccion.city || '-'}</p>
-        <p><strong>Estado:</strong> ${direccion.state || '-'}</p>
-        <p><strong>Tipo Dirección:</strong> ${direccion.type || direccion.typeId || '-'}</p>
-        <p><strong>Dirección Completa:</strong> ${direccion.fullAddress || '-'}</p>
+        <p><strong>Calle / Nombre:</strong> ${dir.name ?? '-'}</p>
+        <p><strong>Número:</strong> ${dir.number ?? '-'}</p>
+        <p><strong>Código Postal:</strong> ${dir.cpCode ?? '-'}</p>
+        <p><strong>Ciudad:</strong> ${dir.city ?? '-'}</p>
+        <p><strong>Estado:</strong> ${dir.state ?? '-'}</p>
+        <p><strong>Tipo Dirección:</strong> ${dir.type ?? dir.typeId ?? '-'}</p>
+        <p><strong>Dirección Completa:</strong> ${dir.fullAddress ?? '-'}</p>
       </div>
     `;
   }
 
-  /* === MAPEO DE SECCIONES === */
+  // ===============================
+  // Navegación lateral
+  // ===============================
   const secciones = {
     cuenta: cargarMiCuenta,
     pedidos: cargarMisPedidos,
     direccion: cargarDireccion,
-    logout: cerrarSesion
+    logout: cerrarSesion,
   };
 
-  /* === EVENTOS MENÚ LATERAL === */
-  enlacesMenu.forEach(enlace => {
-    enlace.addEventListener('click', e => {
+  enlacesMenu.forEach((link) => {
+    link.addEventListener('click', (e) => {
       e.preventDefault();
-      enlacesMenu.forEach(link => {
-        link.classList.remove('active');
-        link.removeAttribute('aria-current');
-      });
+      enlacesMenu.forEach((l) => { l.classList.remove('active'); l.removeAttribute('aria-current'); });
+      link.classList.add('active');
+      link.setAttribute('aria-current', 'page');
 
-      enlace.classList.add('active');
-      enlace.setAttribute('aria-current', 'page');
-
-      const seccion = enlace.getAttribute('data-section');
-      if (typeof secciones[seccion] === 'function') {
-        secciones[seccion]();
-      }
+      const sec = link.dataset.section;
+      if (typeof secciones[sec] === 'function') secciones[sec]();
     });
   });
 
-  /* === CARGA INICIAL === */
+  // ===============================
+  // Carga inicial
+  // ===============================
   manejarSesion();
   cargarMiCuenta();
 
-  /* === CARGAR Y GUARDAR FOTO DE PERFIL === */
+  // ===============================
+  // Foto de perfil
+  // ===============================
   inputFoto.addEventListener('change', () => {
-    const file = inputFoto.files[0];
-    if (file) {
-      if (!file.type.startsWith('image/')) {
-        alertify.error('Por favor, selecciona una imagen válida.');
-        inputFoto.value = '';
-        return;
-      }
-      if (file.size > 2097152) {
-        alertify.error('La imagen debe ser menor a 2MB.');
-        inputFoto.value = '';
-        return;
-      }
-      const reader = new FileReader();
-      reader.onload = e => {
-        fotoPerfil.src = e.target.result;
-        const datos = JSON.parse(localStorage.getItem(USUARIO_DATOS_KEY)) || {};
-        datos.foto = e.target.result;
-        guardarDatosUsuarioLocalStorage(datos);
-        alertify.success('Foto actualizada');
-      };
-      reader.readAsDataURL(file);
+    const file = inputFoto.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      alertify?.error?.('Por favor, selecciona una imagen válida.');
+      inputFoto.value = '';
+      return;
     }
+    if (file.size > 2 * 1024 * 1024) {
+      alertify?.error?.('La imagen debe ser menor a 2MB.');
+      inputFoto.value = '';
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      fotoPerfil.src = e.target.result;
+      const datos = fromLS(KEYS.USUARIO_DATOS, {});
+      datos.foto = e.target.result;
+      toLS(KEYS.USUARIO_DATOS, datos);
+      alertify?.success?.('Foto actualizada');
+    };
+    reader.readAsDataURL(file);
   });
 
-  /* === CONTROL POPUP "CAMBIOS REALIZADOS" === */
-  const popupCambios = document.getElementById('popupCambios');
-  const btnCerrarPopupCambios = document.getElementById('btnCerrarPopupCambios');
-  if (btnCerrarPopupCambios) {
-    btnCerrarPopupCambios.addEventListener('click', () => {
-      popupCambios.close();
-      const btnGuardar = document.getElementById('btn-guardar');
-      if (btnGuardar) btnGuardar.focus();
-    });
-  }
+  // ===============================
+  // Popup "Cambios realizados"
+  // ===============================
+  qs('#btnCerrarPopupCambios')?.addEventListener('click', () => {
+    qs('#popupCambios')?.close();
+    qs('#btn-guardar')?.focus();
+  });
 });
