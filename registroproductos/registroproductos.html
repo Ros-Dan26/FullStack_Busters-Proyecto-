@@ -3,21 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>registro productos</title>
+  <title>Registro de productos</title>
 
   <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
+    crossorigin="anonymous"
+  />
   <!-- Bootstrap Icons -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-  <!-- Fuente -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
-  <!-- Tu CSS de la página -->
-  <link rel="stylesheet" href="/registroproductos/registroproductos.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+  />
+  <!-- Fuente opcional -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap"
+    rel="stylesheet"
+  />
+  <!-- CSS de esta pantalla -->
+  <link rel="stylesheet" href="./registroproductos.css" />
   <!-- Header & Footer CSS -->
-  <link rel="stylesheet" href="/header-footer/header-footer.css" />
-  <!-- Header & Footer JS (defer para no bloquear) -->
-  <script defer src="/header-footer/header-footer.js"></script>
+  <link rel="stylesheet" href="../header-footer/header-footer.css" />
+
+  <!-- Header & Footer JS (cargar antes de initLayout) -->
+  <script defer src="../header-footer/header-footer.js"></script>
+  <!-- Lógica principal de esta pantalla -->
+  <script defer src="./registroproductos.js"></script>
 </head>
 
 <body style="font-family: 'Montserrat', sans-serif;">
@@ -25,143 +38,147 @@
   <div id="header-container"></div>
 
   <!-- Contenido principal -->
-  <div class="main-content">
-    <div class="form-container">
+  <main class="main-content">
+    <div class="form-container container py-4">
       <h4 class="text-center mb-4 fw-bold">REGISTRAR PRODUCTOS</h4>
 
-      <!-- Formulario: respeta tus IDs y clases -->
-      <form id="formularioRegistro">
+      <!-- Mensaje informativo -->
+      <div class="alert alert-info py-2" role="alert">
+        Completa los datos y presiona <strong>PUBLICAR</strong>. Las listas de Marca, Color, Talla y Estado se cargan desde el servidor.
+      </div>
+
+      <!-- Formulario -->
+      <form id="formularioRegistro" novalidate>
         <div class="mb-3">
           <label for="nombre" class="form-label">Nombre:</label>
-          <input type="text" class="form-control" id="nombre" required>
+          <input type="text" class="form-control" id="nombre" name="nombre" required autocomplete="off"/>
         </div>
 
         <div class="mb-3">
           <label for="modelo" class="form-label">Modelo:</label>
-          <input type="text" class="form-control" id="modelo" required>
+          <input type="text" class="form-control" id="modelo" name="modelo" required autocomplete="off"/>
         </div>
 
         <div class="mb-3">
           <label for="descripcion" class="form-label">Descripción:</label>
-          <input type="text" class="form-control" id="descripcion">
+          <input type="text" class="form-control" id="descripcion" name="descripcion" autocomplete="off"/>
         </div>
 
         <div class="mb-3">
           <label for="precio" class="form-label">Precio:</label>
-          <input type="number" class="form-control" id="precio" placeholder="$">
+          <input
+            type="number"
+            class="form-control"
+            id="precio"
+            name="precio"
+            placeholder="$"
+            min="0"
+            step="0.01"
+            required
+            inputmode="decimal"
+          />
         </div>
 
-        <div class="row mb-3">
-          <div class="col">
+        <div class="row g-3 mb-3">
+          <div class="col-12 col-md-4">
             <label for="color" class="form-label">Color:</label>
-            <select id="color" class="form-select">
+            <select id="color" name="color" class="form-select" required>
               <option value="">Color</option>
-              <option>Negro</option>
-              <option>Blanco</option>
-              <option>Rojo</option>
             </select>
           </div>
-          <div class="col">
-            <label for="talla" class="form-label">Talla:</label>
-            <select id="talla" class="form-select">
-              <option value="">Talla</option>
-              <option>21</option>
-              <option>22</option>
-              <option>23</option>
-              <option>24</option>
-              <option>25</option>
-              <option>26</option>
-              <option>27</option>
-              <option>28</option>
-              <option>29</option>
-              <option>30</option>
-            </select>
-          </div>
-          <div class="col">
-            <label for="genero" class="form-label">Género:</label>
-            <select id="genero" class="form-select">
-              <option value="">Género</option>
-              <option>Hombre</option>
-              <option>Mujer</option>
-              <option>Unisex</option>
-            </select>
-          </div>
-        </div>
 
-        <div class="row mb-3">
-          <div class="col">
-            <label for="estado" class="form-label">Estado:</label>
-            <select id="estado" class="form-select">
-              <option value="">Estado</option>
-              <option>Nuevo</option>
-              <option>Usado</option>
-              <option>Reacondicionado</option>
+          <div class="col-12 col-md-4">
+            <label for="talla" class="form-label">Talla:</label>
+            <select id="talla" name="talla" class="form-select" required>
+              <option value="">Talla</option>
             </select>
           </div>
-          <div class="col">
-            <label for="marca" class="form-label">Marca:</label>
-            <select id="marca" class="form-select">
-              <option value="">Marca</option>
-              <option>Nike</option>
-              <option>Adidas</option>
-              <option>Jordan</option>
-              <option>Puma</option>
-              <option>New Balance</option>
-              <option>Under Armour</option>
-              <option>Reebook</option>
-              <option>Saucony</option>
-              <option>Asics</option>
-              <option>Converse</option>
-              <option>Vans</option>
-              <option>Skechers</option>
-              <option>Pirma</option>
-              <option>Charly</option>
+
+          <div class="col-12 col-md-4">
+            <label for="estado" class="form-label">Estado:</label>
+            <select id="estado" name="estado" class="form-select" required>
+              <option value="">Estado</option>
             </select>
           </div>
         </div>
 
         <div class="mb-3">
-          <label for="imagen" class="form-label">Imagen:</label>
-          <input type="file" class="form-control" id="imagen" name="imagen" lang="es" aria-label="Seleccionar imagen" accept="image/*">
-          <!-- PREVIEW opcional: el JS lo usa si existe -->
-          <div class="mt-2">
-            <img id="preview" src="" alt="" style="max-width: 220px; height: auto; display: block;">
-          </div>
+          <label for="marca" class="form-label">Marca:</label>
+          <select id="marca" name="marca" class="form-select" required>
+            <option value="">Marca</option>
+          </select>
         </div>
 
-        <!-- Mantengo tu clase y el CTA; type="submit" para que el form dispare submit -->
-        <button type="submit" class="btn btn-publicar" id="btn-publicar">PUBLICAR</button>
+        <div class="mb-3">
+          <label for="imagen" class="form-label">Imagen:</label>
+          <input
+            type="file"
+            class="form-control"
+            id="imagen"
+            name="imagen"
+            accept="image/*"
+            aria-label="Seleccionar imagen"
+          />
+          <small class="text-muted">Opcional. Se sube después de crear el producto.</small>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100" id="btn-publicar">
+          PUBLICAR
+        </button>
       </form>
 
-      <!-- Contenedor opcional para pintar la respuesta del backend -->
+      <!-- Contenedor opcional para mostrar el producto recién creado -->
       <div id="producto" class="mt-4"></div>
     </div>
-  </div>
+  </main>
 
   <!-- Footer -->
   <div id="footer-container"></div>
 
-  <!-- Scripts de tu layout -->
-  <script src="/header-footer/header-footer.js"></script>
+  <!-- Bootstrap JS -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+    crossorigin="anonymous"
+  ></script>
+
+  <!-- (Opcional) EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+  <!-- Inicialización segura del header/footer + sesión -->
   <script>
-    // Carga de header con sesión (respetando tu flujo actual)
-    cargarHeader().then(() => {
-      const script = document.createElement('script');
-      script.src = "/Login/session.js";
-      script.onload = () => {
-        manejarSesion?.();
-      };
-      document.body.appendChild(script);
-    });
-    cargarFooter?.();
+    (function initLayout() {
+      function cargarSesionLuego() {
+        const script = document.createElement("script");
+        script.src = "/Login/session.js";
+        script.onload = () => {
+          if (typeof manejarSesion === "function") manejarSesion();
+        };
+        document.body.appendChild(script);
+      }
+
+      if (typeof cargarHeader === "function") {
+        try {
+          cargarHeader().then(cargarSesionLuego).catch(cargarSesionLuego);
+        } catch (err) {
+          console.error("Error al cargar header:", err);
+          cargarSesionLuego();
+        }
+      } else {
+        console.warn("cargarHeader no está definida.");
+        cargarSesionLuego();
+      }
+
+      if (typeof cargarFooter === "function") {
+        try {
+          cargarFooter();
+        } catch (err) {
+          console.error("Error al cargar footer:", err);
+        }
+      } else {
+        console.warn("cargarFooter no está definida.");
+      }
+    })();
   </script>
-
-  <!-- Bootstrap bundle -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-          integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
-          crossorigin="anonymous"></script>
-
-  <!-- Tu lógica (la versión que ya te pasé, sin tocar el diseño) -->
-  <script src="/registroproductos/registroproductos.js"></script>
 </body>
 </html>
