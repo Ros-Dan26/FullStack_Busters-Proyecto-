@@ -1,7 +1,7 @@
 create database netshopingonlinedb;
 use netshopingonlinedb;
 
--- Ultima version 07/08/25
+-- Ultima version 13/08/25
  -- DROP DATABASE netshopingonlinedb;
 
 -- TABLA BANCOS
@@ -48,13 +48,6 @@ CREATE TABLE brands (
 CREATE TABLE status (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL
-);
-
--- TABLA VARIANTES
-CREATE TABLE variants_types (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    description VARCHAR(256) NOT NULL
 );
 
 -- TABLA envíos
@@ -199,6 +192,17 @@ CREATE TABLE tags_products (
     FOREIGN KEY (id_tag) REFERENCES tags(id) ON DELETE CASCADE
 );
 
+-- TABLA DETALLE DE PRODUCTO
+CREATE TABLE details_products (
+id INT AUTO_INCREMENT PRIMARY KEY,
+id_sale INT NOT NULL,
+id_product INT NOT NULL,
+discount DECIMAL(8,2),
+
+FOREIGN KEY (id_sale) REFERENCES sales(id),
+FOREIGN KEY (id_product) REFERENCES products(id)
+);
+
 -- TABLA SOLICITUD DE COMPRA
 CREATE TABLE purcharse_request (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -216,6 +220,17 @@ CREATE TABLE images_products (
     FOREIGN KEY (id_product) REFERENCES products(id) ON DELETE CASCADE
 );
 
+-- PROTO TRIGGER
+DELIMITER $$
+CREATE TRIGGER foto_predeterminada
+AFTER INSERT ON users
+FOR EACH ROW
+BEGIN
+    INSERT INTO avatars(id_user, url)
+    VALUES (NEW.id, 'http://jft314.ddns.net/nso/bin/default.webp');
+END$$
+DELIMITER ;
+
 /* TABLAS DESCARTADAS
 -- TABLA TIPO DE PRODUCTOS
 CREATE TABLE types_products (
@@ -224,6 +239,13 @@ CREATE TABLE types_products (
     id_product INT NOT NULL,
     FOREIGN KEY (id_variant_type) REFERENCES variants_types(id) ON DELETE CASCADE,
     FOREIGN KEY (id_product) REFERENCES products(id) ON DELETE CASCADE
+
+
+-- TABLA VARIANTES
+CREATE TABLE variants_types (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    description VARCHAR(256) NOT NULL
 );
 
 
