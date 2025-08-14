@@ -153,7 +153,7 @@ fetch(API_URL, requestOptions)
         // Verifica que la respuesta sea un array
         if (!Array.isArray(data)) return;
         // Selecciona 5 productos aleatorios para destacar
-        const destacados = data.sort(() => 0.5 - Math.random()).slice(0, 5);
+        const destacados = data.sort(() => 0.5 - Math.random()).slice(0, 7);
 
         // Itera sobre los productos destacados y crea una tarjeta para cada uno
         destacados.forEach(item => {
