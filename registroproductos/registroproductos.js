@@ -66,7 +66,6 @@
       clearTimeout(id);
     }
   }
-
   async function safeJsonFetch(url, options = {}, timeoutMs = 10000) {
     const res = await fetchWithTimeout(url, options, timeoutMs);
     const text = await res.text().catch(() => "");
@@ -82,14 +81,13 @@
 
     for (const base of API_CANDIDATES) {
       try {
-        // Probamos un endpoint "ligero" y público (lookup/status)
         const url = `${base}/product/lookup/status`;
         const r = await fetchWithTimeout(url, { method: "GET" }, 3500);
         if (r.ok) {
           sessionStorage.setItem("API_BASE_SELECTED", base);
           return base;
         }
-      } catch { /* ignora y prueba siguiente */ }
+      } catch {/* siguiente */}
     }
     throw new Error("Ningún backend respondió en tiempo. Verifica red/servidor.");
   }
@@ -140,7 +138,7 @@
     return String(obj.id ?? "");
   }
 
-  // ====== Imagen ======
+  // ====== Imagen (validación, preview y subida) ======
   function sanitizeFilename(name) {
     if (!name) return `img_${Date.now()}.bin`;
     const dot = name.lastIndexOf(".");
@@ -151,13 +149,115 @@
     const safeExt = ext.replace(/[^a-zA-Z0-9.]/g, "");
     return `${safeBase}${safeExt || ".jpg"}`;
   }
-  function validarImagen(file) {
-    if (!file) return { ok: true };
+
+  function validarUnaImagen(file) {
     const allowed = ["image/png","image/jpeg","image/webp","image/gif","image/jpg"];
     const maxSizeMB = 6;
-    if (!allowed.includes(file.type)) return { ok:false, msg:"Formato no permitido (PNG/JPG/WEBP/GIF)." };
-    if (file.size > maxSizeMB*1024*1024) return { ok:false, msg:`La imagen supera ${maxSizeMB}MB.` };
+    if (!allowed.includes(file.type)) return { ok:false, msg:`${file.name}: formato no permitido (PNG/JPG/WEBP/GIF).` };
+    if (file.size > maxSizeMB*1024*1024) return { ok:false, msg:`${file.name}: supera ${maxSizeMB}MB.` };
     return { ok:true };
+  }
+  function validarImagenes(files) {
+    if (!files || !files.length) return { ok: true, msgs: [] };
+    const msgs = [];
+    for (const f of files) {
+      const v = validarUnaImagen(f);
+      if (!v.ok) msgs.push(v.msg);
+    }
+    return { ok: msgs.length === 0, msgs };
+  }
+
+  // Fallback para re-encode si algun servidor devuelve 422 (opcional)
+  async function reencodeImage(file, { mime = "image/png", maxW = 1600, maxH = 1600, quality = 0.95 } = {}) {
+    const dataURL = await new Promise((resolve, reject) => {
+      const fr = new FileReader();
+      fr.onload = () => resolve(fr.result);
+      fr.onerror = reject;
+      fr.readAsDataURL(file);
+    });
+    const img = await new Promise((resolve, reject) => {
+      const i = new Image();
+      i.onload = () => resolve(i);
+      i.onerror = reject;
+      i.src = dataURL;
+    });
+    let { width, height } = img;
+    const ratio = Math.min(maxW / width, maxH / height, 1);
+    width  = Math.round(width * ratio);
+    height = Math.round(height * ratio);
+    const canvas = document.createElement("canvas");
+    canvas.width = width; canvas.height = height;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0, width, height);
+    const blob = await new Promise((resolve) => canvas.toBlob(resolve, mime, quality));
+    const ext = mime === "image/png" ? ".png" : mime === "image/jpeg" ? ".jpg" : ".bin";
+    const clean = sanitizeFilename(file.name).replace(/\.[^.]+$/, "") + ext;
+    return new File([blob], clean, { type: mime });
+  }
+
+  // Sube 1 imagen
+  async function subirUnaImagen(productId, file) {
+    try {
+      const fd = new FormData();
+      fd.append("file", file, sanitizeFilename(file?.name));
+      fd.append("id", String(productId));
+      return await safeJsonFetch(EP.addImg(), { method: "POST", body: fd });
+    } catch (e) {
+      // Si el server valida mimetype y rechaza con 422, re-encode y reintenta una vez
+      if (String(e.message).startsWith("HTTP 422")) {
+        const pngFile = await reencodeImage(file, { mime: "image/png", maxW: 1600, maxH: 1600, quality: 0.95 });
+        const fd2 = new FormData();
+        fd2.append("file", pngFile, sanitizeFilename(pngFile.name));
+        fd2.append("id", String(productId));
+        return await safeJsonFetch(EP.addImg(), { method: "POST", body: fd2 });
+      }
+      throw e;
+    }
+  }
+
+  // Sube N imágenes de forma secuencial (más seguro para el backend)
+  async function subirImagenesProducto(productId, files) {
+    let ok = 0, fail = 0;
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      try {
+        toastInfo(`Subiendo imagen ${i+1}/${files.length}: ${file.name}`);
+        await subirUnaImagen(productId, file);
+        ok++;
+      } catch (err) {
+        console.error("Fallo al subir imagen:", err);
+        fail++;
+      }
+    }
+    return { ok, fail };
+  }
+
+  // Render de previews
+  function renderPreviews(files, container) {
+    container.innerHTML = "";
+    const frag = document.createDocumentFragment();
+    Array.from(files).forEach(file => {
+      const col = document.createElement("div");
+      col.className = "col-6 col-sm-4 col-md-3 col-lg-2";
+      const card = document.createElement("div");
+      card.className = "border rounded p-1 h-100 d-flex flex-column";
+
+      const img = document.createElement("img");
+      img.className = "img-fluid rounded";
+      img.alt = file.name;
+      img.src = URL.createObjectURL(file);
+
+      const cap = document.createElement("small");
+      cap.className = "text-truncate mt-1";
+      cap.title = file.name;
+      cap.textContent = file.name;
+
+      card.appendChild(img);
+      card.appendChild(cap);
+      col.appendChild(card);
+      frag.appendChild(col);
+    });
+    container.appendChild(frag);
   }
 
   // ====== Sesión ======
@@ -214,38 +314,47 @@
     return { brands, colors, sizes, status };
   }
 
-  // ====== Subida de imagen ======
-  async function subirImagenProducto(productId, file) {
-    const fd = new FormData();
-    fd.append("file", file, sanitizeFilename(file?.name));
-    fd.append("id", String(productId)); // el backend espera id como texto
-    return await safeJsonFetch(EP.addImg(), { method: "POST", body: fd });
-  }
-
   // ====== Bootstrap de la página ======
   document.addEventListener("DOMContentLoaded", async () => {
-    const form        = document.getElementById("formularioRegistro");
-    const btnPublicar = document.getElementById("btn-publicar");
-    const nombre      = document.getElementById("nombre");
-    const modelo      = document.getElementById("modelo");
-    const descripcion = document.getElementById("descripcion");
-    const detalle     = document.getElementById("detalle");
-    const precio      = document.getElementById("precio");
-    const selMarca    = document.getElementById("marca");
-    const selColor    = document.getElementById("color");
-    const selTalla    = document.getElementById("talla");
-    const selEstado   = document.getElementById("estado");
-    const inputImagen = document.getElementById("imagen");
+    const form         = document.getElementById("formularioRegistro");
+    const btnPublicar  = document.getElementById("btn-publicar");
+    const nombre       = document.getElementById("nombre");
+    const modelo       = document.getElementById("modelo");
+    const descripcion  = document.getElementById("descripcion");
+    const detalle      = document.getElementById("detalle");
+    const precio       = document.getElementById("precio");
+    const selMarca     = document.getElementById("marca");
+    const selColor     = document.getElementById("color");
+    const selTalla     = document.getElementById("talla");
+    const selEstado    = document.getElementById("estado");
+    const inputImagen  = document.getElementById("imagen");
+    const previewGrid  = document.getElementById("previewGrid");
 
     [selMarca, selColor, selTalla, selEstado].forEach(s => { if (s) { s.disabled = false; s.style.pointerEvents = "auto"; } });
 
     const originalBtnText = btnPublicar?.textContent || "PUBLICAR";
     if (btnPublicar) { btnPublicar.disabled = true; btnPublicar.textContent = "Detectando servidor..."; }
 
+    // Previews al seleccionar archivos
+    inputImagen?.addEventListener("change", () => {
+      const files = inputImagen.files ? Array.from(inputImagen.files) : [];
+      if (!files.length) {
+        previewGrid.innerHTML = "";
+        return;
+      }
+      const v = validarImagenes(files);
+      if (!v.ok) {
+        toastWarn("Revisa tus imágenes:\n• " + v.msgs.join("\n• "));
+        inputImagen.value = "";
+        previewGrid.innerHTML = "";
+        return;
+      }
+      renderPreviews(files, previewGrid);
+    });
+
     // 1) Elegir base disponible
     try {
       API_BASE = await chooseApiBase();
-      toastOK(`Conectado a: ${API_BASE}`, "Backend OK");
     } catch (e) {
       console.error(e);
       toastError("No fue posible contactar ningún backend (LAN ni DDNS). Verifica que el servidor esté arriba y accesible desde tu red.");
@@ -309,9 +418,9 @@
         toastWarn("Selecciona marca, color, talla y estado."); return;
       }
 
-      const file = inputImagen?.files?.[0] ?? null;
-      const vImg = validarImagen(file);
-      if (!vImg.ok) { toastWarn(vImg.msg); return; }
+      const files = inputImagen?.files ? Array.from(inputImagen.files) : [];
+      const vImgs = validarImagenes(files);
+      if (!vImgs.ok) { toastWarn("Revisa tus imágenes:\n• " + vImgs.msgs.join("\n• ")); return; }
 
       let payload;
       try {
@@ -354,19 +463,24 @@
           return;
         }
 
-        if (file) {
-          if (btnPublicar) btnPublicar.textContent = "2/2 Subiendo imagen...";
-          toastInfo("2/2 Subiendo imagen…");
-          try {
-            await subirImagenProducto(productSaved.id, file);
-          } catch (imgErr) {
-            console.error("Fallo al subir imagen:", imgErr);
-            toastWarn("El producto se creó, pero la imagen no se pudo subir. Puedes reintentar más tarde.\n" + imgErr.message);
+        if (files.length) {
+          if (btnPublicar) btnPublicar.textContent = `2/2 Subiendo ${files.length} imagen(es)...`;
+          toastInfo(`2/2 Subiendo ${files.length} imagen(es)…`);
+
+          const { ok, fail } = await subirImagenesProducto(productSaved.id, files);
+          if (ok && !fail) {
+            toastOK(`Se subieron ${ok}/${files.length} imágenes correctamente.`);
+          } else if (ok && fail) {
+            toastWarn(`Algunas imágenes fallaron (${ok} OK, ${fail} error). Puedes reintentar.`);
+          } else {
+            toastWarn("No se pudo subir ninguna imagen. El producto quedó creado, puedes subirlas más tarde.");
           }
         }
 
         toastOK("Producto publicado correctamente.");
         form.reset();
+        // Limpia previews
+        if (previewGrid) previewGrid.innerHTML = "";
       } catch (err) {
         console.error(err);
         if (String(err.message).startsWith("HTTP 409")) {

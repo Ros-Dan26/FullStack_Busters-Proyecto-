@@ -30,7 +30,7 @@
   <!-- Header & Footer CSS -->
   <link rel="stylesheet" href="../header-footer/header-footer.css" />
 
-  <!-- Bootstrap JS (bundle) con defer para toasts y componentes -->
+  <!-- Bootstrap JS (bundle) -->
   <script
     defer
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
@@ -128,18 +128,22 @@
           </select>
         </div>
 
-        <div class="mb-3">
-          <label for="imagen" class="form-label">Imagen (opcional)</label>
+        <div class="mb-2">
+          <label for="imagen" class="form-label">Imágenes (opcional)</label>
           <input
             type="file"
             class="form-control"
             id="imagen"
             name="imagen"
             accept="image/*"
-            aria-label="Seleccionar imagen"
+            aria-label="Seleccionar imágenes"
+            multiple
           />
-          <small class="text-muted">La imagen se sube automáticamente después de crear el producto.</small>
+          <small class="text-muted">Puedes seleccionar varias imágenes (Ctrl/Cmd + click). Se suben automáticamente después de crear el producto.</small>
         </div>
+
+        <!-- Previsualización de imágenes seleccionadas -->
+        <div id="previewGrid" class="row g-2 mb-3"></div>
 
         <button type="submit" class="btn btn-primary w-100" id="btn-publicar">
           PUBLICAR
