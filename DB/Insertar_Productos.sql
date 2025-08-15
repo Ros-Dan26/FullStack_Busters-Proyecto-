@@ -347,10 +347,78 @@ insert into images_products(id_product,url) values (50,"https://images.puma.com/
 insert into images_products(id_product,url) values (50,"https://images.puma.com/image/upload/f_auto,q_auto,b_rgb:fafafa,w_750,h_750/global/401417/01/sv01/fnd/PNA/fmt/png/PUMA-x-HELLO-KITTY%C2%AE-AND-FRIENDS-Suede-XL-Little-Kids'-Sneakers");
 insert into images_products(id_product,url) values (50,"https://images.puma.com/image/upload/f_auto,q_auto,b_rgb:fafafa,w_750,h_750/global/401417/01/sv04/fnd/PNA/fmt/png/PUMA-x-HELLO-KITTY%C2%AE-AND-FRIENDS-Suede-XL-Little-Kids'-Sneakers");
 
+-- VISTA PRODUCTOS
+create view products_view as(
+select 
+    p.id as id,
+    concat(u.first_name, ' ',u.last_name, ' ', u.middle_name) as user,
+    s.name as status,
+    z.name as size,
+    b.name as brand,
+    b.url as url_brand,
+    cp.name as color_product,
+    cp.hex_code as code,
+    p.name as name,
+    p.model as model,
+    p.description as description,
+    p.details as details,
+    p.price as price,
+    p.created as created,
+    p.updated as updated,
+    p.deleted as deleted
+from products p 
+inner join users u on u.id = p.id_user 
+inner join status s on s.id = p.id_status 
+inner join brands b on b.id = p.id_brand 
+inner join sizes z on z.id = p.id_size 
+inner join colors_products cp on cp.id = p.id_color
+order by p.id);
 
+-- VISTA CORREO
+create view address_view as(
+select 
+    a.id  as id,
+    u.id as id_user,
+    t.name as type,
+    c.name as city,
+    s.name as state,
+    a.name as name,
+    a.number as number,
+    CONCAT(t.name, ' ', a.name, ' No. ', a.number, ' CP: ', a.cp_code , ', ', c.name, ', ', s.name) as full_address,
+    a.cp_code as cp_code,
+    a.created as created,
+    a.updated as updated,
+    a.deleted as deleted
+from address a
+inner join users u on u.id = a.id_user
+inner join types t on t.id = a.id_type
+inner join cities c on c.id = a.id_city
+inner join states s on s.id = c.id_state
+order by a.id);
 
-
-
+-- VISTA USUARIOS
+create view users_view as(
+select 
+u.id as id,
+g.name as gender,
+g.id as id_gender,
+u.first_name as first_name,
+u.last_name as last_name,
+u.middle_name as middle_name,
+a.url as avatar,
+u.preferences as preferences,
+u.email as email,
+u.phone as phone,
+u.mobile as mobile,
+u.nickname as nickname,
+u.password as password,
+u.created as created,
+u.updated as updated,
+u.deleted as deleted
+from users u 
+inner join genders g on u.id_gender = g.id 
+inner join avatars a on a.id_user = u.id
+order by u.id);
 
 
 

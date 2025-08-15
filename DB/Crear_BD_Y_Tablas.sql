@@ -17,11 +17,7 @@ CREATE TABLE genders (
     name VARCHAR(50) NOT NULL
 );
 
--- TABLA TAGS
-CREATE TABLE tags (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL
-);
+
 
 -- TABLA DE COLORES
 CREATE TABLE colors_products (
@@ -50,13 +46,6 @@ CREATE TABLE status (
     name VARCHAR(50) NOT NULL
 );
 
--- TABLA envíos
-CREATE TABLE shipments (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    price DECIMAL(8,2),
-    address_details VARCHAR(256) NOT NULL
-);
 
 -- TABLA USUARIOS
 CREATE TABLE users (
@@ -149,12 +138,12 @@ CREATE TABLE address (
 CREATE TABLE sales (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_user INT NOT NULL,
-    id_shipment INT NOT NULL,
+   -- id_shipment INT NOT NULL,
     payment_details VARCHAR(256) NOT NULL,
     time_sale TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     discount DECIMAL(4, 2) DEFAULT 0.0,
-    FOREIGN KEY (id_user) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (id_shipment) REFERENCES shipments(id) ON DELETE CASCADE
+    FOREIGN KEY (id_user) REFERENCES users(id) ON DELETE CASCADE
+    -- FOREIGN KEY (id_shipment) REFERENCES shipments(id) ON DELETE CASCADE
 );
 
 -- TABLA PRODUCTOS
@@ -183,14 +172,6 @@ CREATE TABLE products (
     FOREIGN KEY (id_color) REFERENCES colors_products(id) ON DELETE CASCADE
 );
 
--- TABLA TAGS DE PRODUCTOS
-CREATE TABLE tags_products (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    id_product INT NOT NULL,
-    id_tag INT NOT NULL,
-    FOREIGN KEY (id_product) REFERENCES products(id) ON DELETE CASCADE,
-    FOREIGN KEY (id_tag) REFERENCES tags(id) ON DELETE CASCADE
-);
 
 -- TABLA DETALLE DE PRODUCTO
 CREATE TABLE details_products (
@@ -203,14 +184,6 @@ FOREIGN KEY (id_sale) REFERENCES sales(id),
 FOREIGN KEY (id_product) REFERENCES products(id)
 );
 
--- TABLA SOLICITUD DE COMPRA
-CREATE TABLE purcharse_request (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    id_user INT NOT NULL,
-    id_product INT NOT NULL,
-    FOREIGN KEY (id_user) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (id_product) REFERENCES products(id) ON DELETE CASCADE
-);
 
 -- TABLA DE IMAGENES
 CREATE TABLE images_products (
@@ -246,6 +219,38 @@ CREATE TABLE variants_types (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     description VARCHAR(256) NOT NULL
+);
+
+-- TABLA SOLICITUD DE COMPRA
+CREATE TABLE purcharse_request (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_user INT NOT NULL,
+    id_product INT NOT NULL,
+    FOREIGN KEY (id_user) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_product) REFERENCES products(id) ON DELETE CASCADE
+);
+
+-- TABLA TAGS
+CREATE TABLE tags (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL
+);
+
+-- TABLA TAGS DE PRODUCTOS
+CREATE TABLE tags_products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_product INT NOT NULL,
+    id_tag INT NOT NULL,
+    FOREIGN KEY (id_product) REFERENCES products(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_tag) REFERENCES tags(id) ON DELETE CASCADE
+);
+
+-- TABLA envíos
+CREATE TABLE shipments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    price DECIMAL(8,2),
+    address_details VARCHAR(256) NOT NULL
 );
 
 

@@ -3148,7 +3148,13 @@ INSERT INTO bank_transfers(id_user, id_bank, identification_number) VALUES
 ('99', '16','134893432972417331'),
 ('100', '20','141378117477256617');
 
-/*  INSERTAR IMAGENES A USUARIOS */
+
+
+
+
+/*
+
+  INSERTAR IMAGENES A USUARIOS 
 -- Imagenes de perfil avatars
 INSERT INTO avatars(id_user, url) VALUES
 (2,"https://i.pinimg.com/236x/d1/e3/d2/d1e3d2a12bc3d0221898c4391dffcfff.jpg"),
@@ -3202,9 +3208,6 @@ INSERT INTO avatars(id_user, url) VALUES
 (50,"https://i.pinimg.com/originals/50/da/2f/50da2f8b2229b0abb9de5cbbedfe2e2e.jpg");
 
 
-
-
-/*
 TABLAS DESCARTADAS
 INSERT INTO paypals(id_user, email) VALUES
 ('2', (select email from users where id=13)),
