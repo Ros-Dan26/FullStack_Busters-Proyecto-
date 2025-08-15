@@ -25,10 +25,14 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', () => {
     // Selecciona el contenedor del carrusel de marcas
     const track = document.querySelector('.brands-carousel-track');
+    // Evitar errores si no existe en la página
+    if (!track) return;
     // Obtiene todos los slides (marcas) como un array
     let slides = Array.from(track.children);
     // Guarda el número original de slides
     const slideCount = slides.length;
+    // Evitar errores si no hay slides
+    if (slideCount === 0) return;
 
     // Duplica los slides al final para crear el efecto infinito
     slides.forEach(slide => track.appendChild(slide.cloneNode(true)));
@@ -153,7 +157,7 @@ fetch(API_URL, requestOptions)
         // Verifica que la respuesta sea un array
         if (!Array.isArray(data)) return;
         // Selecciona 5 productos aleatorios para destacar
-        const destacados = data.sort(() => 0.5 - Math.random()).slice(0, 7);
+        const destacados = data.sort(() => 0.5 - Math.random()).slice(0, 6);
 
         // Itera sobre los productos destacados y crea una tarjeta para cada uno
         destacados.forEach(item => {
