@@ -1,30 +1,100 @@
+// /registroproductos/registroproductos.js
 (() => {
-  const API_BASE = "http://jft314.ddns.net:8080/nso/api/v1/nso";
+  // === Candidatos de API: LAN y DDNS (ajusta si hace falta) ===
+  const API_CANDIDATES = [
+    "http://192.168.50.23:8081/api/v1/nso",
+    "http://jft314.ddns.net:8080/nso/api/v1/nso",
+  ];
+  // Si quieres forzar que la imagen vaya a una base distinta, pon aquí la URL base (o deja null)
+  const IMAGE_EP_OVERRIDE = null; // p.ej. "http://192.168.50.23:8081/api/v1/nso"
 
-  const EP_LOOKUP_BRANDS  = `${API_BASE}/product/lookup/brands`;
-  const EP_LOOKUP_COLORS  = `${API_BASE}/product/lookup/colors_products`;
-  const EP_LOOKUP_SIZES   = `${API_BASE}/product/lookup/sizes`;
-  const EP_LOOKUP_STATUS  = `${API_BASE}/product/lookup/status`;
+  // No agregar sufijo al modelo
+  const USE_UNIQUE_MODEL_SUFFIX = false;
 
-  const EP_SAVE_PRODUCT   = `${API_BASE}/product/save`;
-  const EP_ADD_IMAGE      = `${API_BASE}/product/add/image`;
+  // ====== Toasts (Bootstrap 5) ======
+  function createToast({ title = "", message = "", variant = "info", delay = 4500, autohide = true } = {}) {
+    const container = document.getElementById("toastContainer") || (() => {
+      const c = document.createElement("div");
+      c.id = "toastContainer";
+      c.className = "toast-container position-fixed top-0 end-0 p-3";
+      c.style.zIndex = 1080;
+      document.body.appendChild(c);
+      return c;
+    })();
+    const bgClass = `text-bg-${variant}`;
+    const wrapper = document.createElement("div");
+    wrapper.className = `toast align-items-center ${bgClass} border-0`;
+    wrapper.setAttribute("role", "alert");
+    wrapper.setAttribute("aria-live", "assertive");
+    wrapper.setAttribute("aria-atomic", "true");
 
-  // Si sospechas de unicidad en 'model', pon esto en true para añadir -timestamp
-  const USE_UNIQUE_MODEL_SUFFIX = true;
+    const body = document.createElement("div");
+    body.className = "d-flex";
 
-  const CATALOG_CACHE = { brands: [], colors: [], sizes: [], status: [] };
+    const tb = document.createElement("div");
+    tb.className = "toast-body";
+    tb.innerHTML = (title ? `<strong class="me-2">${title}</strong>` : "") + (message || "");
 
-  async function safeJsonFetch(url, options = {}) {
-    const res = await fetch(url, { ...options, mode: "cors" });
-    const text = await res.text().catch(() => "");
-    if (!res.ok) {
-      // Incluye el cuerpo devuelto por el backend para que veas el motivo exacto
-      throw new Error(`HTTP ${res.status} - ${url} - ${text}`);
+    const closeBtn = document.createElement("button");
+    const darkBg = ["primary","secondary","dark","danger","success"].includes(variant);
+    closeBtn.type = "button";
+    closeBtn.className = `btn-close ${darkBg ? "btn-close-white" : ""} me-2 m-auto`;
+    closeBtn.setAttribute("data-bs-dismiss", "toast");
+    closeBtn.setAttribute("aria-label", "Close");
+
+    body.appendChild(tb);
+    body.appendChild(closeBtn);
+    wrapper.appendChild(body);
+    container.appendChild(wrapper);
+
+    const toast = new bootstrap.Toast(wrapper, { autohide, delay });
+    toast.show();
+    return toast;
+  }
+  const toastInfo  = (m,t="Info",d=3500)=>createToast({title:t,message:m,variant:"info",delay:d});
+  const toastOK    = (m,t="Éxito",d=3500)=>createToast({title:t,message:m,variant:"success",delay:d});
+  const toastWarn  = (m,t="Atención",d=5500)=>createToast({title:t,message:m,variant:"warning",delay:d});
+  const toastError = (m,t="Error",d=7000)=>createToast({title:t,message:m,variant:"danger",delay:d});
+
+  // ====== Helpers red/HTTP ======
+  async function fetchWithTimeout(url, options = {}, timeoutMs = 6000) {
+    const ctrl = new AbortController();
+    const id = setTimeout(() => ctrl.abort(), timeoutMs);
+    try {
+      return await fetch(url, { ...options, mode: "cors", signal: ctrl.signal });
+    } finally {
+      clearTimeout(id);
     }
+  }
+
+  async function safeJsonFetch(url, options = {}, timeoutMs = 10000) {
+    const res = await fetchWithTimeout(url, options, timeoutMs);
+    const text = await res.text().catch(() => "");
+    if (!res.ok) throw new Error(`HTTP ${res.status} - ${url} - ${text}`);
     if (!text) return [];
     try { return JSON.parse(text); } catch { return text; }
   }
 
+  // Detecta y cachea la base disponible
+  async function chooseApiBase() {
+    const cached = sessionStorage.getItem("API_BASE_SELECTED");
+    if (cached) return cached;
+
+    for (const base of API_CANDIDATES) {
+      try {
+        // Probamos un endpoint "ligero" y público (lookup/status)
+        const url = `${base}/product/lookup/status`;
+        const r = await fetchWithTimeout(url, { method: "GET" }, 3500);
+        if (r.ok) {
+          sessionStorage.setItem("API_BASE_SELECTED", base);
+          return base;
+        }
+      } catch { /* ignora y prueba siguiente */ }
+    }
+    throw new Error("Ningún backend respondió en tiempo. Verifica red/servidor.");
+  }
+
+  // ====== Utilidades UI/DOM ======
   function resetAndPlaceholder(selectEl, placeholder) {
     if (!selectEl) return;
     selectEl.innerHTML = "";
@@ -33,7 +103,6 @@
     opt.textContent = placeholder;
     selectEl.appendChild(opt);
   }
-
   function populateSelect(selectEl, items, { valueKey = "id", labelKey = "name" } = {}) {
     if (!selectEl || !Array.isArray(items)) return;
     const frag = document.createDocumentFragment();
@@ -45,19 +114,17 @@
     });
     selectEl.appendChild(frag);
   }
-
   function normalizeArray(raw) {
     if (Array.isArray(raw)) return raw;
     if (raw && typeof raw === "object") {
-      for (const key of ["data","content","items","list","results"]) {
-        if (Array.isArray(raw[key])) return raw[key];
+      for (const k of ["data","content","items","list","results"]) {
+        if (Array.isArray(raw[k])) return raw[k];
       }
       const vals = Object.values(raw);
       if (vals.length && vals.every(v => typeof v === "object")) return vals;
     }
     return [];
   }
-
   function guessLabel(obj) {
     if (!obj || typeof obj !== "object") return "";
     const keys = ["name","nombre","label","value","brand","status","size","description","title"];
@@ -73,20 +140,71 @@
     return String(obj.id ?? "");
   }
 
+  // ====== Imagen ======
+  function sanitizeFilename(name) {
+    if (!name) return `img_${Date.now()}.bin`;
+    const dot = name.lastIndexOf(".");
+    const base = dot >= 0 ? name.slice(0, dot) : name;
+    const ext  = dot >= 0 ? name.slice(dot) : "";
+    const safeBase = base.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                     .replace(/[^a-zA-Z0-9._-]+/g, "_").slice(0, 80) || `img_${Date.now()}`;
+    const safeExt = ext.replace(/[^a-zA-Z0-9.]/g, "");
+    return `${safeBase}${safeExt || ".jpg"}`;
+  }
+  function validarImagen(file) {
+    if (!file) return { ok: true };
+    const allowed = ["image/png","image/jpeg","image/webp","image/gif","image/jpg"];
+    const maxSizeMB = 6;
+    if (!allowed.includes(file.type)) return { ok:false, msg:"Formato no permitido (PNG/JPG/WEBP/GIF)." };
+    if (file.size > maxSizeMB*1024*1024) return { ok:false, msg:`La imagen supera ${maxSizeMB}MB.` };
+    return { ok:true };
+  }
+
+  // ====== Sesión ======
+  function getActiveUserIdFromSessionOrRedirect() {
+    try {
+      const raw = localStorage.getItem("usuarioActivo");
+      const u = raw ? JSON.parse(raw) : null;
+      if (u && Number.isInteger(Number(u.id)) && Number(u.id) > 0) {
+        return Number(u.id);
+      }
+    } catch {}
+    toastWarn("Tu sesión expiró o no hay usuario activo. Inicia sesión.", "Sesión requerida", 6000);
+    window.location.href = "/Login/login.html";
+    throw new Error("Sin sesión: redirigiendo a login");
+  }
+
+  // ====== Estado global tras elegir base ======
+  let API_BASE = null;
+  const CATALOG_CACHE = { brands: [], colors: [], sizes: [], status: [] };
+
+  // Construye endpoints a partir de API_BASE
+  const EP = {
+    brands:  () => `${API_BASE}/product/lookup/brands`,
+    colors:  () => `${API_BASE}/product/lookup/colors_products`,
+    sizes:   () => `${API_BASE}/product/lookup/sizes`,
+    status:  () => `${API_BASE}/product/lookup/status`,
+    save:    () => `${API_BASE}/product/save`,
+    // Imagen: usa override si está definido; si no, la base elegida
+    addImg:  () => `${(IMAGE_EP_OVERRIDE || API_BASE)}/product/add/image`,
+  };
+
+  // ====== Carga de catálogos ======
   async function precargarCatalogos() {
     const [brandsRaw, colorsRaw, sizesRaw, statusRaw] = await Promise.all([
-      safeJsonFetch(EP_LOOKUP_BRANDS),
-      safeJsonFetch(EP_LOOKUP_COLORS),
-      safeJsonFetch(EP_LOOKUP_SIZES),
-      safeJsonFetch(EP_LOOKUP_STATUS),
+      safeJsonFetch(EP.brands()),
+      safeJsonFetch(EP.colors()),
+      safeJsonFetch(EP.sizes()),
+      safeJsonFetch(EP.status()),
     ]);
 
-    const brands = normalizeArray(brandsRaw).map(o => ({ id: o.id ?? o.id_brand ?? o.brandId ?? o.value, name: guessLabel(o), raw: o }));
-    const colors = normalizeArray(colorsRaw).map(o => ({ id: o.id ?? o.id_color ?? o.colorId ?? o.value, name: guessLabel(o), hex: o.hex || o.hex_code || o.hexCode || o.hexadecimal || null, raw: o }));
-    const sizes  = normalizeArray(sizesRaw).map(o => ({ id: o.id ?? o.id_size  ?? o.sizeId  ?? o.value, name: guessLabel(o), raw: o }));
-    const status = normalizeArray(statusRaw).map(o => ({ id: o.id ?? o.id_status?? o.statusId?? o.value, name: guessLabel(o), raw: o }));
+    const brands = normalizeArray(brandsRaw).map(o => ({ id:o.id ?? o.id_brand ?? o.brandId ?? o.value, name:guessLabel(o), raw:o }));
+    const colors = normalizeArray(colorsRaw).map(o => ({ id:o.id ?? o.id_color ?? o.colorId ?? o.value, name:guessLabel(o), hex:o.hex||o.hex_code||o.hexCode||o.hexadecimal||null, raw:o }));
+    const sizes  = normalizeArray(sizesRaw).map(o => ({ id:o.id ?? o.id_size  ?? o.sizeId  ?? o.value, name:guessLabel(o), raw:o }));
+    const status = normalizeArray(statusRaw).map(o => ({ id:o.id ?? o.id_status?? o.statusId?? o.value, name:guessLabel(o), raw:o }));
 
     console.group("[Catálogos registrar productos]");
+    console.log("API_BASE:", API_BASE);
     console.log("Brands:", brands);
     console.log("Colors:", colors);
     console.log("Sizes:", sizes);
@@ -96,50 +214,47 @@
     return { brands, colors, sizes, status };
   }
 
-  function getActiveUserIdFromSessionOrRedirect() {
-    try {
-      const raw = localStorage.getItem("usuarioActivo");
-      const u = raw ? JSON.parse(raw) : null;
-      if (u && Number.isInteger(Number(u.id)) && Number(u.id) > 0) {
-        return Number(u.id);
-      }
-    } catch {}
-    alert("Tu sesión expiró o no hay usuario activo. Por favor inicia sesión.");
-    window.location.href = "/Login/login.html";
-    throw new Error("Sin sesión: redirigiendo a login");
+  // ====== Subida de imagen ======
+  async function subirImagenProducto(productId, file) {
+    const fd = new FormData();
+    fd.append("file", file, sanitizeFilename(file?.name));
+    fd.append("id", String(productId)); // el backend espera id como texto
+    return await safeJsonFetch(EP.addImg(), { method: "POST", body: fd });
   }
 
-  function existsId(arr, id) {
-    id = Number(id);
-    return Array.isArray(arr) && arr.some(x => Number(x.id) === id);
-  }
-  function validateBeforePost({ id_brand, id_color, id_size, id_status }) {
-    const missing = [];
-    if (!existsId(CATALOG_CACHE.brands, id_brand))  missing.push("Marca (id_brand)");
-    if (!existsId(CATALOG_CACHE.colors, id_color))  missing.push("Color (id_color)");
-    if (!existsId(CATALOG_CACHE.sizes,  id_size))   missing.push("Talla (id_size)");
-    if (!existsId(CATALOG_CACHE.status, id_status)) missing.push("Estado (id_status)");
-    return missing;
-  }
-
+  // ====== Bootstrap de la página ======
   document.addEventListener("DOMContentLoaded", async () => {
-    const form          = document.getElementById("formularioRegistro");
-    const btnPublicar   = document.getElementById("btn-publicar");
-    const nombre        = document.getElementById("nombre");
-    const modelo        = document.getElementById("modelo");
-    const descripcion   = document.getElementById("descripcion");
-    const precio        = document.getElementById("precio");
-    const selMarca      = document.getElementById("marca");
-    const selColor      = document.getElementById("color");
-    const selTalla      = document.getElementById("talla");
-    const selEstado     = document.getElementById("estado");
-    const inputImagen   = document.getElementById("imagen");
+    const form        = document.getElementById("formularioRegistro");
+    const btnPublicar = document.getElementById("btn-publicar");
+    const nombre      = document.getElementById("nombre");
+    const modelo      = document.getElementById("modelo");
+    const descripcion = document.getElementById("descripcion");
+    const detalle     = document.getElementById("detalle");
+    const precio      = document.getElementById("precio");
+    const selMarca    = document.getElementById("marca");
+    const selColor    = document.getElementById("color");
+    const selTalla    = document.getElementById("talla");
+    const selEstado   = document.getElementById("estado");
+    const inputImagen = document.getElementById("imagen");
 
     [selMarca, selColor, selTalla, selEstado].forEach(s => { if (s) { s.disabled = false; s.style.pointerEvents = "auto"; } });
 
     const originalBtnText = btnPublicar?.textContent || "PUBLICAR";
-    if (btnPublicar) { btnPublicar.disabled = true; btnPublicar.textContent = "Cargando catálogos..."; }
+    if (btnPublicar) { btnPublicar.disabled = true; btnPublicar.textContent = "Detectando servidor..."; }
 
+    // 1) Elegir base disponible
+    try {
+      API_BASE = await chooseApiBase();
+      toastOK(`Conectado a: ${API_BASE}`, "Backend OK");
+    } catch (e) {
+      console.error(e);
+      toastError("No fue posible contactar ningún backend (LAN ni DDNS). Verifica que el servidor esté arriba y accesible desde tu red.");
+      if (btnPublicar) { btnPublicar.disabled = true; btnPublicar.textContent = originalBtnText; }
+      return;
+    }
+
+    // 2) Cargar catálogos
+    if (btnPublicar) { btnPublicar.textContent = "Cargando catálogos..."; }
     try {
       const { brands, colors, sizes, status } = await precargarCatalogos();
       CATALOG_CACHE.brands = brands;
@@ -168,83 +283,66 @@
       }
 
       if (btnPublicar) { btnPublicar.disabled = false; btnPublicar.textContent = originalBtnText; }
+      toastOK("Catálogos listos.");
     } catch (err) {
       console.error(err);
-      alert("No se pudieron cargar los catálogos. Revisa consola/Network y vuelve a intentar.");
+      toastError("No se pudieron cargar los catálogos desde el backend seleccionado.");
+      if (btnPublicar) { btnPublicar.disabled = true; btnPublicar.textContent = originalBtnText; }
       return;
     }
 
+    // 3) Submit
     form?.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const nombreVal = (nombre?.value || "").trim();
-      const modeloVal = (modelo?.value || "").trim();
+      const nombreVal      = (nombre?.value || "").trim();
+      const modeloVal      = (modelo?.value || "").trim();
       const descripcionVal = (descripcion?.value || "").trim();
-      const precioVal = Number(precio?.value);
+      const detalleVal     = (detalle?.value || "-").trim();
+      const precioVal      = Number(precio?.value);
 
-      if (!nombreVal || !modeloVal) { alert("Nombre y modelo son obligatorios."); return; }
+      if (!nombreVal || !modeloVal) { toastWarn("Nombre y modelo son obligatorios."); return; }
       if (!precioVal || isNaN(precioVal) || precioVal <= 0 || precioVal > 999999.99) {
-        alert("Precio inválido. Debe ser > 0 y ≤ 999,999.99."); return;
+        toastWarn("Precio inválido. Debe ser > 0 y ≤ 999,999.99."); return;
       }
       if (!selMarca?.value || !selColor?.value || !selTalla?.value || !selEstado?.value) {
-        alert("Selecciona marca, color, talla y estado."); return;
+        toastWarn("Selecciona marca, color, talla y estado."); return;
       }
 
-      if (btnPublicar) { btnPublicar.disabled = true; btnPublicar.textContent = "PUBLICANDO..."; }
+      const file = inputImagen?.files?.[0] ?? null;
+      const vImg = validarImagen(file);
+      if (!vImg.ok) { toastWarn(vImg.msg); return; }
 
-      let payload; // visible en catch
+      let payload;
       try {
-        const id_user = getActiveUserIdFromSessionOrRedirect();
+        if (btnPublicar) { btnPublicar.disabled = true; btnPublicar.textContent = "1/2 Guardando producto..."; }
+        toastInfo("1/2 Guardando producto…");
 
-        // IDs FK en snake_case
-        const fkSnake = {
+        const id_user = getActiveUserIdFromSessionOrRedirect();
+        const fk = {
           id_user:  id_user,
           id_status: Number(selEstado.value),
           id_size:   Number(selTalla.value),
           id_brand:  Number(selMarca.value),
           id_color:  Number(selColor.value),
         };
-        // Mismo contenido en camelCase (por si la entidad Java usa idUser, etc.)
-        const fkCamel = {
-          idUser:   fkSnake.id_user,
-          idStatus: fkSnake.id_status,
-          idSize:   fkSnake.id_size,
-          idBrand:  fkSnake.id_brand,
-          idColor:  fkSnake.id_color,
-        };
 
         payload = {
-          ...fkSnake,
-          ...fkCamel,
+          ...fk,
+          // camelCase por si tu backend mapea así
+          idUser:   fk.id_user,
+          idStatus: fk.id_status,
+          idSize:   fk.id_size,
+          idBrand:  fk.id_brand,
+          idColor:  fk.id_color,
           name: nombreVal,
           model: USE_UNIQUE_MODEL_SUFFIX ? `${modeloVal}-${Date.now()}` : modeloVal,
           description: descripcionVal || "Sin descripción",
-          details: "-",
+          details: detalleVal,
           price: precioVal
         };
 
-        console.table(payload);
-
-        const missing = validateBeforePost(fkSnake);
-        if (missing.length) {
-          alert("No se puede registrar porque faltan/son inválidas las referencias:\n- " + missing.join("\n- "));
-          return;
-        }
-
-        // Double-check de FK elegidas
-        const fkCheck = {
-          brand:  CATALOG_CACHE.brands.find(x => Number(x.id) === fkSnake.id_brand),
-          color:  CATALOG_CACHE.colors.find(x => Number(x.id) === fkSnake.id_color),
-          size:   CATALOG_CACHE.sizes.find(x => Number(x.id) === fkSnake.id_size),
-          status: CATALOG_CACHE.status.find(x => Number(x.id) === fkSnake.id_status),
-        };
-        console.log("FK elegidas:", { id_user, ...fkCheck });
-        if (!fkCheck.brand || !fkCheck.color || !fkCheck.size || !fkCheck.status) {
-          alert("Alguna FK seleccionada ya no existe en los catálogos. Actualiza la página y vuelve a intentar.");
-          return;
-        }
-
-        const productSaved = await safeJsonFetch(EP_SAVE_PRODUCT, {
+        const productSaved = await safeJsonFetch(EP.save(), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload)
@@ -252,40 +350,32 @@
 
         if (!productSaved?.id) {
           console.warn("Respuesta inesperada al guardar producto:", productSaved);
-          alert("Producto guardado, pero la respuesta no incluye ID. Revisa el backend.");
+          toastWarn("Producto guardado, pero la respuesta no incluye ID. Revisa el backend.");
           return;
         }
 
-        // Subir imagen si corresponde
-        if (inputImagen?.files?.length) {
-          const fd = new FormData();
-          fd.append("file", inputImagen.files[0]);
-          fd.append("id", productSaved.id);
-          await safeJsonFetch(EP_ADD_IMAGE, { method: "POST", body: fd });
+        if (file) {
+          if (btnPublicar) btnPublicar.textContent = "2/2 Subiendo imagen...";
+          toastInfo("2/2 Subiendo imagen…");
+          try {
+            await subirImagenProducto(productSaved.id, file);
+          } catch (imgErr) {
+            console.error("Fallo al subir imagen:", imgErr);
+            toastWarn("El producto se creó, pero la imagen no se pudo subir. Puedes reintentar más tarde.\n" + imgErr.message);
+          }
         }
 
-        alert("Producto publicado correctamente.");
+        toastOK("Producto publicado correctamente.");
         form.reset();
       } catch (err) {
         console.error(err);
-        // Aquí verás el motivo exacto si tu backend lo envía en el body del 409
         if (String(err.message).startsWith("HTTP 409")) {
-          alert(
-            "No se pudo guardar (409 - Conflicto).\n\n" +
-            "Causas típicas:\n" +
-            "• Alguna FK no existe (users, brands, colors_products, sizes, status).\n" +
-            "• Algún campo llegó NULL/0 porque el nombre no coincidió con lo que espera la entidad Java.\n" +
-            "• (Menos probable) Unicidad en 'model'.\n\n" +
-            `Envié id_user=${payload?.id_user}, id_brand=${payload?.id_brand}, id_color=${payload?.id_color}, id_size=${payload?.id_size}, id_status=${payload?.id_status}.\n` +
-            "Revisa la pestaña Network → Response del 409 para ver el detalle que devolvió el backend."
-          );
-        } else if (err.message.includes("Sin sesión")) {
-          // ya redirigimos
+          toastError("No se pudo guardar (409 - Conflicto). Verifica FKs y nombres de campos.", "Conflicto al guardar");
         } else {
-          alert(`Error al registrar producto: ${err.message}`);
+          toastError(`Error al registrar producto: ${err.message}`);
         }
       } finally {
-        if (btnPublicar) { btnPublicar.disabled = false; btnPublicar.textContent = originalBtnText; }
+        if (btnPublicar) { btnPublicar.disabled = false; btnPublicar.textContent = "PUBLICAR"; }
       }
     });
   });
