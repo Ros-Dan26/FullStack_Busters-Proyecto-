@@ -391,7 +391,7 @@ function renderTestimonials(users) {
             // Construye el nombre completo del usuario
             const fullName = `${user.firstName} ${user.lastName || ""}`.trim();
             // Usa el avatar del usuario o una imagen por defecto
-            const avatar = user.avatar || "https://via.placeholder.com/80x80?text=User";
+            const avatar = "/index/imgIndex/user.png";
             // Selecciona un comentario aleatorio
             const comment = sampleComments[Math.floor(Math.random() * sampleComments.length)];
             // Genera una calificación aleatoria entre 3 y 5 estrellas
