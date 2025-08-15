@@ -19,11 +19,11 @@ body {
 
 
 .form-container {
-  background: linear-gradient(to bottom, #274A7D, #9AB8DF);
+  background: #274A7D;
   padding: 30px;
   color: white;
   width: 100%;
-  max-width: 400px;
+  max-width: 600px;
   margin: auto;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
 }
@@ -34,11 +34,27 @@ body {
 }
 
 .btn-finalizar_compra {
-  background-color: #274A7D;
-  color: white;
-  border-radius: 0;
-  border-width: 0cm;
+  background: #0d6efd;
+  color: #fff;
+  border: none;
+  border-radius: 2rem;
   width: 100%;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 0.75rem 0;
+  outline: 3px solid #274A7D;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 0.15rem #274A7D;
+  transition: none;
+}
+.btn-finalizar_compra:hover,
+.btn-finalizar_compra:focus {
+  background: #0d6efd;
+  color: #fff;
+  outline: 3px solid #274A7D;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 0.15rem #274A7D;
 }
 
 .main-content {
