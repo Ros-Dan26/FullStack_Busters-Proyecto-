@@ -25,9 +25,10 @@
   <script>
     // Limpia la sesión y redirige
     localStorage.removeItem('usuarioActivo');
-    setTimeout(() => {
+    window.location.href = '/Login/login.html';
+    /*setTimeout(() => {
       window.location.href = '/Login/login.html';
-    }, 2500);
+    },0);*/
   </script>
 </body>
 </html>

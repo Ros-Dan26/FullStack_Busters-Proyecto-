@@ -18,7 +18,7 @@ function finalizarCompra() {
     }).then((result) => {
         if (result.dismiss === Swal.DismissReason.timer) {
             localStorage.clear();
-            window.location.href = "/index/index.html";
+            window.location.href = "./index.html";
         }
     })
 }

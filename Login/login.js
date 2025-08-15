@@ -58,7 +58,7 @@ function mostrarPopupRegistro(event) {
 function cerrarPopupRegistro() {
   document.getElementById("popup-login").style.display = "none";
   if (typeof manejarSesion === "function") manejarSesion();
-  window.location.href = "/index/index.html";
+  window.location.href = "../index.html";
 }
 function mostrarPopupRegistroConInc(event) {
   event.preventDefault();
