@@ -253,7 +253,8 @@ section>h2 {
 /* Sección de productos destacados: scroll horizontal */
 .featured-container {
     display: flex;                           /* Flexbox para alinear tarjetas horizontalmente */
-    overflow-x: auto;                        /* Permite scroll horizontal */
+    justify-content: center;                 /* Centra horizontalmente */
+    flex-wrap: wrap;                         /* Permite que las tarjetas se envuelvan */
     gap: 15px;                               /* Espaciado entre tarjetas */
     padding: 20px;                           /* Espaciado interno */
 }
@@ -326,7 +327,7 @@ section>h2 {
     background-color: rgba(0, 0, 0, 0.6);    /* Fondo negro translúcido */
 }
 .modal-content {
-    background: white;                       /* Fondo blanco */
+    background: var(--color-bg);             /* Fondo blanco */
     max-width: 600px;                        /* Ancho máximo */
     margin: 50px auto;                       /* Centrado vertical y horizontal */
     padding: 20px;                           /* Espaciado interno */
@@ -352,7 +353,8 @@ section>h2 {
 }
 #addToCartBtn {
     background: #28a745;                     /* Verde */
-    color: white;                            /* Texto blanco */
+    color: var(--color-bg);                   /* Texto blanco */
+    font-weight: 700;                          /* Negrita */
     padding: 10px;                           /* Espaciado interno */
     border: none;                            /* Sin borde */
     margin-top: 10px;                        /* Espaciado superior */
@@ -363,12 +365,12 @@ section>h2 {
     background: #218838;                     /* Verde más oscuro al pasar el mouse */
 }
 
-/* 6. Productos destacados */
+/* 6. carrusel de marcas */
 /* Contenedor principal del carrusel de marcas */
 .brands-carousel {
     width: 100%;                              /* Ancho completo */
     overflow: hidden;                         /* Oculta desbordes */
-    margin: 2rem 0;                           /* Espaciado vertical */
+    margin: 1rem 0;                           /* Espaciado vertical */
 }
 .brands-carousel-track-container {
     overflow: hidden;                         /* Oculta desbordes */
@@ -376,6 +378,7 @@ section>h2 {
 }
 .brands-carousel-track {
     display: flex;                            /* Flexbox para alinear marcas */
+    flex-wrap: nowrap;                      /* Evita que los elementos se envuelvan */
     transition: transform 0.5s ease-in-out;   /* Transición suave al mover */
     will-change: transform;                   /* Optimización de rendimiento */
 }
@@ -419,25 +422,27 @@ section>h2 {
     border-radius: 20px;                      /* Bordes redondeados */
     padding: 30px;                            /* Espaciado interno */
     text-align: center;                       /* Centra el texto */
+    font-weight: 700;                          /* Negrita */
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);/* Sombra */
 }
 .popup-Diseño-Contenido button {
     border-radius: 0.5rem;                    /* Bordes redondeados */
-    background-color: #F5EFE7;                /* Fondo igual al popup */
+    background-color: var(--color-accent);    /* Fondo igual al popup */
     padding: 8px 18px;                        /* Espaciado interno */
     margin-top: 13px;                         /* Espaciado superior */
+    color: var(--color-bg);
 }
 
 /* 7. TESTIMONIOS */
 /* Sección general de testimonios */
 .testimonials-section {
     padding: 40px 20px;                       /* Espaciado interno */
-    background: linear-gradient(135deg, #f9f9f9, #eef1f6); /* Fondo degradado */
+    background: var(--color-bg);               /* Fondo  */
     text-align: center;                       /* Centra el texto */
 }
 .testimonials-section h2 {
-    font-size: 2em;                           /* Título grande */
-    color: #333;                              /* Gris oscuro */
+    font-size: 2rem;                           /* Título grande */
+    color: var(--color-accent);               /* azul oscuro */
     margin-bottom: 25px;                      /* Espaciado inferior */
 }
 /* Contenedor de tarjetas de testimonios */
@@ -575,6 +580,20 @@ section>h2 {
         width: 100%;
         margin-top: 0.5rem;
     }
+
+    .brands-carousel{
+        display: block !important;         /* Asegura que el carrusel se muestre como bloque */
+        width: 100vw;                      /* Ancho completo de la ventana */
+        overflow-x: auto;                  /* Permite scroll horizontal */
+        -webkit-overflow-scrolling: touch; /* Mejora el scroll en dispositivos táctiles */
+        margin: 1rem 0;                /* Espaciado vertical */
+    }
+
+    .brands-carousel-track{
+        display: flex;                     /* Muestra los elementos en fila */
+        flex-wrap: nowrap;                /* Evita que los elementos se envuelvan */
+    }
+
     .brands-carousel-slide {
         min-width: 70px;
         margin: 0 0.3rem;
@@ -606,8 +625,11 @@ section>h2 {
         margin-right: 0.7rem;
     }
     .featured-container {
-        gap: 12px;
-        padding: 15px;
+        justify-content: flex-start;               /* Alinea a la izquierda */
+        overflow-x: auto;                     /* Permite scroll horizontal */
+        flex-wrap: nowrap;                    /* Evita que los elementos se envuelvan */
+        gap: 12px;                            /* Espaciado entre elementos */
+        padding: 15px;                        /* Espaciado interno */
     }
     .card {
         flex: 0 0 180px;
@@ -638,9 +660,23 @@ section>h2 {
         padding: 0.7rem 1rem;
         margin-bottom: 1.5rem;
     }
+
+    .brands-carousel{
+        display: block !important;         /* Asegura que el carrusel se muestre como bloque */
+        width: 100vw;                      /* Ancho completo de la ventana */
+        overflow-x: auto;                  /* Permite scroll horizontal */
+        -webkit-overflow-scrolling: touch; /* Mejora el scroll en dispositivos táctiles */
+        margin: 1rem 0;                /* Espaciado vertical */
+    }
+
+    .brands-carousel-track{
+        display: flex;                     /* Muestra los elementos en fila */
+        flex-wrap: nowrap;                /* Evita que los elementos se envuelvan */
+    }
+
     .brands-carousel-slide {
-        min-width: 90px;
-        margin: 0 0.7rem;
+        min-width: 70px;
+        margin: 0 0.3rem;
     }
 }
 
